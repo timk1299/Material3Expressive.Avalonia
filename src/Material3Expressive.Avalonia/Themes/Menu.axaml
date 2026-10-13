@@ -1,0 +1,300 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:conv="using:Avalonia.Controls.Converters"
+                    xmlns:motion="using:Material3Expressive.Avalonia.Motion">
+
+  <!--
+    Material 3 Expressive menus: surface container low, large (16dp) corners, elevation 2, 4dp inset;
+    44dp items with body-large text and 4dp corners. Checked (toggle/radio) items are selected:
+    tertiary container with 12dp corners. Vibrant menus (FlyoutPresenterClasses="Vibrant" or
+    ContextMenu Classes="Vibrant") use the tertiary container. The outer margin leaves room for the shadow.
+  -->
+  <conv:PlatformKeyGestureConverter x:Key="M3KeyGestureConverter" />
+  <StreamGeometry x:Key="M3ArrowRightGeometry">M10 17l5-5-5-5v10z</StreamGeometry>
+
+  <ControlTheme x:Key="M3MenuPopupBorder" TargetType="Border">
+    <Setter Property="Margin" Value="8,4,8,10" />
+    <Setter Property="Padding" Value="4" />
+    <Setter Property="MinWidth" Value="112" />
+    <Setter Property="MaxWidth" Value="320" />
+    <Setter Property="Background" Value="{DynamicResource M3SurfaceContainerLowBrush}" />
+    <Setter Property="CornerRadius" Value="{DynamicResource M3ShapeLarge}" />
+    <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation2}" />
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type MenuItem}" TargetType="MenuItem">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+    <Setter Property="Padding" Value="12,0" />
+    <Setter Property="MinHeight" Value="44" />
+    <Setter Property="CornerRadius" Value="4" />
+    <Setter Property="FontSize" Value="16" />
+    <Setter Property="FontWeight" Value="Normal" />
+    <Setter Property="LetterSpacing" Value="0.5" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <Border Name="PART_LayoutRoot"
+                  MinHeight="{TemplateBinding MinHeight}"
+                  Padding="{TemplateBinding Padding}"
+                  CornerRadius="{TemplateBinding CornerRadius}"
+                  Background="{TemplateBinding Background}">
+            <Border.Transitions>
+              <Transitions>
+                <CornerRadiusTransition Property="CornerRadius" Duration="{motion:SpringDuration FastSpatial}" Easing="{motion:Spring FastSpatial}" />
+                <BrushTransition Property="Background" Duration="{motion:SpringDuration FastEffects}" Easing="{motion:Spring FastEffects}" />
+              </Transitions>
+            </Border.Transitions>
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="ToggleIcon" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="MenuItemIcon" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="MenuItemIGT" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="MenuItemChevron" />
+              </Grid.ColumnDefinitions>
+              <ContentControl Name="PART_ToggleIconPresenter"
+                              Grid.Column="0"
+                              Width="24"
+                              Height="24"
+                              Margin="0,0,12,0"
+                              IsVisible="False" />
+              <ContentControl Name="PART_IconPresenter"
+                              Grid.Column="1"
+                              Width="24"
+                              Height="24"
+                              Margin="0,0,12,0"
+                              HorizontalContentAlignment="Center"
+                              VerticalContentAlignment="Center"
+                              Foreground="{DynamicResource M3OnSurfaceVariantBrush}"
+                              Content="{TemplateBinding Icon}"
+                              IsVisible="False" />
+              <ContentPresenter Name="PART_HeaderPresenter"
+                                Grid.Column="2"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Stretch"
+                                Content="{TemplateBinding Header}"
+                                ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                RecognizesAccessKey="True" />
+              <TextBlock Name="PART_InputGestureText"
+                         Grid.Column="3"
+                         Margin="24,0,0,0"
+                         HorizontalAlignment="Right"
+                         VerticalAlignment="Center"
+                         Foreground="{DynamicResource M3OnSurfaceVariantBrush}"
+                         Text="{TemplateBinding InputGesture, Converter={StaticResource M3KeyGestureConverter}}" />
+              <PathIcon Name="PART_ChevronPath"
+                        Grid.Column="4"
+                        Width="5"
+                        Height="10"
+                        Margin="21,0,5,0"
+                        VerticalAlignment="Center"
+                        Foreground="{DynamicResource M3OnSurfaceVariantBrush}"
+                        Data="{StaticResource M3ArrowRightGeometry}" />
+            </Grid>
+          </Border>
+          <Border Name="PART_StateLayer"
+                  Background="{TemplateBinding Foreground}"
+                  CornerRadius="{Binding #PART_LayoutRoot.CornerRadius}"
+                  Opacity="0"
+                  IsHitTestVisible="False" />
+          <Popup Name="PART_Popup"
+                 WindowManagerAddShadowHint="False"
+                 Placement="RightEdgeAlignedTop"
+                 HorizontalOffset="-8"
+                 VerticalOffset="-12"
+                 IsLightDismissEnabled="False"
+                 IsOpen="{TemplateBinding IsSubMenuOpen, Mode=TwoWay}">
+            <Border Theme="{StaticResource M3MenuPopupBorder}">
+              <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                <ItemsPresenter Name="PART_ItemsPresenter"
+                                ItemsPanel="{TemplateBinding ItemsPanel}"
+                                Grid.IsSharedSizeScope="True" />
+              </ScrollViewer>
+            </Border>
+          </Popup>
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^:icon /template/ ContentControl#PART_IconPresenter">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <Style Selector="^:selected /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StateHoverOpacity}" />
+    </Style>
+    <Style Selector="^:pressed /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StatePressedOpacity}" />
+    </Style>
+    <Style Selector="^:open /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StateHoverOpacity}" />
+    </Style>
+    <Style Selector="^:empty /template/ PathIcon#PART_ChevronPath">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^:disabled">
+      <Style Selector="^ /template/ Border#PART_LayoutRoot">
+        <Setter Property="Opacity" Value="{DynamicResource M3DisabledContentOpacity}" />
+      </Style>
+    </Style>
+    <Style Selector="^:separator">
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Separator Margin="0,8" />
+        </ControlTemplate>
+      </Setter>
+    </Style>
+    <!-- Selected (checked) items -->
+    <Style Selector="^:checked">
+      <Setter Property="Background" Value="{DynamicResource M3TertiaryContainerBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnTertiaryContainerBrush}" />
+      <Setter Property="CornerRadius" Value="12" />
+      <Style Selector="^ /template/ ContentControl#PART_IconPresenter">
+        <Setter Property="Foreground" Value="{DynamicResource M3OnTertiaryContainerBrush}" />
+      </Style>
+    </Style>
+    <Style Selector="^:checked:toggle /template/ ContentControl#PART_ToggleIconPresenter">
+      <Setter Property="IsVisible" Value="True" />
+      <Setter Property="Content">
+        <Template>
+          <PathIcon Width="18"
+                    Height="14"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Foreground="{Binding $parent[MenuItem].Foreground}"
+                    Data="{StaticResource M3CheckGeometry}" />
+        </Template>
+      </Setter>
+    </Style>
+    <Style Selector="^:checked:radio /template/ ContentControl#PART_ToggleIconPresenter">
+      <Setter Property="IsVisible" Value="True" />
+      <Setter Property="Content">
+        <Template>
+          <Ellipse Width="8"
+                   Height="8"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Fill="{Binding $parent[MenuItem].Foreground}" />
+        </Template>
+      </Setter>
+    </Style>
+  </ControlTheme>
+
+  <!-- Menu bar item -->
+  <ControlTheme x:Key="M3TopLevelMenuItem" TargetType="MenuItem">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+    <Setter Property="Padding" Value="12,0" />
+    <Setter Property="CornerRadius" Value="{DynamicResource M3ShapeExtraSmall}" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="LetterSpacing" Value="0.1" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <Border Name="PART_LayoutRoot"
+                  Background="{TemplateBinding Background}"
+                  CornerRadius="{TemplateBinding CornerRadius}">
+            <ContentPresenter Name="PART_HeaderPresenter"
+                              Margin="{TemplateBinding Padding}"
+                              VerticalAlignment="Center"
+                              Content="{TemplateBinding Header}"
+                              ContentTemplate="{TemplateBinding HeaderTemplate}"
+                              RecognizesAccessKey="True" />
+          </Border>
+          <Border Name="PART_StateLayer"
+                  Background="{TemplateBinding Foreground}"
+                  CornerRadius="{TemplateBinding CornerRadius}"
+                  Opacity="0"
+                  IsHitTestVisible="False" />
+          <Popup Name="PART_Popup"
+                 WindowManagerAddShadowHint="False"
+                 Placement="BottomEdgeAlignedLeft"
+                 HorizontalOffset="-8"
+                 IsLightDismissEnabled="True"
+                 IsOpen="{TemplateBinding IsSubMenuOpen, Mode=TwoWay}"
+                 OverlayInputPassThroughElement="{Binding $parent[Menu]}">
+            <Border Theme="{StaticResource M3MenuPopupBorder}">
+              <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                <ItemsPresenter Name="PART_ItemsPresenter"
+                                ItemsPanel="{TemplateBinding ItemsPanel}"
+                                Grid.IsSharedSizeScope="True" />
+              </ScrollViewer>
+            </Border>
+          </Popup>
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:selected /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StateHoverOpacity}" />
+    </Style>
+    <Style Selector="^:open /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StatePressedOpacity}" />
+    </Style>
+    <Style Selector="^:disabled /template/ ContentPresenter#PART_HeaderPresenter">
+      <Setter Property="Opacity" Value="{DynamicResource M3DisabledContentOpacity}" />
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type Menu}" TargetType="Menu">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Height" Value="40" />
+    <Setter Property="ItemContainerTheme" Value="{StaticResource M3TopLevelMenuItem}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="{TemplateBinding CornerRadius}"
+                Padding="{TemplateBinding Padding}"
+                HorizontalAlignment="Stretch">
+          <ItemsPresenter Name="PART_ItemsPresenter"
+                          ItemsPanel="{TemplateBinding ItemsPanel}"
+                          VerticalAlignment="Stretch"
+                          KeyboardNavigation.TabNavigation="Continue" />
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type ContextMenu}" TargetType="ContextMenu">
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+    <Style Selector="^.Vibrant /template/ Border">
+      <Setter Property="Background" Value="{DynamicResource M3TertiaryContainerBrush}" />
+    </Style>
+    <Setter Property="Focusable" Value="True" />
+    <Setter Property="WindowManagerAddShadowHint" Value="False" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Theme="{StaticResource M3MenuPopupBorder}">
+          <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+            <ItemsPresenter Name="PART_ItemsPresenter"
+                            ItemsPanel="{TemplateBinding ItemsPanel}"
+                            KeyboardNavigation.TabNavigation="Continue"
+                            Grid.IsSharedSizeScope="True" />
+          </ScrollViewer>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type MenuFlyoutPresenter}" TargetType="MenuFlyoutPresenter">
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+    <Style Selector="^.Vibrant /template/ Border">
+      <Setter Property="Background" Value="{DynamicResource M3TertiaryContainerBrush}" />
+    </Style>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Theme="{StaticResource M3MenuPopupBorder}">
+          <ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                        VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
+            <ItemsPresenter Name="PART_ItemsPresenter"
+                            ItemsPanel="{TemplateBinding ItemsPanel}"
+                            KeyboardNavigation.TabNavigation="Continue"
+                            Grid.IsSharedSizeScope="True" />
+          </ScrollViewer>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

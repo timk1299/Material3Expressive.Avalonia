@@ -1,0 +1,382 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="using:Material3Expressive.Avalonia.Controls"
+                    xmlns:motion="using:Material3Expressive.Avalonia.Motion">
+
+  <!-- ================= Primary tab ================= -->
+  <ControlTheme x:Key="M3TabItem" TargetType="TabItem">
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Padding" Value="16,0" />
+    <Setter Property="MinHeight" Value="48" />
+    <Setter Property="MinWidth" Value="90" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="LetterSpacing" Value="0.1" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <Border Name="PART_Container" Background="{TemplateBinding Background}" />
+          <Border Name="PART_StateLayer"
+                  Background="{TemplateBinding Foreground}"
+                  Opacity="0"
+                  IsHitTestVisible="False">
+            <Border.Transitions>
+              <Transitions>
+                <DoubleTransition Property="Opacity" Duration="0:0:0.1" />
+              </Transitions>
+            </Border.Transitions>
+          </Border>
+          <controls:Ripple Brush="{TemplateBinding Foreground}" />
+          <Panel Name="PART_ContentHost"
+                 Margin="{TemplateBinding Padding}"
+                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}">
+            <StackPanel VerticalAlignment="Center" Spacing="2">
+              <ContentPresenter Name="PART_IconPresenter"
+                                HorizontalAlignment="Center"
+                                Content="{TemplateBinding Icon}"
+                                ContentTemplate="{TemplateBinding IconTemplate}" />
+              <ContentPresenter Name="PART_ContentPresenter"
+                                HorizontalAlignment="Center"
+                                Content="{TemplateBinding Header}"
+                                ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                RecognizesAccessKey="True" />
+            </StackPanel>
+            <Border Name="PART_SelectedPipe"
+                    Height="3"
+                    MinWidth="24"
+                    VerticalAlignment="Bottom"
+                    CornerRadius="3,3,0,0"
+                    Background="{DynamicResource M3PrimaryBrush}"
+                    IsVisible="False" />
+          </Panel>
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^ /template/ ContentPresenter:empty">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^ /template/ ContentPresenter#PART_IconPresenter:not(:empty)">
+      <Setter Property="Margin" Value="0,10,0,0" />
+    </Style>
+    <Style Selector="^:pointerover /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StateHoverOpacity}" />
+    </Style>
+    <Style Selector="^:focus-visible /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StateFocusOpacity}" />
+    </Style>
+    <Style Selector="^:selected">
+      <Setter Property="Foreground" Value="{DynamicResource M3PrimaryBrush}" />
+      <Style Selector="^ /template/ Border#PART_SelectedPipe">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+    </Style>
+    <Style Selector="^[TabStripPlacement=Left], ^[TabStripPlacement=Right]">
+      <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+      <Style Selector="^ /template/ Border#PART_SelectedPipe">
+        <Setter Property="Height" Value="NaN" />
+        <Setter Property="Width" Value="3" />
+        <Setter Property="MinWidth" Value="0" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="Margin" Value="0,8" />
+      </Style>
+    </Style>
+    <Style Selector="^[TabStripPlacement=Left] /template/ Border#PART_SelectedPipe">
+      <Setter Property="HorizontalAlignment" Value="Right" />
+      <Setter Property="CornerRadius" Value="3,0,0,3" />
+    </Style>
+    <Style Selector="^[TabStripPlacement=Right] /template/ Border#PART_SelectedPipe">
+      <Setter Property="HorizontalAlignment" Value="Left" />
+      <Setter Property="CornerRadius" Value="0,3,3,0" />
+    </Style>
+    <Style Selector="^[TabStripPlacement=Bottom] /template/ Border#PART_SelectedPipe">
+      <Setter Property="VerticalAlignment" Value="Top" />
+      <Setter Property="CornerRadius" Value="0,0,3,3" />
+    </Style>
+    <Style Selector="^:disabled /template/ Panel#PART_ContentHost">
+      <Setter Property="Opacity" Value="{DynamicResource M3DisabledContentOpacity}" />
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type TabItem}" TargetType="TabItem" BasedOn="{StaticResource M3TabItem}" />
+
+  <!-- ================= Secondary tab: full-width 2px indicator ================= -->
+  <ControlTheme x:Key="M3SecondaryTabItem" TargetType="TabItem" BasedOn="{StaticResource M3TabItem}">
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Style Selector="^:selected">
+      <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+      <Style Selector="^ /template/ Border#PART_SelectedPipe">
+        <Setter Property="Height" Value="2" />
+        <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="Margin" Value="-16,0" />
+      </Style>
+    </Style>
+  </ControlTheme>
+
+  <!-- ================= Navigation rail / bar destination ================= -->
+  <ControlTheme x:Key="M3NavigationRailItem" TargetType="TabItem">
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="LetterSpacing" Value="0.5" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <StackPanel Name="PART_Root"
+                    Background="{TemplateBinding Background}"
+                    Spacing="4"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}">
+          <Panel Name="PART_IndicatorHost" Height="32" HorizontalAlignment="Center">
+            <Border Name="PART_Indicator"
+                    CornerRadius="16"
+                    Background="{DynamicResource M3SecondaryContainerBrush}"
+                    Opacity="0"
+                    RenderTransform="scaleX(0.4)">
+              <Border.Transitions>
+                <Transitions>
+                  <DoubleTransition Property="Opacity" Duration="{motion:SpringDuration FastEffects}" Easing="{motion:Spring FastEffects}" />
+                  <TransformOperationsTransition Property="RenderTransform" Duration="{motion:SpringDuration FastSpatial}" Easing="{motion:Spring FastSpatial}" />
+                </Transitions>
+              </Border.Transitions>
+            </Border>
+            <Border Name="PART_StateLayer"
+                    CornerRadius="16"
+                    Background="{DynamicResource M3OnSecondaryContainerBrush}"
+                    Opacity="0"
+                    IsHitTestVisible="False" />
+            <controls:Ripple CornerRadius="16"
+                             IsCentered="True"
+                             Brush="{DynamicResource M3OnSecondaryContainerBrush}" />
+            <ContentPresenter Name="PART_IconPresenter"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              Content="{TemplateBinding Icon}"
+                              ContentTemplate="{TemplateBinding IconTemplate}" />
+          </Panel>
+          <ContentPresenter Name="PART_ContentPresenter"
+                            HorizontalAlignment="Center"
+                            Content="{TemplateBinding Header}"
+                            ContentTemplate="{TemplateBinding HeaderTemplate}"
+                            RecognizesAccessKey="True" />
+        </StackPanel>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^ /template/ Panel#PART_IndicatorHost">
+      <Setter Property="Width" Value="56" />
+    </Style>
+    <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter:empty">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^:pointerover /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StateHoverOpacity}" />
+    </Style>
+    <Style Selector="^:focus-visible /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StateFocusOpacity}" />
+    </Style>
+    <Style Selector="^:selected">
+      <Style Selector="^ /template/ Border#PART_Indicator">
+        <Setter Property="Opacity" Value="1" />
+        <Setter Property="RenderTransform" Value="scaleX(1)" />
+      </Style>
+      <Style Selector="^ /template/ ContentPresenter#PART_IconPresenter">
+        <Setter Property="Foreground" Value="{DynamicResource M3OnSecondaryContainerBrush}" />
+      </Style>
+      <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Foreground" Value="{DynamicResource M3SecondaryBrush}" />
+      </Style>
+    </Style>
+    <Style Selector="^:disabled /template/ StackPanel#PART_Root">
+      <Setter Property="Opacity" Value="{DynamicResource M3DisabledContentOpacity}" />
+    </Style>
+  </ControlTheme>
+
+  <!-- Navigation bar (Expressive "flexible" bar): 64dp tall, 56x32 indicator, label below -->
+  <ControlTheme x:Key="M3NavigationBarItem" TargetType="TabItem" BasedOn="{StaticResource M3NavigationRailItem}">
+    <Setter Property="Height" Value="64" />
+    <Setter Property="Padding" Value="0,6" />
+  </ControlTheme>
+
+  <!-- Horizontal navigation bar item (wide windows): icon and label side by side in a 40dp pill -->
+  <ControlTheme x:Key="M3NavigationBarHorizontalItem" TargetType="TabItem">
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Height" Value="64" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="LetterSpacing" Value="0.1" />
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel Background="{TemplateBinding Background}">
+          <Panel Name="PART_Pill" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Border Name="PART_Indicator"
+                    CornerRadius="20"
+                    Background="{DynamicResource M3SecondaryContainerBrush}"
+                    Opacity="0"
+                    RenderTransform="scaleX(0.5)">
+              <Border.Transitions>
+                <Transitions>
+                  <DoubleTransition Property="Opacity" Duration="{motion:SpringDuration FastEffects}" Easing="{motion:Spring FastEffects}" />
+                  <TransformOperationsTransition Property="RenderTransform" Duration="{motion:SpringDuration FastSpatial}" Easing="{motion:Spring FastSpatial}" />
+                </Transitions>
+              </Border.Transitions>
+            </Border>
+            <Border Name="PART_StateLayer"
+                    CornerRadius="20"
+                    Background="{DynamicResource M3OnSecondaryContainerBrush}"
+                    Opacity="0"
+                    IsHitTestVisible="False" />
+            <controls:Ripple CornerRadius="20" Brush="{DynamicResource M3OnSecondaryContainerBrush}" />
+            <StackPanel Margin="16,0" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+              <ContentPresenter Name="PART_IconPresenter"
+                                VerticalAlignment="Center"
+                                Content="{TemplateBinding Icon}"
+                                ContentTemplate="{TemplateBinding IconTemplate}" />
+              <ContentPresenter Name="PART_ContentPresenter"
+                                VerticalAlignment="Center"
+                                Content="{TemplateBinding Header}"
+                                ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                RecognizesAccessKey="True" />
+            </StackPanel>
+          </Panel>
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:pointerover /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StateHoverOpacity}" />
+    </Style>
+    <Style Selector="^:focus-visible /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StateFocusOpacity}" />
+    </Style>
+    <Style Selector="^:selected">
+      <Style Selector="^ /template/ Border#PART_Indicator">
+        <Setter Property="Opacity" Value="1" />
+        <Setter Property="RenderTransform" Value="scaleX(1)" />
+      </Style>
+      <Style Selector="^ /template/ ContentPresenter#PART_IconPresenter">
+        <Setter Property="Foreground" Value="{DynamicResource M3OnSecondaryContainerBrush}" />
+      </Style>
+      <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Foreground" Value="{DynamicResource M3SecondaryBrush}" />
+      </Style>
+    </Style>
+    <Style Selector="^:disabled /template/ Panel#PART_Pill">
+      <Setter Property="Opacity" Value="{DynamicResource M3DisabledContentOpacity}" />
+    </Style>
+  </ControlTheme>
+
+  <!--
+    TabControl.
+      (default) primary tabs, fixed width · Classes="Scrollable" · Classes="Secondary"
+      Classes="NavigationRail" (strip on the left; see m3:NavigationRail for the Expressive rail)
+      Classes="NavigationBar" (strip at the bottom, 64dp) · add "Horizontal" for side-by-side icon and label
+    TabItem.Icon is shown above the header.
+  -->
+  <ControlTheme x:Key="{x:Type TabControl}" TargetType="TabControl">
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="{DynamicResource M3SurfaceVariantBrush}" />
+    <Setter Property="ItemContainerTheme" Value="{StaticResource M3TabItem}" />
+    <Setter Property="ItemsPanel">
+      <ItemsPanelTemplate>
+        <UniformGrid Rows="1" />
+      </ItemsPanelTemplate>
+    </Setter>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}"
+                CornerRadius="{TemplateBinding CornerRadius}"
+                HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                VerticalAlignment="{TemplateBinding VerticalAlignment}">
+          <DockPanel>
+            <Border Name="PART_TabStrip"
+                    DockPanel.Dock="{TemplateBinding TabStripPlacement}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="0,0,0,1">
+              <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+            </Border>
+            <Panel ClipToBounds="True">
+              <ContentPresenter Name="PART_SelectedContentHost2"
+                                Margin="{TemplateBinding Padding}"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                IsVisible="False" />
+              <ContentPresenter Name="PART_SelectedContentHost"
+                                Margin="{TemplateBinding Padding}"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+            </Panel>
+          </DockPanel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^[TabStripPlacement=Bottom] /template/ Border#PART_TabStrip">
+      <Setter Property="BorderThickness" Value="0,1,0,0" />
+    </Style>
+    <Style Selector="^[TabStripPlacement=Left], ^[TabStripPlacement=Right]">
+      <Setter Property="ItemsPanel">
+        <ItemsPanelTemplate>
+          <StackPanel Orientation="Vertical" />
+        </ItemsPanelTemplate>
+      </Setter>
+    </Style>
+    <Style Selector="^[TabStripPlacement=Left] /template/ Border#PART_TabStrip">
+      <Setter Property="BorderThickness" Value="0,0,1,0" />
+    </Style>
+    <Style Selector="^[TabStripPlacement=Right] /template/ Border#PART_TabStrip">
+      <Setter Property="BorderThickness" Value="1,0,0,0" />
+    </Style>
+
+    <Style Selector="^.Scrollable">
+      <Setter Property="ItemsPanel">
+        <ItemsPanelTemplate>
+          <StackPanel Orientation="Horizontal" />
+        </ItemsPanelTemplate>
+      </Setter>
+    </Style>
+    <Style Selector="^.Secondary">
+      <Setter Property="ItemContainerTheme" Value="{StaticResource M3SecondaryTabItem}" />
+    </Style>
+
+    <Style Selector="^.NavigationRail">
+      <Setter Property="TabStripPlacement" Value="Left" />
+      <Setter Property="ItemContainerTheme" Value="{StaticResource M3NavigationRailItem}" />
+      <Setter Property="ItemsPanel">
+        <ItemsPanelTemplate>
+          <StackPanel Orientation="Vertical" Spacing="12" />
+        </ItemsPanelTemplate>
+      </Setter>
+      <Style Selector="^ /template/ Border#PART_TabStrip">
+        <Setter Property="Width" Value="80" />
+        <Setter Property="Padding" Value="0,44,0,12" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Background" Value="{DynamicResource M3SurfaceBrush}" />
+      </Style>
+    </Style>
+    <Style Selector="^.NavigationBar">
+      <Setter Property="TabStripPlacement" Value="Bottom" />
+      <Setter Property="ItemContainerTheme" Value="{StaticResource M3NavigationBarItem}" />
+      <Setter Property="ItemsPanel">
+        <ItemsPanelTemplate>
+          <UniformGrid Rows="1" />
+        </ItemsPanelTemplate>
+      </Setter>
+      <Style Selector="^ /template/ Border#PART_TabStrip">
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Background" Value="{DynamicResource M3SurfaceContainerBrush}" />
+      </Style>
+    </Style>
+    <Style Selector="^.NavigationBar.Horizontal">
+      <Setter Property="ItemContainerTheme" Value="{StaticResource M3NavigationBarHorizontalItem}" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

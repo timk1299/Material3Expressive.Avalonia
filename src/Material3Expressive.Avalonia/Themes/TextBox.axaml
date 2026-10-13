@@ -1,0 +1,306 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:m3="using:Material3Expressive.Avalonia"
+                    xmlns:controls="using:Material3Expressive.Avalonia.Controls"
+                    xmlns:conv="using:Material3Expressive.Avalonia.Converters">
+
+  <!--
+    Material 3 text field.
+      (default) Filled · Classes="Outlined"
+      m3:TextFieldAssist.Label          floating label
+      m3:TextFieldAssist.SupportingText helper text (validation errors replace it)
+      PlaceholderText                   shown while focused and empty
+      InnerLeftContent / InnerRightContent  leading / trailing icons
+
+    The label is laid out at 12px (its floating size) and scaled up to 16px while resting.
+    Avalonia applies the translation before the scale, so resting offsets are divided by 1.3333.
+  -->
+  <ControlTheme x:Key="M3TextBox" TargetType="TextBox">
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+    <Setter Property="Background" Value="{DynamicResource M3SurfaceContainerHighestBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+    <Setter Property="CaretBrush" Value="{DynamicResource M3PrimaryBrush}" />
+    <Setter Property="SelectionBrush" Value="{DynamicResource M3TextSelectionBrush}" />
+    <Setter Property="PlaceholderForeground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+    <Setter Property="CornerRadius" Value="{DynamicResource M3ShapeExtraSmallTop}" />
+    <Setter Property="Padding" Value="16" />
+    <Setter Property="MinWidth" Value="120" />
+    <Setter Property="ClipToBounds" Value="False" />
+    <Setter Property="FontSize" Value="16" />
+    <Setter Property="LetterSpacing" Value="0.5" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+    <Setter Property="ScrollViewer.IsScrollChainingEnabled" Value="True" />
+    <Setter Property="ContextFlyout" Value="{DynamicResource DefaultTextBoxContextFlyout}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <DataValidationErrors>
+          <Grid RowDefinitions="*,Auto">
+            <Panel Name="PART_Field" MinHeight="56">
+              <Border Name="PART_Container"
+                      Background="{TemplateBinding Background}"
+                      CornerRadius="{TemplateBinding CornerRadius}" />
+              <Border Name="PART_StateLayer"
+                      Background="{DynamicResource M3OnSurfaceBrush}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      Opacity="0"
+                      IsHitTestVisible="False">
+                <Border.Transitions>
+                  <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+                  </Transitions>
+                </Border.Transitions>
+              </Border>
+              <Border Name="PART_ActiveIndicator"
+                      VerticalAlignment="Bottom"
+                      Height="1"
+                      Background="{TemplateBinding BorderBrush}" />
+              <controls:OutlineBorder Name="PART_Outline"
+                                      IsVisible="False"
+                                      Stroke="{TemplateBinding BorderBrush}"
+                                      StrokeThickness="1"
+                                      CornerRadius="4"
+                                      GapStart="{Binding #PART_Label.Bounds.X, Converter={x:Static conv:M3Converters.LabelXToNotchStart}}"
+                                      GapWidth="{Binding #PART_Label.Bounds.Width, Converter={x:Static conv:M3Converters.LabelWidthToNotchWidth}}">
+                <controls:OutlineBorder.Transitions>
+                  <Transitions>
+                    <DoubleTransition Property="GapProgress" Duration="0:0:0.15" Easing="CubicEaseOut" />
+                  </Transitions>
+                </controls:OutlineBorder.Transitions>
+              </controls:OutlineBorder>
+
+              <Grid ColumnDefinitions="Auto,*,Auto">
+                <ContentPresenter Name="PART_LeadingContent"
+                                  Grid.Column="0"
+                                  Margin="12,0,-4,0"
+                                  VerticalAlignment="Center"
+                                  Foreground="{DynamicResource M3OnSurfaceVariantBrush}"
+                                  Content="{TemplateBinding InnerLeftContent}" />
+                <DockPanel Name="PART_InnerDockPanel"
+                           Grid.Column="1"
+                           Margin="{TemplateBinding Padding}"
+                           VerticalAlignment="Top">
+
+                  <ScrollViewer Name="PART_ScrollViewer"
+                                HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+                                VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
+                                IsScrollChainingEnabled="{TemplateBinding (ScrollViewer.IsScrollChainingEnabled)}"
+                                AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}"
+                                BringIntoViewOnFocusChange="{TemplateBinding (ScrollViewer.BringIntoViewOnFocusChange)}">
+                    <Panel>
+                      <TextBlock Name="PART_Placeholder"
+                                 Foreground="{TemplateBinding PlaceholderForeground}"
+                                 Text="{TemplateBinding PlaceholderText}"
+                                 TextAlignment="{TemplateBinding TextAlignment}"
+                                 TextWrapping="{TemplateBinding TextWrapping}"
+                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                 LineHeight="24">
+                        <TextBlock.IsVisible>
+                          <MultiBinding Converter="{x:Static BoolConverters.And}">
+                            <Binding ElementName="PART_TextPresenter" Path="PreeditText" Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+                            <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Text" Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+                          </MultiBinding>
+                        </TextBlock.IsVisible>
+                      </TextBlock>
+                      <TextPresenter Name="PART_TextPresenter"
+                                     Text="{TemplateBinding Text, Mode=TwoWay}"
+                                     CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
+                                     CaretIndex="{TemplateBinding CaretIndex}"
+                                     SelectionStart="{TemplateBinding SelectionStart}"
+                                     SelectionEnd="{TemplateBinding SelectionEnd}"
+                                     TextAlignment="{TemplateBinding TextAlignment}"
+                                     TextWrapping="{TemplateBinding TextWrapping}"
+                                     LineHeight="24"
+                                     LetterSpacing="{TemplateBinding LetterSpacing}"
+                                     PasswordChar="{TemplateBinding PasswordChar}"
+                                     RevealPassword="{TemplateBinding RevealPassword}"
+                                     SelectionBrush="{TemplateBinding SelectionBrush}"
+                                     SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+                                     CaretBrush="{TemplateBinding CaretBrush}"
+                                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                     VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Panel>
+                    <ScrollViewer.Styles>
+                      <Style Selector="ScrollContentPresenter#PART_ContentPresenter">
+                        <Setter Property="Cursor" Value="IBeam" />
+                      </Style>
+                    </ScrollViewer.Styles>
+                  </ScrollViewer>
+                </DockPanel>
+                <TextBlock Name="PART_Label"
+                           Grid.Column="1"
+                           Margin="16,8,16,0"
+                           VerticalAlignment="Top"
+                           Text="{TemplateBinding (m3:TextFieldAssist.Label)}"
+                           FontSize="12"
+                           LineHeight="16"
+                           LetterSpacing="0.4"
+                           FontWeight="Normal"
+                           Foreground="{DynamicResource M3OnSurfaceVariantBrush}"
+                           TextTrimming="CharacterEllipsis"
+                           HorizontalAlignment="Left"
+                           IsHitTestVisible="False"
+                           IsVisible="False"
+                           RenderTransformOrigin="0%,0%"
+                           RenderTransform="translate(0px,7px) scale(1.3333)">
+                  <TextBlock.Transitions>
+                    <Transitions>
+                      <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.15" Easing="CubicEaseOut" />
+                      <BrushTransition Property="Foreground" Duration="0:0:0.15" />
+                    </Transitions>
+                  </TextBlock.Transitions>
+                </TextBlock>
+                <ContentPresenter Name="PART_TrailingContent"
+                                  Grid.Column="2"
+                                  Margin="-4,0,12,0"
+                                  VerticalAlignment="Center"
+                                  Foreground="{DynamicResource M3OnSurfaceVariantBrush}"
+                                  Content="{TemplateBinding InnerRightContent}" />
+              </Grid>
+            </Panel>
+
+            <TextBlock Name="PART_SupportingText"
+                       Grid.Row="1"
+                       Margin="16,4,16,0"
+                       FontSize="12"
+                       LineHeight="16"
+                       LetterSpacing="0.4"
+                       TextWrapping="Wrap"
+                       Foreground="{DynamicResource M3OnSurfaceVariantBrush}"
+                       Text="{TemplateBinding (m3:TextFieldAssist.SupportingText)}"
+                       IsVisible="{TemplateBinding (m3:TextFieldAssist.SupportingText), Converter={x:Static conv:M3Converters.IsNotNullOrEmpty}}" />
+          </Grid>
+        </DataValidationErrors>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^ /template/ ContentPresenter:empty">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <!-- ===== Label ===== -->
+    <Style Selector="^.HasLabel">
+      <!-- Filled: input text sits below the floating label -->
+      <Setter Property="Padding" Value="16,24,16,8" />
+      <Style Selector="^ /template/ TextBlock#PART_Label">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+      <!-- With a label, the placeholder only shows while focused -->
+      <Style Selector="^ /template/ TextBlock#PART_Placeholder">
+        <Setter Property="Opacity" Value="0" />
+      </Style>
+      <Style Selector="^:focus /template/ TextBlock#PART_Placeholder">
+        <Setter Property="Opacity" Value="1" />
+      </Style>
+    </Style>
+    <!-- Floating -->
+    <Style Selector="^:focus /template/ TextBlock#PART_Label, ^:not(:empty) /template/ TextBlock#PART_Label">
+      <Setter Property="RenderTransform" Value="translate(0px,0px) scale(1)" />
+    </Style>
+
+    <!-- ===== Filled states ===== -->
+    <Style Selector="^:pointerover">
+      <Setter Property="BorderBrush" Value="{DynamicResource M3OnSurfaceBrush}" />
+      <Style Selector="^ /template/ Border#PART_StateLayer">
+        <Setter Property="Opacity" Value="{DynamicResource M3StateHoverOpacity}" />
+      </Style>
+    </Style>
+    <Style Selector="^:focus">
+      <Setter Property="BorderBrush" Value="{DynamicResource M3PrimaryBrush}" />
+      <Style Selector="^ /template/ Border#PART_ActiveIndicator">
+        <Setter Property="Height" Value="2" />
+      </Style>
+      <Style Selector="^ /template/ TextBlock#PART_Label">
+        <Setter Property="Foreground" Value="{DynamicResource M3PrimaryBrush}" />
+      </Style>
+    </Style>
+
+    <!-- ===== Outlined ===== -->
+    <Style Selector="^.Outlined">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderBrush" Value="{DynamicResource M3OutlineBrush}" />
+      <Setter Property="CornerRadius" Value="{DynamicResource M3ShapeExtraSmall}" />
+      <Style Selector="^ /template/ Border#PART_ActiveIndicator">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+      <Style Selector="^ /template/ controls|OutlineBorder#PART_Outline">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+      <!-- Input text is centered; the label floats onto the outline -->
+      <Setter Property="Padding" Value="16" />
+      <Style Selector="^:focus /template/ TextBlock#PART_Label, ^:not(:empty) /template/ TextBlock#PART_Label">
+        <Setter Property="RenderTransform" Value="translate(0px,-16px) scale(1)" />
+      </Style>
+      <Style Selector="^.HasLabel:focus /template/ controls|OutlineBorder#PART_Outline, ^.HasLabel:not(:empty) /template/ controls|OutlineBorder#PART_Outline">
+        <Setter Property="GapProgress" Value="1" />
+      </Style>
+      <Style Selector="^:pointerover">
+        <Setter Property="BorderBrush" Value="{DynamicResource M3OnSurfaceBrush}" />
+        <Style Selector="^ /template/ Border#PART_StateLayer">
+          <Setter Property="Opacity" Value="0" />
+        </Style>
+      </Style>
+      <Style Selector="^:focus">
+        <Setter Property="BorderBrush" Value="{DynamicResource M3PrimaryBrush}" />
+        <Style Selector="^ /template/ controls|OutlineBorder#PART_Outline">
+          <Setter Property="StrokeThickness" Value="2" />
+        </Style>
+      </Style>
+    </Style>
+
+    <!-- ===== Search bar: Classes="Search" (use PlaceholderText, not a label) ===== -->
+    <Style Selector="^.Search">
+      <Setter Property="Background" Value="{DynamicResource M3SurfaceContainerHighBrush}" />
+      <Setter Property="CornerRadius" Value="{DynamicResource M3ShapeFull}" />
+      <Setter Property="Padding" Value="16" />
+      <Style Selector="^ /template/ Border#PART_ActiveIndicator">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+      <Style Selector="^ /template/ ContentPresenter#PART_LeadingContent">
+        <Setter Property="Margin" Value="16,0,0,0" />
+      </Style>
+      <Style Selector="^ /template/ ContentPresenter#PART_TrailingContent">
+        <Setter Property="Margin" Value="0,0,16,0" />
+      </Style>
+    </Style>
+
+    <!-- ===== Error ===== -->
+    <Style Selector="^:error">
+      <Setter Property="BorderBrush" Value="{DynamicResource M3ErrorBrush}" />
+      <Setter Property="CaretBrush" Value="{DynamicResource M3ErrorBrush}" />
+      <Style Selector="^ /template/ TextBlock#PART_Label">
+        <Setter Property="Foreground" Value="{DynamicResource M3ErrorBrush}" />
+      </Style>
+      <Style Selector="^ /template/ TextBlock#PART_SupportingText">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+      <Style Selector="^ /template/ ContentPresenter#PART_TrailingContent">
+        <Setter Property="Foreground" Value="{DynamicResource M3ErrorBrush}" />
+      </Style>
+    </Style>
+
+    <!-- ===== Disabled ===== -->
+    <Style Selector="^:disabled">
+      <Setter Property="Foreground" Value="{DynamicResource M3DisabledContentBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource M3DisabledContentBrush}" />
+      <Setter Property="Background" Value="{DynamicResource M3DisabledFilledFieldBrush}" />
+      <Style Selector="^ /template/ TextBlock#PART_Label">
+        <Setter Property="Foreground" Value="{DynamicResource M3DisabledContentBrush}" />
+      </Style>
+      <Style Selector="^ /template/ TextBlock#PART_SupportingText">
+        <Setter Property="Opacity" Value="{DynamicResource M3DisabledContentOpacity}" />
+      </Style>
+      <Style Selector="^ /template/ ContentPresenter">
+        <Setter Property="Opacity" Value="{DynamicResource M3DisabledContentOpacity}" />
+      </Style>
+    </Style>
+    <Style Selector="^.Outlined:disabled">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderBrush" Value="{DynamicResource M3DisabledContainerBrush}" />
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type TextBox}" TargetType="TextBox" BasedOn="{StaticResource M3TextBox}" />
+
+</ResourceDictionary>

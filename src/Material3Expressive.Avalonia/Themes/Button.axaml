@@ -1,0 +1,791 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="using:Material3Expressive.Avalonia.Controls"
+                    xmlns:conv="using:Material3Expressive.Avalonia.Converters"
+                    xmlns:motion="using:Material3Expressive.Avalonia.Motion">
+
+  <!--
+    Material 3 Expressive buttons. Variant, size and shape are chosen with classes:
+      Common buttons : (default) Filled · Tonal · Elevated · Outlined · Text
+      Sizes          : XSmall (32) · Small (40, default) · Medium (56) · Large (96) · XLarge (136)
+      Shape          : round (default) · Square
+      Icon buttons   : Icon · FilledIcon · TonalIcon · OutlinedIcon  (+ size, + Narrow · Wide, + Square)
+      FABs           : Fab · MediumFab · LargeFab · SmallFab (deprecated) · ExtendedFab (+ Medium · Large)
+                       color: (default) primary container · Secondary · Tertiary · Surface, + Filled for the
+                       strong color (Primary / Secondary / Tertiary); + Lowered
+      Chips          : AssistChip · SuggestionChip · InputChip  (ToggleButton: FilterChip)
+    Pressing a button morphs its corners to a smaller radius with a fast spatial spring.
+  -->
+  <ControlTheme x:Key="M3Button" TargetType="Button">
+    <Setter Property="Background" Value="{DynamicResource M3PrimaryBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource M3OnPrimaryBrush}" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="CornerRadius" Value="20" />
+    <Setter Property="Padding" Value="24,0" />
+    <Setter Property="MinHeight" Value="40" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="LetterSpacing" Value="0.1" />
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+    <!-- ContentControl clips by default in Avalonia 12; shadows and focus rings draw outside the bounds. -->
+    <Setter Property="ClipToBounds" Value="False" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <Border Name="PART_FocusRing"
+                  Margin="-5"
+                  BorderThickness="3"
+                  BorderBrush="{DynamicResource M3SecondaryBrush}"
+                  CornerRadius="{Binding #PART_Container.CornerRadius, Converter={x:Static conv:M3Converters.InflateCornerRadius}, ConverterParameter=5}"
+                  IsHitTestVisible="False"
+                  IsVisible="False" />
+          <Border Name="PART_Container"
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="{TemplateBinding CornerRadius}"
+                  BoxShadow="{DynamicResource M3Elevation0}">
+            <Border.Transitions>
+              <Transitions>
+                <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.15" />
+                <CornerRadiusTransition Property="CornerRadius" Duration="{motion:SpringDuration FastSpatial}" Easing="{motion:Spring FastSpatial}" />
+                <BrushTransition Property="Background" Duration="{motion:SpringDuration FastEffects}" Easing="{motion:Spring FastEffects}" />
+              </Transitions>
+            </Border.Transitions>
+          </Border>
+          <Border Name="PART_StateLayer"
+                  Background="{TemplateBinding Foreground}"
+                  CornerRadius="{Binding #PART_Container.CornerRadius}"
+                  Opacity="0"
+                  IsHitTestVisible="False">
+            <Border.Transitions>
+              <Transitions>
+                <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+              </Transitions>
+            </Border.Transitions>
+          </Border>
+          <controls:Ripple Name="PART_Ripple"
+                           Brush="{TemplateBinding Foreground}"
+                           CornerRadius="{Binding #PART_Container.CornerRadius}" />
+          <ContentPresenter Name="PART_ContentPresenter"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            Padding="{TemplateBinding Padding}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                            RecognizesAccessKey="True" />
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+
+    <!-- ===== Color variants ===== -->
+    <Style Selector="^.Tonal">
+      <Setter Property="Background" Value="{DynamicResource M3SecondaryContainerBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnSecondaryContainerBrush}" />
+    </Style>
+    <Style Selector="^.Elevated">
+      <Setter Property="Background" Value="{DynamicResource M3SurfaceContainerLowBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3PrimaryBrush}" />
+      <Style Selector="^ /template/ Border#PART_Container">
+        <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation1}" />
+      </Style>
+    </Style>
+    <Style Selector="^.Outlined">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource M3OutlineVariantBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+    </Style>
+    <Style Selector="^.Text">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Foreground" Value="{DynamicResource M3PrimaryBrush}" />
+      <Setter Property="Padding" Value="12,0" />
+    </Style>
+
+    <!-- ===== Sizes (md.comp.button.{xsmall…xlarge}) ===== -->
+    <Style Selector="^.XSmall">
+      <Setter Property="MinHeight" Value="32" />
+      <Setter Property="Padding" Value="16,0" />
+      <Setter Property="CornerRadius" Value="16" />
+    </Style>
+    <Style Selector="^.Small">
+      <Setter Property="MinHeight" Value="40" />
+      <Setter Property="Padding" Value="16,0" />
+      <Setter Property="CornerRadius" Value="20" />
+    </Style>
+    <Style Selector="^.Medium">
+      <Setter Property="MinHeight" Value="56" />
+      <Setter Property="Padding" Value="24,0" />
+      <Setter Property="CornerRadius" Value="28" />
+      <Setter Property="FontSize" Value="16" />
+      <Setter Property="LetterSpacing" Value="0.15" />
+    </Style>
+    <Style Selector="^.Large">
+      <Setter Property="MinHeight" Value="96" />
+      <Setter Property="Padding" Value="48,0" />
+      <Setter Property="CornerRadius" Value="48" />
+      <Setter Property="FontSize" Value="24" />
+      <Setter Property="FontWeight" Value="Normal" />
+      <Setter Property="LetterSpacing" Value="0" />
+    </Style>
+    <Style Selector="^.XLarge">
+      <Setter Property="MinHeight" Value="136" />
+      <Setter Property="Padding" Value="64,0" />
+      <Setter Property="CornerRadius" Value="68" />
+      <Setter Property="FontSize" Value="32" />
+      <Setter Property="FontWeight" Value="Normal" />
+      <Setter Property="LetterSpacing" Value="0" />
+    </Style>
+    <Style Selector="^.Outlined.Large">
+      <Setter Property="BorderThickness" Value="2" />
+    </Style>
+    <Style Selector="^.Outlined.XLarge">
+      <Setter Property="BorderThickness" Value="3" />
+    </Style>
+
+    <!-- Square shape -->
+    <Style Selector="^.Square">
+      <Setter Property="CornerRadius" Value="12" />
+    </Style>
+    <Style Selector="^.Square.Medium">
+      <Setter Property="CornerRadius" Value="16" />
+    </Style>
+    <Style Selector="^.Square.Large, ^.Square.XLarge">
+      <Setter Property="CornerRadius" Value="28" />
+    </Style>
+
+    <!-- Pressed shape morph (:pressing is held long enough for quick taps to be seen) -->
+    <Style Selector="^:pressed, ^:pressing">
+      <Setter Property="CornerRadius" Value="8" />
+    </Style>
+    <Style Selector="^.Medium:pressed, ^.Medium:pressing">
+      <Setter Property="CornerRadius" Value="12" />
+    </Style>
+    <Style Selector="^.Large:pressed, ^.Large:pressing, ^.XLarge:pressed, ^.XLarge:pressing">
+      <Setter Property="CornerRadius" Value="16" />
+    </Style>
+
+    <!-- ===== Icon buttons (md.comp.icon-button.*) ===== -->
+    <Style Selector="^.Icon, ^.FilledIcon, ^.TonalIcon, ^.OutlinedIcon">
+      <Setter Property="Width" Value="40" />
+      <Setter Property="Height" Value="40" />
+      <Setter Property="MinHeight" Value="0" />
+      <Setter Property="Padding" Value="0" />
+      <Style Selector="^ /template/ controls|Ripple#PART_Ripple">
+        <Setter Property="IsCentered" Value="True" />
+      </Style>
+    </Style>
+    <Style Selector="^.Icon">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+    </Style>
+    <Style Selector="^.TonalIcon">
+      <Setter Property="Background" Value="{DynamicResource M3SecondaryContainerBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnSecondaryContainerBrush}" />
+    </Style>
+    <Style Selector="^.OutlinedIcon">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource M3OutlineVariantBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+    </Style>
+    <!-- Icon button sizes: height, then default width = icon + 2 × leading space -->
+    <Style Selector="^.Icon.XSmall, ^.FilledIcon.XSmall, ^.TonalIcon.XSmall, ^.OutlinedIcon.XSmall">
+      <Setter Property="Width" Value="32" />
+      <Setter Property="Height" Value="32" />
+      <Setter Property="CornerRadius" Value="16" />
+    </Style>
+    <Style Selector="^.Icon.Medium, ^.FilledIcon.Medium, ^.TonalIcon.Medium, ^.OutlinedIcon.Medium">
+      <Setter Property="Width" Value="56" />
+      <Setter Property="Height" Value="56" />
+      <Setter Property="CornerRadius" Value="28" />
+    </Style>
+    <Style Selector="^.Icon.Large, ^.FilledIcon.Large, ^.TonalIcon.Large, ^.OutlinedIcon.Large">
+      <Setter Property="Width" Value="96" />
+      <Setter Property="Height" Value="96" />
+      <Setter Property="CornerRadius" Value="48" />
+    </Style>
+    <Style Selector="^.Icon.XLarge, ^.FilledIcon.XLarge, ^.TonalIcon.XLarge, ^.OutlinedIcon.XLarge">
+      <Setter Property="Width" Value="136" />
+      <Setter Property="Height" Value="136" />
+      <Setter Property="CornerRadius" Value="68" />
+    </Style>
+    <Style Selector="^.OutlinedIcon.Large">
+      <Setter Property="BorderThickness" Value="2" />
+    </Style>
+    <Style Selector="^.OutlinedIcon.XLarge">
+      <Setter Property="BorderThickness" Value="3" />
+    </Style>
+    <!-- Widths: Narrow / Wide -->
+    <Style Selector="^.Icon.Narrow, ^.FilledIcon.Narrow, ^.TonalIcon.Narrow, ^.OutlinedIcon.Narrow">
+      <Setter Property="Width" Value="32" />
+    </Style>
+    <Style Selector="^.Icon.Wide, ^.FilledIcon.Wide, ^.TonalIcon.Wide, ^.OutlinedIcon.Wide">
+      <Setter Property="Width" Value="52" />
+    </Style>
+    <Style Selector="^.XSmall.Narrow"><Setter Property="Width" Value="28" /></Style>
+    <Style Selector="^.XSmall.Wide"><Setter Property="Width" Value="40" /></Style>
+    <Style Selector="^.Medium.Narrow"><Setter Property="Width" Value="48" /></Style>
+    <Style Selector="^.Medium.Wide"><Setter Property="Width" Value="72" /></Style>
+    <Style Selector="^.Large.Narrow"><Setter Property="Width" Value="64" /></Style>
+    <Style Selector="^.Large.Wide"><Setter Property="Width" Value="128" /></Style>
+    <Style Selector="^.XLarge.Narrow"><Setter Property="Width" Value="104" /></Style>
+    <Style Selector="^.XLarge.Wide"><Setter Property="Width" Value="184" /></Style>
+    <!-- Square icon buttons -->
+    <Style Selector="^.Icon.Square, ^.FilledIcon.Square, ^.TonalIcon.Square, ^.OutlinedIcon.Square">
+      <Setter Property="CornerRadius" Value="12" />
+    </Style>
+    <Style Selector="^.Square.Medium:not(:pressed):not(:pressing)">
+      <Setter Property="CornerRadius" Value="16" />
+    </Style>
+    <Style Selector="^.Square.Large:not(:pressed):not(:pressing), ^.Square.XLarge:not(:pressed):not(:pressing)">
+      <Setter Property="CornerRadius" Value="28" />
+    </Style>
+    <!-- Icon buttons morph on press too -->
+    <Style Selector="^.Icon:pressed, ^.Icon:pressing, ^.FilledIcon:pressed, ^.FilledIcon:pressing, ^.TonalIcon:pressed, ^.TonalIcon:pressing, ^.OutlinedIcon:pressed, ^.OutlinedIcon:pressing">
+      <Setter Property="CornerRadius" Value="8" />
+    </Style>
+    <Style Selector="^.Medium.Icon:pressed, ^.Medium.Icon:pressing, ^.Medium.FilledIcon:pressed, ^.Medium.FilledIcon:pressing, ^.Medium.TonalIcon:pressed, ^.Medium.TonalIcon:pressing, ^.Medium.OutlinedIcon:pressed, ^.Medium.OutlinedIcon:pressing">
+      <Setter Property="CornerRadius" Value="12" />
+    </Style>
+    <Style Selector="^.Large.Icon:pressed, ^.Large.Icon:pressing, ^.Large.FilledIcon:pressed, ^.Large.FilledIcon:pressing, ^.Large.TonalIcon:pressed, ^.Large.TonalIcon:pressing, ^.Large.OutlinedIcon:pressed, ^.Large.OutlinedIcon:pressing, ^.XLarge.Icon:pressed, ^.XLarge.Icon:pressing, ^.XLarge.FilledIcon:pressed, ^.XLarge.FilledIcon:pressing, ^.XLarge.TonalIcon:pressed, ^.XLarge.TonalIcon:pressing, ^.XLarge.OutlinedIcon:pressed, ^.XLarge.OutlinedIcon:pressing">
+      <Setter Property="CornerRadius" Value="16" />
+    </Style>
+
+    <!-- ===== Floating action buttons (md.comp.fab.*) ===== -->
+    <Style Selector="^.Fab, ^.MediumFab, ^.SmallFab, ^.LargeFab, ^.ExtendedFab">
+      <Setter Property="Background" Value="{DynamicResource M3PrimaryContainerBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnPrimaryContainerBrush}" />
+      <Setter Property="MinHeight" Value="0" />
+      <Setter Property="Padding" Value="0" />
+      <Style Selector="^ /template/ Border#PART_Container">
+        <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation3}" />
+      </Style>
+    </Style>
+    <Style Selector="^.Fab">
+      <Setter Property="Width" Value="56" />
+      <Setter Property="Height" Value="56" />
+      <Setter Property="CornerRadius" Value="16" />
+    </Style>
+    <Style Selector="^.MediumFab">
+      <Setter Property="Width" Value="80" />
+      <Setter Property="Height" Value="80" />
+      <Setter Property="CornerRadius" Value="20" />
+    </Style>
+    <Style Selector="^.SmallFab">
+      <Setter Property="Width" Value="40" />
+      <Setter Property="Height" Value="40" />
+      <Setter Property="CornerRadius" Value="12" />
+    </Style>
+    <Style Selector="^.LargeFab">
+      <Setter Property="Width" Value="96" />
+      <Setter Property="Height" Value="96" />
+      <Setter Property="CornerRadius" Value="28" />
+    </Style>
+    <!-- Extended FAB: small (56, default) · Medium (80) · Large (96) -->
+    <Style Selector="^.ExtendedFab">
+      <Setter Property="Height" Value="56" />
+      <Setter Property="MinWidth" Value="80" />
+      <Setter Property="Padding" Value="16,0" />
+      <Setter Property="CornerRadius" Value="16" />
+      <Setter Property="FontSize" Value="16" />
+      <Setter Property="LetterSpacing" Value="0.15" />
+    </Style>
+    <Style Selector="^.ExtendedFab.Medium">
+      <Setter Property="Height" Value="80" />
+      <Setter Property="Padding" Value="26,0" />
+      <Setter Property="CornerRadius" Value="20" />
+      <Setter Property="FontSize" Value="22" />
+      <Setter Property="FontWeight" Value="Normal" />
+      <Setter Property="LetterSpacing" Value="0" />
+    </Style>
+    <Style Selector="^.ExtendedFab.Large">
+      <Setter Property="Height" Value="96" />
+      <Setter Property="Padding" Value="28,0" />
+      <Setter Property="CornerRadius" Value="28" />
+      <Setter Property="FontSize" Value="24" />
+      <Setter Property="FontWeight" Value="Normal" />
+      <Setter Property="LetterSpacing" Value="0" />
+    </Style>
+    <!-- FABs keep their shape when pressed -->
+    <Style Selector="^.Fab:pressed, ^.Fab:pressing, ^.ExtendedFab:pressed, ^.ExtendedFab:pressing">
+      <Setter Property="CornerRadius" Value="16" />
+    </Style>
+    <Style Selector="^.MediumFab:pressed, ^.MediumFab:pressing, ^.ExtendedFab.Medium:pressed, ^.ExtendedFab.Medium:pressing">
+      <Setter Property="CornerRadius" Value="20" />
+    </Style>
+    <Style Selector="^.SmallFab:pressed, ^.SmallFab:pressing">
+      <Setter Property="CornerRadius" Value="12" />
+    </Style>
+    <Style Selector="^.LargeFab:pressed, ^.LargeFab:pressing, ^.ExtendedFab.Large:pressed, ^.ExtendedFab.Large:pressing">
+      <Setter Property="CornerRadius" Value="28" />
+    </Style>
+    <Style Selector="^.Fab.Lowered, ^.MediumFab.Lowered, ^.SmallFab.Lowered, ^.LargeFab.Lowered, ^.ExtendedFab.Lowered">
+      <Style Selector="^ /template/ Border#PART_Container">
+        <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation1}" />
+      </Style>
+    </Style>
+    <!-- FAB colors -->
+    <Style Selector="^.Fab.Secondary, ^.MediumFab.Secondary, ^.SmallFab.Secondary, ^.LargeFab.Secondary, ^.ExtendedFab.Secondary">
+      <Setter Property="Background" Value="{DynamicResource M3SecondaryContainerBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnSecondaryContainerBrush}" />
+    </Style>
+    <Style Selector="^.Fab.Tertiary, ^.MediumFab.Tertiary, ^.SmallFab.Tertiary, ^.LargeFab.Tertiary, ^.ExtendedFab.Tertiary">
+      <Setter Property="Background" Value="{DynamicResource M3TertiaryContainerBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnTertiaryContainerBrush}" />
+    </Style>
+    <Style Selector="^.Fab.Surface, ^.MediumFab.Surface, ^.SmallFab.Surface, ^.LargeFab.Surface, ^.ExtendedFab.Surface">
+      <Setter Property="Background" Value="{DynamicResource M3SurfaceContainerHighBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3PrimaryBrush}" />
+    </Style>
+    <Style Selector="^.Fab.Filled, ^.MediumFab.Filled, ^.SmallFab.Filled, ^.LargeFab.Filled, ^.ExtendedFab.Filled">
+      <Setter Property="Background" Value="{DynamicResource M3PrimaryBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnPrimaryBrush}" />
+    </Style>
+    <Style Selector="^.Fab.Filled.Secondary, ^.MediumFab.Filled.Secondary, ^.SmallFab.Filled.Secondary, ^.LargeFab.Filled.Secondary, ^.ExtendedFab.Filled.Secondary">
+      <Setter Property="Background" Value="{DynamicResource M3SecondaryBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnSecondaryBrush}" />
+    </Style>
+    <Style Selector="^.Fab.Filled.Tertiary, ^.MediumFab.Filled.Tertiary, ^.SmallFab.Filled.Tertiary, ^.LargeFab.Filled.Tertiary, ^.ExtendedFab.Filled.Tertiary">
+      <Setter Property="Background" Value="{DynamicResource M3TertiaryBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnTertiaryBrush}" />
+    </Style>
+
+    <!-- ===== Chips (shape does not morph) ===== -->
+    <Style Selector="^.AssistChip, ^.SuggestionChip, ^.InputChip">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderBrush" Value="{DynamicResource M3OutlineVariantBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="8" />
+      <Setter Property="MinHeight" Value="32" />
+      <Setter Property="Height" Value="32" />
+      <Setter Property="Padding" Value="16,0" />
+    </Style>
+    <Style Selector="^.AssistChip">
+      <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+    </Style>
+    <Style Selector="^.SuggestionChip">
+      <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+    </Style>
+    <!-- Input chip: put the label and a trailing remove icon in the content -->
+    <Style Selector="^.InputChip">
+      <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+      <Setter Property="Padding" Value="12,0,8,0" />
+    </Style>
+    <Style Selector="^.AssistChip:pressed, ^.AssistChip:pressing, ^.SuggestionChip:pressed, ^.SuggestionChip:pressing, ^.InputChip:pressed, ^.InputChip:pressing">
+      <Setter Property="CornerRadius" Value="8" />
+    </Style>
+    <!-- Elevated chips: Classes="AssistChip Elevated" / "SuggestionChip Elevated" -->
+    <Style Selector="^.AssistChip.Elevated, ^.SuggestionChip.Elevated">
+      <Setter Property="Background" Value="{DynamicResource M3SurfaceContainerLowBrush}" />
+      <Setter Property="BorderThickness" Value="0" />
+    </Style>
+
+    <!-- ===== States ===== -->
+    <Style Selector="^:pointerover /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StateHoverOpacity}" />
+    </Style>
+    <Style Selector="^:focus-visible /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StateFocusOpacity}" />
+    </Style>
+    <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+
+    <!-- Hover elevation: filled/tonal +1, elevated 2, FAB 4 -->
+    <Style Selector="^:pointerover /template/ Border#PART_Container">
+      <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation1}" />
+    </Style>
+    <Style Selector="^.Outlined:pointerover, ^.Text:pointerover, ^.Icon:pointerover, ^.OutlinedIcon:pointerover, ^.AssistChip:pointerover, ^.SuggestionChip:pointerover, ^.InputChip:pointerover">
+      <Style Selector="^ /template/ Border#PART_Container">
+        <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation0}" />
+      </Style>
+    </Style>
+    <Style Selector="^.Elevated:pointerover /template/ Border#PART_Container">
+      <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation2}" />
+    </Style>
+    <Style Selector="^.Fab:pointerover, ^.MediumFab:pointerover, ^.SmallFab:pointerover, ^.LargeFab:pointerover, ^.ExtendedFab:pointerover">
+      <Style Selector="^ /template/ Border#PART_Container">
+        <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation4}" />
+      </Style>
+    </Style>
+    <Style Selector="^.Lowered:pointerover /template/ Border#PART_Container">
+      <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation2}" />
+    </Style>
+
+    <!-- Pressed returns to the resting elevation -->
+    <Style Selector="^:pressed /template/ Border#PART_Container">
+      <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation0}" />
+    </Style>
+    <Style Selector="^.Elevated:pressed /template/ Border#PART_Container">
+      <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation1}" />
+    </Style>
+    <Style Selector="^.Fab:pressed, ^.MediumFab:pressed, ^.SmallFab:pressed, ^.LargeFab:pressed, ^.ExtendedFab:pressed">
+      <Style Selector="^ /template/ Border#PART_Container">
+        <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation3}" />
+      </Style>
+    </Style>
+    <Style Selector="^.Lowered:pressed /template/ Border#PART_Container">
+      <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation1}" />
+    </Style>
+
+    <!-- Disabled: container onSurface 12%, content onSurface 38%, no elevation -->
+    <Style Selector="^:disabled">
+      <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+      <Style Selector="^ /template/ Border#PART_Container">
+        <Setter Property="Background" Value="{DynamicResource M3OnSurfaceBrush}" />
+        <Setter Property="Opacity" Value="{DynamicResource M3DisabledContainerOpacity}" />
+        <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation0}" />
+      </Style>
+      <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Opacity" Value="{DynamicResource M3DisabledContentOpacity}" />
+      </Style>
+    </Style>
+    <Style Selector="^.Outlined:disabled, ^.OutlinedIcon:disabled, ^.AssistChip:disabled, ^.SuggestionChip:disabled, ^.InputChip:disabled">
+      <Style Selector="^ /template/ Border#PART_Container">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{DynamicResource M3OnSurfaceBrush}" />
+      </Style>
+    </Style>
+    <Style Selector="^.Text:disabled, ^.Icon:disabled">
+      <Style Selector="^ /template/ Border#PART_Container">
+        <Setter Property="Background" Value="Transparent" />
+      </Style>
+    </Style>
+    <Style Selector="^.AssistChip.Elevated:disabled, ^.SuggestionChip.Elevated:disabled">
+      <Style Selector="^ /template/ Border#PART_Container">
+        <Setter Property="Background" Value="{DynamicResource M3OnSurfaceBrush}" />
+      </Style>
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type Button}" TargetType="Button" BasedOn="{StaticResource M3Button}" />
+
+  <!-- Buttons on inverse surfaces (snackbar action / close). -->
+  <ControlTheme x:Key="M3InverseTextButton" TargetType="Button" BasedOn="{StaticResource M3Button}">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource M3InversePrimaryBrush}" />
+    <Setter Property="Padding" Value="12,0" />
+    <Style Selector="^:pointerover /template/ Border#PART_Container">
+      <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation0}" />
+    </Style>
+    <Style Selector="^:disabled /template/ Border#PART_Container">
+      <Setter Property="Background" Value="Transparent" />
+    </Style>
+  </ControlTheme>
+  <ControlTheme x:Key="M3InverseIconButton" TargetType="Button" BasedOn="{StaticResource M3InverseTextButton}">
+    <Setter Property="Foreground" Value="{DynamicResource M3InverseOnSurfaceBrush}" />
+    <Setter Property="Width" Value="40" />
+    <Setter Property="Height" Value="40" />
+    <Setter Property="MinHeight" Value="0" />
+    <Setter Property="Padding" Value="0" />
+    <Style Selector="^ /template/ controls|Ripple#PART_Ripple">
+      <Setter Property="IsCentered" Value="True" />
+    </Style>
+  </ControlTheme>
+  <ControlTheme x:Key="{x:Type RepeatButton}" TargetType="RepeatButton" BasedOn="{StaticResource M3Button}" />
+
+  <ControlTheme x:Key="{x:Type HyperlinkButton}" TargetType="HyperlinkButton" BasedOn="{StaticResource M3Button}">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource M3PrimaryBrush}" />
+    <Setter Property="Padding" Value="12,0" />
+    <Style Selector="^:pointerover /template/ Border#PART_Container">
+      <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation0}" />
+    </Style>
+    <Style Selector="^:disabled /template/ Border#PART_Container">
+      <Setter Property="Background" Value="Transparent" />
+    </Style>
+  </ControlTheme>
+
+  <!--
+    ToggleButton. The default look is the Expressive (filled) toggle button; classes:
+      Tonal · Elevated · Outlined                  toggle button colors
+      sizes and Square                             as for Button
+      Icon · FilledIcon · TonalIcon · OutlinedIcon icon toggle buttons
+      FilterChip (+ Elevated) · Segmented (+ SegmentStart / SegmentEnd)
+    Selecting a round toggle button morphs it to its square shape (and a Square one to round).
+  -->
+  <ControlTheme x:Key="M3ToggleButton" TargetType="ToggleButton" BasedOn="{StaticResource M3Button}">
+    <Setter Property="Background" Value="{DynamicResource M3SurfaceContainerBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <Border Name="PART_FocusRing"
+                  Margin="-5"
+                  BorderThickness="3"
+                  BorderBrush="{DynamicResource M3SecondaryBrush}"
+                  CornerRadius="{Binding #PART_Container.CornerRadius, Converter={x:Static conv:M3Converters.InflateCornerRadius}, ConverterParameter=5}"
+                  IsHitTestVisible="False"
+                  IsVisible="False" />
+          <Border Name="PART_Container"
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="{TemplateBinding CornerRadius}"
+                  BoxShadow="{DynamicResource M3Elevation0}">
+            <Border.Transitions>
+              <Transitions>
+                <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.15" />
+                <CornerRadiusTransition Property="CornerRadius" Duration="{motion:SpringDuration FastSpatial}" Easing="{motion:Spring FastSpatial}" />
+                <BrushTransition Property="Background" Duration="{motion:SpringDuration FastEffects}" Easing="{motion:Spring FastEffects}" />
+              </Transitions>
+            </Border.Transitions>
+          </Border>
+          <Border Name="PART_StateLayer"
+                  Background="{TemplateBinding Foreground}"
+                  CornerRadius="{Binding #PART_Container.CornerRadius}"
+                  Opacity="0"
+                  IsHitTestVisible="False">
+            <Border.Transitions>
+              <Transitions>
+                <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+              </Transitions>
+            </Border.Transitions>
+          </Border>
+          <controls:Ripple Name="PART_Ripple"
+                           Brush="{TemplateBinding Foreground}"
+                           CornerRadius="{Binding #PART_Container.CornerRadius}" />
+          <DockPanel Name="PART_Content"
+                     Margin="{TemplateBinding Padding}"
+                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                     VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+            <Path Name="PART_CheckIcon"
+                  DockPanel.Dock="Left"
+                  Width="18"
+                  Height="18"
+                  Margin="0,0,8,0"
+                  VerticalAlignment="Center"
+                  Stroke="{TemplateBinding Foreground}"
+                  StrokeThickness="2"
+                  StrokeLineCap="Round"
+                  StrokeJoin="Round"
+                  Data="{StaticResource M3CheckMarkStroke}"
+                  IsVisible="False" />
+            <ContentPresenter Name="PART_ContentPresenter"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              HorizontalContentAlignment="Center"
+                              VerticalContentAlignment="Center"
+                              RecognizesAccessKey="True" />
+          </DockPanel>
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+
+    <!-- Toggle button colors (md.comp.button.*.selected / unselected) -->
+    <Style Selector="^:checked">
+      <Setter Property="Background" Value="{DynamicResource M3PrimaryBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnPrimaryBrush}" />
+    </Style>
+    <Style Selector="^.Tonal">
+      <Style Selector="^:checked">
+        <Setter Property="Background" Value="{DynamicResource M3SecondaryBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource M3OnSecondaryBrush}" />
+      </Style>
+    </Style>
+    <Style Selector="^.Elevated:checked">
+      <Setter Property="Background" Value="{DynamicResource M3PrimaryBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnPrimaryBrush}" />
+    </Style>
+    <Style Selector="^.Outlined:checked">
+      <Setter Property="Background" Value="{DynamicResource M3InverseSurfaceBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3InverseOnSurfaceBrush}" />
+      <Setter Property="BorderThickness" Value="0" />
+    </Style>
+    <Style Selector="^.Text:checked">
+      <Setter Property="Background" Value="{DynamicResource M3SecondaryContainerBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnSecondaryContainerBrush}" />
+    </Style>
+
+    <!-- Selected shape: round → square, Square → round -->
+    <Style Selector="^:checked">
+      <Setter Property="CornerRadius" Value="12" />
+    </Style>
+    <Style Selector="^.Medium:checked">
+      <Setter Property="CornerRadius" Value="16" />
+    </Style>
+    <Style Selector="^.Large:checked, ^.XLarge:checked">
+      <Setter Property="CornerRadius" Value="28" />
+    </Style>
+    <Style Selector="^.Square:checked">
+      <Setter Property="CornerRadius" Value="20" />
+    </Style>
+    <Style Selector="^.Square.XSmall:checked">
+      <Setter Property="CornerRadius" Value="16" />
+    </Style>
+    <Style Selector="^.Square.Medium:checked">
+      <Setter Property="CornerRadius" Value="28" />
+    </Style>
+    <Style Selector="^.Square.Large:checked">
+      <Setter Property="CornerRadius" Value="48" />
+    </Style>
+    <Style Selector="^.Square.XLarge:checked">
+      <Setter Property="CornerRadius" Value="68" />
+    </Style>
+    <!-- Pressed always wins -->
+    <Style Selector="^:pressed, ^:pressing">
+      <Setter Property="CornerRadius" Value="8" />
+    </Style>
+    <Style Selector="^.Medium:pressed, ^.Medium:pressing">
+      <Setter Property="CornerRadius" Value="12" />
+    </Style>
+    <Style Selector="^.Large:pressed, ^.Large:pressing, ^.XLarge:pressed, ^.XLarge:pressing">
+      <Setter Property="CornerRadius" Value="16" />
+    </Style>
+
+    <Style Selector="^:pointerover /template/ Border#PART_Container">
+      <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation0}" />
+    </Style>
+
+    <!-- Outlined selectables shared by filter chips and (legacy) segmented buttons -->
+    <Style Selector="^.FilterChip, ^.Segmented">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource M3OutlineBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Style Selector="^:checked">
+        <Setter Property="Background" Value="{DynamicResource M3SecondaryContainerBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource M3OnSecondaryContainerBrush}" />
+      </Style>
+    </Style>
+
+    <!-- Filter chip (shape does not morph) -->
+    <Style Selector="^.FilterChip">
+      <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource M3OutlineVariantBrush}" />
+      <Setter Property="CornerRadius" Value="8" />
+      <Setter Property="MinHeight" Value="32" />
+      <Setter Property="Height" Value="32" />
+      <Setter Property="Padding" Value="16,0" />
+    </Style>
+    <Style Selector="^.FilterChip:checked">
+      <Setter Property="Foreground" Value="{DynamicResource M3OnSecondaryContainerBrush}" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="Padding" Value="8,0,16,0" />
+      <Setter Property="CornerRadius" Value="8" />
+      <Style Selector="^ /template/ Path#PART_CheckIcon">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+    </Style>
+    <Style Selector="^.FilterChip:pressed, ^.FilterChip:pressing">
+      <Setter Property="CornerRadius" Value="8" />
+    </Style>
+
+    <Style Selector="^.FilterChip.Elevated">
+      <Setter Property="Background" Value="{DynamicResource M3SurfaceContainerLowBrush}" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Style Selector="^ /template/ Border#PART_Container">
+        <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation1}" />
+      </Style>
+      <Style Selector="^:pointerover /template/ Border#PART_Container">
+        <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation2}" />
+      </Style>
+      <Style Selector="^:checked">
+        <Setter Property="Background" Value="{DynamicResource M3SecondaryContainerBrush}" />
+      </Style>
+      <Style Selector="^:disabled /template/ Border#PART_Container">
+        <Setter Property="Background" Value="{DynamicResource M3OnSurfaceBrush}" />
+        <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation0}" />
+      </Style>
+    </Style>
+
+    <!-- Segmented button (superseded by the connected ButtonGroup in Expressive) -->
+    <Style Selector="^.Segmented">
+      <Setter Property="CornerRadius" Value="0" />
+      <Setter Property="Padding" Value="12,0" />
+      <Setter Property="MinWidth" Value="48" />
+      <Setter Property="Margin" Value="0,0,-1,0" />
+    </Style>
+    <Style Selector="^.Segmented:checked, ^.Segmented:pressed, ^.Segmented:pressing">
+      <Setter Property="CornerRadius" Value="0" />
+    </Style>
+    <Style Selector="^.Segmented.SegmentStart, ^.Segmented.SegmentStart:checked, ^.Segmented.SegmentStart:pressed, ^.Segmented.SegmentStart:pressing">
+      <Setter Property="CornerRadius" Value="20,0,0,20" />
+    </Style>
+    <Style Selector="^.Segmented.SegmentEnd, ^.Segmented.SegmentEnd:checked, ^.Segmented.SegmentEnd:pressed, ^.Segmented.SegmentEnd:pressing">
+      <Setter Property="CornerRadius" Value="0,20,20,0" />
+      <Setter Property="Margin" Value="0" />
+    </Style>
+    <Style Selector="^.Segmented.SegmentStart.SegmentEnd">
+      <Setter Property="CornerRadius" Value="20" />
+    </Style>
+    <Style Selector="^.Segmented:checked /template/ Path#PART_CheckIcon">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+
+    <!-- Icon toggle buttons: selected round → square (Square → round) -->
+    <Style Selector="^.Icon, ^.FilledIcon, ^.TonalIcon, ^.OutlinedIcon">
+      <Setter Property="BorderThickness" Value="0" />
+    </Style>
+    <Style Selector="^.Icon">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+      <Style Selector="^:checked">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource M3PrimaryBrush}" />
+      </Style>
+    </Style>
+    <Style Selector="^.FilledIcon">
+      <Setter Property="Background" Value="{DynamicResource M3SurfaceContainerBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+      <Style Selector="^:checked">
+        <Setter Property="Background" Value="{DynamicResource M3PrimaryBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource M3OnPrimaryBrush}" />
+      </Style>
+    </Style>
+    <Style Selector="^.TonalIcon">
+      <Setter Property="Background" Value="{DynamicResource M3SecondaryContainerBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnSecondaryContainerBrush}" />
+      <Style Selector="^:checked">
+        <Setter Property="Background" Value="{DynamicResource M3SecondaryBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource M3OnSecondaryBrush}" />
+      </Style>
+    </Style>
+    <Style Selector="^.OutlinedIcon">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="BorderBrush" Value="{DynamicResource M3OutlineVariantBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+      <Style Selector="^:checked">
+        <Setter Property="Background" Value="{DynamicResource M3InverseSurfaceBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource M3InverseOnSurfaceBrush}" />
+        <Setter Property="BorderThickness" Value="0" />
+      </Style>
+    </Style>
+    <Style Selector="^.Icon.Square:checked, ^.FilledIcon.Square:checked, ^.TonalIcon.Square:checked, ^.OutlinedIcon.Square:checked">
+      <Setter Property="CornerRadius" Value="20" />
+    </Style>
+    <Style Selector="^.Icon.Square.XSmall:checked, ^.FilledIcon.Square.XSmall:checked, ^.TonalIcon.Square.XSmall:checked, ^.OutlinedIcon.Square.XSmall:checked">
+      <Setter Property="CornerRadius" Value="16" />
+    </Style>
+    <Style Selector="^.Icon:pressed, ^.Icon:pressing, ^.FilledIcon:pressed, ^.FilledIcon:pressing, ^.TonalIcon:pressed, ^.TonalIcon:pressing, ^.OutlinedIcon:pressed, ^.OutlinedIcon:pressing">
+      <Setter Property="CornerRadius" Value="8" />
+    </Style>
+    <Style Selector="^.Medium.Icon:pressed, ^.Medium.Icon:pressing, ^.Medium.FilledIcon:pressed, ^.Medium.FilledIcon:pressing, ^.Medium.TonalIcon:pressed, ^.Medium.TonalIcon:pressing, ^.Medium.OutlinedIcon:pressed, ^.Medium.OutlinedIcon:pressing">
+      <Setter Property="CornerRadius" Value="12" />
+    </Style>
+    <Style Selector="^.Large.Icon:pressed, ^.Large.Icon:pressing, ^.Large.FilledIcon:pressed, ^.Large.FilledIcon:pressing, ^.Large.TonalIcon:pressed, ^.Large.TonalIcon:pressing, ^.Large.OutlinedIcon:pressed, ^.Large.OutlinedIcon:pressing, ^.XLarge.Icon:pressed, ^.XLarge.Icon:pressing, ^.XLarge.FilledIcon:pressed, ^.XLarge.FilledIcon:pressing, ^.XLarge.TonalIcon:pressed, ^.XLarge.TonalIcon:pressing, ^.XLarge.OutlinedIcon:pressed, ^.XLarge.OutlinedIcon:pressing">
+      <Setter Property="CornerRadius" Value="16" />
+    </Style>
+
+    <Style Selector="^:disabled /template/ Path#PART_CheckIcon">
+      <Setter Property="Opacity" Value="{DynamicResource M3DisabledContentOpacity}" />
+    </Style>
+    <Style Selector="^.FilterChip:disabled:unchecked, ^.Segmented:disabled:unchecked, ^.Outlined:disabled:unchecked, ^.OutlinedIcon:disabled:unchecked, ^.Icon:disabled">
+      <Style Selector="^ /template/ Border#PART_Container">
+        <Setter Property="Background" Value="Transparent" />
+      </Style>
+    </Style>
+    <Style Selector="^.FilterChip:disabled:unchecked, ^.Segmented:disabled:unchecked, ^.Outlined:disabled:unchecked, ^.OutlinedIcon:disabled:unchecked">
+      <Style Selector="^ /template/ Border#PART_Container">
+        <Setter Property="BorderBrush" Value="{DynamicResource M3OnSurfaceBrush}" />
+      </Style>
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type ToggleButton}" TargetType="ToggleButton" BasedOn="{StaticResource M3ToggleButton}" />
+</ResourceDictionary>

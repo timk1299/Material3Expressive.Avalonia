@@ -1,0 +1,194 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:motion="using:Material3Expressive.Avalonia.Motion">
+
+  <!--
+    Material 3 switch: 52x32 track, handle 16 (off) / 24 (on) / 28 (pressed).
+    Content is shown as a header above the switch (Avalonia semantics);
+    OnContent / OffContent are shown to the right of the track.
+  -->
+  <ControlTheme x:Key="{x:Type ToggleSwitch}" TargetType="ToggleSwitch">
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="HorizontalContentAlignment" Value="Left" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="LetterSpacing" Value="0.25" />
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+    <!-- ContentControl clips by default in Avalonia 12; shadows and focus rings draw outside the bounds. -->
+    <Setter Property="ClipToBounds" Value="False" />
+    <Setter Property="OnContent" Value="{x:Null}" />
+    <Setter Property="OffContent" Value="{x:Null}" />
+    <Setter Property="KnobTransitions">
+      <Transitions>
+        <DoubleTransition Property="Canvas.Left" Duration="{motion:SpringDuration FastSpatial}" Easing="{motion:Spring FastSpatial}" />
+      </Transitions>
+    </Setter>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Grid Background="Transparent" RowDefinitions="Auto,*">
+          <ContentPresenter Name="PART_ContentPresenter"
+                            Grid.Row="0"
+                            Margin="0,0,0,8"
+                            VerticalAlignment="Top"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            RecognizesAccessKey="True" />
+
+          <Grid Grid.Row="1" ColumnDefinitions="Auto,Auto" HorizontalAlignment="Left">
+            <Panel Name="PART_SwitchArea"
+                   Width="52"
+                   Height="32"
+                   Margin="0,4"
+                   VerticalAlignment="Center">
+              <Border Name="PART_FocusRing"
+                      Margin="-5"
+                      CornerRadius="21"
+                      BorderThickness="3"
+                      BorderBrush="{DynamicResource M3SecondaryBrush}"
+                      IsVisible="False" />
+              <Border Name="PART_Track"
+                      CornerRadius="16"
+                      BorderThickness="2"
+                      Background="{DynamicResource M3SurfaceContainerHighestBrush}"
+                      BorderBrush="{DynamicResource M3OutlineBrush}">
+                <Border.Transitions>
+                  <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.15" />
+                    <BrushTransition Property="BorderBrush" Duration="0:0:0.15" />
+                  </Transitions>
+                </Border.Transitions>
+              </Border>
+              <Canvas Name="PART_SwitchKnob" Width="20" Height="32" HorizontalAlignment="Left">
+                <Panel Name="PART_MovingKnobs" Width="32" Height="32" Background="Transparent">
+                  <Ellipse Name="PART_StateLayer"
+                           Margin="-4"
+                           Fill="{DynamicResource M3OnSurfaceBrush}"
+                           Opacity="0">
+                    <Ellipse.Transitions>
+                      <Transitions>
+                        <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+                      </Transitions>
+                    </Ellipse.Transitions>
+                  </Ellipse>
+                  <Ellipse Name="PART_Handle"
+                           Width="16"
+                           Height="16"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Fill="{DynamicResource M3OutlineBrush}">
+                    <Ellipse.Transitions>
+                      <Transitions>
+                        <DoubleTransition Property="Width" Duration="{motion:SpringDuration FastSpatial}" Easing="{motion:Spring FastSpatial}" />
+                        <DoubleTransition Property="Height" Duration="{motion:SpringDuration FastSpatial}" Easing="{motion:Spring FastSpatial}" />
+                        <BrushTransition Property="Fill" Duration="0:0:0.15" />
+                      </Transitions>
+                    </Ellipse.Transitions>
+                  </Ellipse>
+                </Panel>
+              </Canvas>
+            </Panel>
+
+            <Panel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center">
+              <ContentPresenter Name="PART_OffContentPresenter"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Content="{TemplateBinding OffContent}"
+                                ContentTemplate="{TemplateBinding OffContentTemplate}" />
+              <ContentPresenter Name="PART_OnContentPresenter"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Content="{TemplateBinding OnContent}"
+                                ContentTemplate="{TemplateBinding OnContentTemplate}" />
+            </Panel>
+          </Grid>
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^ /template/ ContentPresenter:empty">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <!-- Unchecked -->
+    <Style Selector="^:unchecked /template/ ContentPresenter#PART_OnContentPresenter">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^:pointerover /template/ Ellipse#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StateHoverOpacity}" />
+    </Style>
+    <Style Selector="^:focus-visible">
+      <Style Selector="^ /template/ Ellipse#PART_StateLayer">
+        <Setter Property="Opacity" Value="{DynamicResource M3StateFocusOpacity}" />
+      </Style>
+      <Style Selector="^ /template/ Border#PART_FocusRing">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+    </Style>
+    <Style Selector="^:pointerover /template/ Ellipse#PART_Handle">
+      <Setter Property="Fill" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+    </Style>
+
+    <!-- Checked -->
+    <Style Selector="^:checked">
+      <Style Selector="^ /template/ ContentPresenter#PART_OffContentPresenter">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+      <Style Selector="^ /template/ Border#PART_Track">
+        <Setter Property="Background" Value="{DynamicResource M3PrimaryBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource M3PrimaryBrush}" />
+      </Style>
+      <Style Selector="^ /template/ Ellipse#PART_Handle">
+        <Setter Property="Width" Value="24" />
+        <Setter Property="Height" Value="24" />
+        <Setter Property="Fill" Value="{DynamicResource M3OnPrimaryBrush}" />
+      </Style>
+      <Style Selector="^ /template/ Ellipse#PART_StateLayer">
+        <Setter Property="Fill" Value="{DynamicResource M3PrimaryBrush}" />
+      </Style>
+    </Style>
+    <Style Selector="^:checked:pointerover /template/ Ellipse#PART_Handle">
+      <Setter Property="Fill" Value="{DynamicResource M3PrimaryContainerBrush}" />
+    </Style>
+
+    <!-- Pressed / dragging: handle grows to 28 -->
+    <Style Selector="^:pressed, ^:dragging">
+      <Style Selector="^ /template/ Ellipse#PART_Handle">
+        <Setter Property="Width" Value="28" />
+        <Setter Property="Height" Value="28" />
+      </Style>
+      <Style Selector="^ /template/ Ellipse#PART_StateLayer">
+        <Setter Property="Opacity" Value="{DynamicResource M3StatePressedOpacity}" />
+      </Style>
+    </Style>
+    <Style Selector="^:unchecked:pressed /template/ Ellipse#PART_Handle">
+      <Setter Property="Fill" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+    </Style>
+    <Style Selector="^:checked:pressed /template/ Ellipse#PART_Handle">
+      <Setter Property="Fill" Value="{DynamicResource M3PrimaryContainerBrush}" />
+    </Style>
+
+    <!-- Disabled (spec: track 12%, outline onSurface 12%, handle onSurface 38% / surface when on) -->
+    <Style Selector="^:disabled">
+      <Style Selector="^ /template/ Border#PART_Track">
+        <Setter Property="BorderBrush" Value="{DynamicResource M3OnSurfaceBrush}" />
+        <Setter Property="Opacity" Value="{DynamicResource M3DisabledContainerOpacity}" />
+      </Style>
+      <Style Selector="^ /template/ Ellipse#PART_Handle">
+        <Setter Property="Fill" Value="{DynamicResource M3DisabledContentBrush}" />
+      </Style>
+      <Style Selector="^ /template/ ContentPresenter">
+        <Setter Property="Opacity" Value="{DynamicResource M3DisabledContentOpacity}" />
+      </Style>
+    </Style>
+    <Style Selector="^:disabled:checked">
+      <Style Selector="^ /template/ Border#PART_Track">
+        <Setter Property="Background" Value="{DynamicResource M3OnSurfaceBrush}" />
+      </Style>
+      <Style Selector="^ /template/ Ellipse#PART_Handle">
+        <Setter Property="Fill" Value="{DynamicResource M3SurfaceBrush}" />
+      </Style>
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

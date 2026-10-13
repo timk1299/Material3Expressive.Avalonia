@@ -1,0 +1,139 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:m3="https://github.com/timk1299/material3-expressive-avalonia"
+             x:Class="Material3Expressive.Avalonia.Demo.Views.ShapesPage">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="avares://Material3Expressive.Avalonia.Demo/Views/Icons.axaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <UserControl.Styles>
+    <Style Selector="Border.SpringDemo">
+      <Setter Property="Background" Value="{DynamicResource M3TertiaryContainerBrush}" />
+      <Setter Property="CornerRadius" Value="48" />
+      <Setter Property="RenderTransform" Value="scale(1)" />
+      <Setter Property="Transitions">
+        <Transitions>
+          <CornerRadiusTransition Property="CornerRadius" Duration="{m3:SpringDuration DefaultSpatial}" Easing="{m3:Spring DefaultSpatial}" />
+          <TransformOperationsTransition Property="RenderTransform" Duration="{m3:SpringDuration FastSpatial}" Easing="{m3:Spring FastSpatial}" />
+        </Transitions>
+      </Setter>
+    </Style>
+    <Style Selector="Border.SpringDemo:pointerover">
+      <Setter Property="CornerRadius" Value="16" />
+      <Setter Property="RenderTransform" Value="scale(1.1)" />
+    </Style>
+  </UserControl.Styles>
+
+  <ScrollViewer>
+    <StackPanel Margin="24,0,24,24" Spacing="16">
+      <Grid ColumnDefinitions="*,16,*">
+        <m3:Card Classes="Outlined" Grid.Column="0">
+          <StackPanel Spacing="16">
+            <TextBlock Classes="TitleMediumEmphasized" Text="Loading indicators" />
+            <TextBlock Classes="BodyMedium OnSurfaceVariant" TextWrapping="Wrap"
+                       Text="A shape morphing through the Material shape library while it rotates." />
+            <StackPanel Orientation="Horizontal" Spacing="24">
+              <m3:LoadingIndicator VerticalAlignment="Center" />
+              <m3:LoadingIndicator Classes="Contained" VerticalAlignment="Center" />
+              <m3:LoadingIndicator Classes="Contained" Width="96" Height="96" VerticalAlignment="Center" />
+              <m3:LoadingIndicator Name="CustomLoading" Foreground="{DynamicResource M3TertiaryBrush}" Width="72" Height="72" VerticalAlignment="Center" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="16">
+              <m3:LoadingIndicator Name="DeterminateLoading" Progress="0.4" VerticalAlignment="Center" />
+              <TextBlock Classes="BodyMedium OnSurfaceVariant" VerticalAlignment="Center" Text="Determinate:" />
+              <Slider Name="LoadingProgress" Width="200" Minimum="0" Maximum="1" Value="0.4" VerticalAlignment="Center" />
+            </StackPanel>
+          </StackPanel>
+        </m3:Card>
+
+        <m3:Card Classes="Outlined" Grid.Column="2">
+          <StackPanel Spacing="16">
+            <TextBlock Classes="TitleMediumEmphasized" Text="Progress indicators" />
+            <ProgressBar Name="LinearFlat" Value="65" />
+            <ProgressBar Name="LinearWavy" Classes="Wavy" Value="65" />
+            <ProgressBar Classes="Thick" Value="40" />
+            <ProgressBar IsIndeterminate="True" />
+            <ProgressBar Classes="Wavy" IsIndeterminate="True" />
+            <StackPanel Orientation="Horizontal" Spacing="24">
+              <ProgressBar Name="CircularFlat" Classes="Circular" Value="65" />
+              <ProgressBar Name="CircularWavy" Classes="Circular Wavy" Value="65" />
+              <ProgressBar Classes="Circular" IsIndeterminate="True" />
+              <ProgressBar Classes="Circular Wavy" IsIndeterminate="True" />
+              <ProgressBar Classes="Circular Thick" Value="30" Width="48" Height="48" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <Button Classes="Tonal XSmall" Content="−20%" Name="LessProgress" />
+              <Button Classes="Tonal XSmall" Content="+20%" Name="MoreProgress" />
+            </StackPanel>
+            <TextBlock Classes="BodySmall OnSurfaceVariant" TextWrapping="Wrap"
+                       Text="Progress changes animate with a spring; the wave flattens near 0% and 100%." />
+          </StackPanel>
+        </m3:Card>
+      </Grid>
+
+      <m3:Card Classes="Outlined">
+        <Grid ColumnDefinitions="Auto,32,*">
+          <StackPanel Spacing="16" Width="220">
+            <TextBlock Classes="TitleMediumEmphasized" Text="Shape morphing" />
+            <m3:ShapeBox Name="MorphBox"
+                         Width="200"
+                         Height="200"
+                         Shape="Cookie9Sided"
+                         Background="{DynamicResource M3PrimaryContainerBrush}">
+              <PathIcon Width="64" Height="64" Foreground="{DynamicResource M3OnPrimaryContainerBrush}" Data="{StaticResource IconPerson}" />
+            </m3:ShapeBox>
+            <TextBlock Name="MorphName" Classes="TitleSmall" HorizontalAlignment="Center" />
+            <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+              <Button Name="PreviousShape" Classes="TonalIcon"><PathIcon Data="{StaticResource IconSkipPrevious}" /></Button>
+              <Button Name="NextShape" Classes="FilledIcon Wide"><PathIcon Data="{StaticResource IconSkipNext}" /></Button>
+            </StackPanel>
+          </StackPanel>
+          <StackPanel Grid.Column="2" Spacing="12">
+            <TextBlock Classes="TitleMediumEmphasized" Text="Shape library" />
+            <TextBlock Classes="BodyMedium OnSurfaceVariant" TextWrapping="Wrap"
+                       Text="The 35 Material 3 Expressive shapes (MaterialShapes). Click one to morph to it. Use them with m3:ShapeBox to clip any content, or MaterialShapes.CreateGeometry(...)." />
+            <ItemsControl Name="ShapeGallery">
+              <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <WrapPanel />
+                </ItemsPanelTemplate>
+              </ItemsControl.ItemsPanel>
+            </ItemsControl>
+          </StackPanel>
+        </Grid>
+      </m3:Card>
+
+      <m3:Card Classes="Outlined">
+        <StackPanel Spacing="16">
+          <TextBlock Classes="TitleMediumEmphasized" Text="Motion: spring tokens" />
+          <TextBlock Classes="BodyMedium OnSurfaceVariant" TextWrapping="Wrap"
+                     Text="Expressive motion is driven by springs instead of fixed durations. Spatial springs move and resize things and may overshoot; effects springs fade colors and opacity without overshoot. Switch the theme's motion scheme to compare." />
+          <StackPanel Orientation="Horizontal" Spacing="16">
+            <m3:ButtonGroup Name="SchemeGroup" IsConnected="True" SelectionMode="SingleRequired" SelectedIndex="0">
+              <ToggleButton Content="Expressive" />
+              <ToggleButton Content="Standard" />
+            </m3:ButtonGroup>
+            <Button Name="PlaySprings" Classes="Tonal">
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <PathIcon Data="{StaticResource IconPlay}" />
+                <TextBlock Text="Play" />
+              </StackPanel>
+            </Button>
+          </StackPanel>
+          <ItemsControl Name="SpringLanes" />
+          <StackPanel Orientation="Horizontal" Spacing="16">
+            <Border Classes="SpringDemo" Width="96" Height="96">
+              <TextBlock Classes="LabelLarge" Text="Hover me" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <TextBlock Classes="BodyMedium OnSurfaceVariant" VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="560"
+                       Text="Your own transitions can use the same springs: Duration=&quot;{m3:SpringDuration DefaultSpatial}&quot; Easing=&quot;{m3:Spring DefaultSpatial}&quot;." />
+          </StackPanel>
+        </StackPanel>
+      </m3:Card>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

@@ -1,0 +1,386 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:m3="using:Material3Expressive.Avalonia"
+                    xmlns:controls="using:Material3Expressive.Avalonia.Controls"
+                    xmlns:conv="using:Material3Expressive.Avalonia.Converters">
+
+  <!-- Chrome-less text box used inside other templates (editable ComboBox, Fluent fallback controls). -->
+  <ControlTheme x:Key="M3InlineTextBox" TargetType="TextBox">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="CaretBrush" Value="{DynamicResource M3PrimaryBrush}" />
+    <Setter Property="SelectionBrush" Value="{DynamicResource M3TextSelectionBrush}" />
+    <Setter Property="PlaceholderForeground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+    <Setter Property="ContextFlyout" Value="{DynamicResource DefaultTextBoxContextFlyout}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="{TemplateBinding CornerRadius}">
+          <Panel Margin="{TemplateBinding Padding}">
+            <TextBlock Name="PART_Placeholder"
+                       Foreground="{TemplateBinding PlaceholderForeground}"
+                       Text="{TemplateBinding PlaceholderText}"
+                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                       IsVisible="{TemplateBinding Text, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
+            <ScrollViewer Name="PART_ScrollViewer"
+                          HorizontalScrollBarVisibility="Hidden"
+                          VerticalScrollBarVisibility="Disabled">
+              <TextPresenter Name="PART_TextPresenter"
+                             Text="{TemplateBinding Text, Mode=TwoWay}"
+                             CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
+                             CaretIndex="{TemplateBinding CaretIndex}"
+                             SelectionStart="{TemplateBinding SelectionStart}"
+                             SelectionEnd="{TemplateBinding SelectionEnd}"
+                             TextAlignment="{TemplateBinding TextAlignment}"
+                             LetterSpacing="{TemplateBinding LetterSpacing}"
+                             PasswordChar="{TemplateBinding PasswordChar}"
+                             RevealPassword="{TemplateBinding RevealPassword}"
+                             SelectionBrush="{TemplateBinding SelectionBrush}"
+                             SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+                             CaretBrush="{TemplateBinding CaretBrush}"
+                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+            </ScrollViewer>
+          </Panel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+  <!-- Menu-style item used by ComboBox drop-downs. -->
+  <ControlTheme x:Key="{x:Type ComboBoxItem}" TargetType="ComboBoxItem">
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Padding" Value="12,0" />
+    <Setter Property="MinHeight" Value="48" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="LetterSpacing" Value="0.1" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <Border Name="PART_Container" Background="{TemplateBinding Background}" />
+          <Border Name="PART_StateLayer"
+                  Background="{TemplateBinding Foreground}"
+                  Opacity="0"
+                  IsHitTestVisible="False">
+            <Border.Transitions>
+              <Transitions>
+                <DoubleTransition Property="Opacity" Duration="0:0:0.1" />
+              </Transitions>
+            </Border.Transitions>
+          </Border>
+          <controls:Ripple Brush="{TemplateBinding Foreground}" />
+          <ContentPresenter Name="PART_ContentPresenter"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            Padding="{TemplateBinding Padding}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:pointerover /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StateHoverOpacity}" />
+    </Style>
+    <Style Selector="^:focus-visible /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StateFocusOpacity}" />
+    </Style>
+    <Style Selector="^:selected">
+      <Setter Property="Background" Value="{DynamicResource M3SecondaryContainerBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnSecondaryContainerBrush}" />
+    </Style>
+    <Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Opacity" Value="{DynamicResource M3DisabledContentOpacity}" />
+    </Style>
+  </ControlTheme>
+
+  <!--
+    Material 3 exposed drop-down menu, styled like a text field.
+      (default) Filled · Classes="Outlined"
+      m3:TextFieldAssist.Label / SupportingText work like on TextBox.
+  -->
+  <ControlTheme x:Key="{x:Type ComboBox}" TargetType="ComboBox">
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+    <Setter Property="Background" Value="{DynamicResource M3SurfaceContainerHighestBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+    <Setter Property="PlaceholderForeground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+    <Setter Property="CornerRadius" Value="{DynamicResource M3ShapeExtraSmallTop}" />
+    <Setter Property="Padding" Value="16,16,4,16" />
+    <Setter Property="ClipToBounds" Value="False" />
+    <Setter Property="MinWidth" Value="120" />
+    <Setter Property="MaxDropDownHeight" Value="400" />
+    <Setter Property="FontSize" Value="16" />
+    <Setter Property="LetterSpacing" Value="0.5" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="VerticalAlignment" Value="Top" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+    <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <DataValidationErrors>
+          <Grid RowDefinitions="*,Auto">
+            <Panel Name="PART_Field" MinHeight="56">
+              <Border Name="PART_Container"
+                      Background="{TemplateBinding Background}"
+                      CornerRadius="{TemplateBinding CornerRadius}" />
+              <Border Name="PART_StateLayer"
+                      Background="{DynamicResource M3OnSurfaceBrush}"
+                      CornerRadius="{TemplateBinding CornerRadius}"
+                      Opacity="0"
+                      IsHitTestVisible="False">
+                <Border.Transitions>
+                  <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+                  </Transitions>
+                </Border.Transitions>
+              </Border>
+              <Border Name="PART_ActiveIndicator"
+                      VerticalAlignment="Bottom"
+                      Height="1"
+                      Background="{TemplateBinding BorderBrush}" />
+              <controls:OutlineBorder Name="PART_Outline"
+                                      IsVisible="False"
+                                      Stroke="{TemplateBinding BorderBrush}"
+                                      StrokeThickness="1"
+                                      CornerRadius="4"
+                                      GapStart="{Binding #PART_Label.Bounds.X, Converter={x:Static conv:M3Converters.LabelXToNotchStart}}"
+                                      GapWidth="{Binding #PART_Label.Bounds.Width, Converter={x:Static conv:M3Converters.LabelWidthToNotchWidth}}">
+                <controls:OutlineBorder.Transitions>
+                  <Transitions>
+                    <DoubleTransition Property="GapProgress" Duration="0:0:0.15" Easing="CubicEaseOut" />
+                  </Transitions>
+                </controls:OutlineBorder.Transitions>
+              </controls:OutlineBorder>
+
+              <Grid ColumnDefinitions="*,Auto">
+                <DockPanel Margin="{TemplateBinding Padding}"
+                           VerticalAlignment="Top">
+                  <Panel MinHeight="24">
+                    <TextBlock Name="PlaceholderTextBlock"
+                               VerticalAlignment="Center"
+                               Text="{TemplateBinding PlaceholderText}"
+                               Foreground="{TemplateBinding PlaceholderForeground}">
+                      <TextBlock.IsVisible>
+                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                          <Binding Path="SelectionBoxItem" RelativeSource="{RelativeSource TemplatedParent}" Converter="{x:Static ObjectConverters.IsNull}" />
+                          <Binding Path="!IsEditable" RelativeSource="{RelativeSource TemplatedParent}" />
+                        </MultiBinding>
+                      </TextBlock.IsVisible>
+                    </TextBlock>
+                    <ContentControl Name="ContentPresenter"
+                                    Content="{TemplateBinding SelectionBoxItem}"
+                                    ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalContentAlignment="Center"
+                                    IsVisible="{TemplateBinding IsEditable, Converter={x:Static BoolConverters.Not}}" />
+                    <TextBox Name="PART_EditableTextBox"
+                             Theme="{StaticResource M3InlineTextBox}"
+                             VerticalContentAlignment="Center"
+                             Foreground="{TemplateBinding Foreground}"
+                             Text="{TemplateBinding Text, Mode=TwoWay}"
+                             PlaceholderText="{TemplateBinding PlaceholderText}"
+                             IsVisible="{TemplateBinding IsEditable}" />
+                  </Panel>
+                </DockPanel>
+                <TextBlock Name="PART_Label"
+                           Margin="16,8,0,0"
+                           VerticalAlignment="Top"
+                           Text="{TemplateBinding (m3:TextFieldAssist.Label)}"
+                           FontSize="12"
+                           LineHeight="16"
+                           LetterSpacing="0.4"
+                           FontWeight="Normal"
+                           Foreground="{DynamicResource M3OnSurfaceVariantBrush}"
+                           TextTrimming="CharacterEllipsis"
+                           HorizontalAlignment="Left"
+                           IsHitTestVisible="False"
+                           IsVisible="False"
+                           RenderTransformOrigin="0%,0%"
+                           RenderTransform="translate(0px,0px) scale(1)">
+                  <TextBlock.Transitions>
+                    <Transitions>
+                      <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.15" Easing="CubicEaseOut" />
+                      <BrushTransition Property="Foreground" Duration="0:0:0.15" />
+                    </Transitions>
+                  </TextBlock.Transitions>
+                </TextBlock>
+                <PathIcon Name="DropDownGlyph"
+                          Grid.Column="1"
+                          Width="10"
+                          Height="5"
+                          Margin="7,0,19,0"
+                          VerticalAlignment="Center"
+                          IsHitTestVisible="False"
+                          Foreground="{DynamicResource M3OnSurfaceVariantBrush}"
+                          Data="{StaticResource M3ArrowDropDownGeometry}"
+                          RenderTransformOrigin="50%,50%">
+                  <PathIcon.Transitions>
+                    <Transitions>
+                      <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.15" />
+                    </Transitions>
+                  </PathIcon.Transitions>
+                </PathIcon>
+              </Grid>
+
+              <Popup Name="PART_Popup"
+                     WindowManagerAddShadowHint="False"
+                     IsOpen="{TemplateBinding IsDropDownOpen, Mode=TwoWay}"
+                     MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                     PlacementTarget="PART_Field"
+                     Placement="BottomEdgeAlignedLeft"
+                     HorizontalOffset="-8"
+                     IsLightDismissEnabled="True"
+                     InheritsTransform="True">
+                <Border Name="PopupBorder"
+                        Margin="8,2,8,8"
+                        MinWidth="{Binding #PART_Field.Bounds.Width}"
+                        Background="{DynamicResource M3SurfaceContainerBrush}"
+                        CornerRadius="{DynamicResource M3ShapeExtraSmall}"
+                        BoxShadow="{DynamicResource M3Elevation2}"
+                        Padding="0,8"
+                        ClipToBounds="True">
+                  <ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                                VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
+                                IsScrollChainingEnabled="False"
+                                IsDeferredScrollingEnabled="{TemplateBinding (ScrollViewer.IsDeferredScrollingEnabled)}">
+                    <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+                  </ScrollViewer>
+                </Border>
+              </Popup>
+            </Panel>
+
+            <TextBlock Name="PART_SupportingText"
+                       Grid.Row="1"
+                       Margin="16,4,16,0"
+                       FontSize="12"
+                       LineHeight="16"
+                       LetterSpacing="0.4"
+                       TextWrapping="Wrap"
+                       Foreground="{DynamicResource M3OnSurfaceVariantBrush}"
+                       Text="{TemplateBinding (m3:TextFieldAssist.SupportingText)}"
+                       IsVisible="{TemplateBinding (m3:TextFieldAssist.SupportingText), Converter={x:Static conv:M3Converters.IsNotNullOrEmpty}}" />
+          </Grid>
+        </DataValidationErrors>
+      </ControlTemplate>
+    </Setter>
+
+    <!-- ===== Label ===== -->
+    <Style Selector="^.HasLabel">
+      <Setter Property="Padding" Value="16,24,4,8" />
+      <Style Selector="^ /template/ TextBlock#PART_Label">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+      <Style Selector="^ /template/ TextBlock#PlaceholderTextBlock">
+        <Setter Property="Opacity" Value="0" />
+      </Style>
+      <Style Selector="^:dropdownopen /template/ TextBlock#PlaceholderTextBlock">
+        <Setter Property="Opacity" Value="1" />
+      </Style>
+    </Style>
+    <!-- Resting label: nothing selected and closed -->
+    <Style Selector="^[SelectedIndex=-1]:not(:dropdownopen):not(:focus-visible) /template/ TextBlock#PART_Label">
+      <Setter Property="RenderTransform" Value="translate(0px,7px) scale(1.3333)" />
+    </Style>
+
+    <Style Selector="^:dropdownopen /template/ PathIcon#DropDownGlyph">
+      <Setter Property="RenderTransform" Value="rotate(180deg)" />
+    </Style>
+
+    <!-- ===== Filled states ===== -->
+    <Style Selector="^:pointerover">
+      <Setter Property="BorderBrush" Value="{DynamicResource M3OnSurfaceBrush}" />
+      <Style Selector="^ /template/ Border#PART_StateLayer">
+        <Setter Property="Opacity" Value="{DynamicResource M3StateHoverOpacity}" />
+      </Style>
+    </Style>
+    <Style Selector="^:focus-visible, ^:dropdownopen">
+      <Setter Property="BorderBrush" Value="{DynamicResource M3PrimaryBrush}" />
+      <Style Selector="^ /template/ Border#PART_ActiveIndicator">
+        <Setter Property="Height" Value="2" />
+      </Style>
+      <Style Selector="^ /template/ TextBlock#PART_Label">
+        <Setter Property="Foreground" Value="{DynamicResource M3PrimaryBrush}" />
+      </Style>
+    </Style>
+
+    <!-- ===== Outlined ===== -->
+    <Style Selector="^.Outlined">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderBrush" Value="{DynamicResource M3OutlineBrush}" />
+      <Setter Property="CornerRadius" Value="{DynamicResource M3ShapeExtraSmall}" />
+      <Style Selector="^ /template/ Border#PART_ActiveIndicator">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+      <Style Selector="^ /template/ controls|OutlineBorder#PART_Outline">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+      <Setter Property="Padding" Value="16,16,4,16" />
+      <Style Selector="^ /template/ TextBlock#PART_Label">
+        <Setter Property="RenderTransform" Value="translate(0px,-16px) scale(1)" />
+      </Style>
+      <Style Selector="^[SelectedIndex=-1]:not(:dropdownopen):not(:focus-visible) /template/ TextBlock#PART_Label">
+        <Setter Property="RenderTransform" Value="translate(0px,7px) scale(1.3333)" />
+      </Style>
+      <Style Selector="^.HasLabel /template/ controls|OutlineBorder#PART_Outline">
+        <Setter Property="GapProgress" Value="1" />
+      </Style>
+      <Style Selector="^.HasLabel[SelectedIndex=-1]:not(:dropdownopen):not(:focus-visible) /template/ controls|OutlineBorder#PART_Outline">
+        <Setter Property="GapProgress" Value="0" />
+      </Style>
+      <Style Selector="^:pointerover">
+        <Setter Property="BorderBrush" Value="{DynamicResource M3OnSurfaceBrush}" />
+        <Style Selector="^ /template/ Border#PART_StateLayer">
+          <Setter Property="Opacity" Value="0" />
+        </Style>
+      </Style>
+      <Style Selector="^:focus-visible, ^:dropdownopen">
+        <Setter Property="BorderBrush" Value="{DynamicResource M3PrimaryBrush}" />
+        <Style Selector="^ /template/ controls|OutlineBorder#PART_Outline">
+          <Setter Property="StrokeThickness" Value="2" />
+        </Style>
+      </Style>
+    </Style>
+
+    <!-- ===== Error ===== -->
+    <Style Selector="^:error">
+      <Setter Property="BorderBrush" Value="{DynamicResource M3ErrorBrush}" />
+      <Style Selector="^ /template/ TextBlock#PART_Label">
+        <Setter Property="Foreground" Value="{DynamicResource M3ErrorBrush}" />
+      </Style>
+      <Style Selector="^ /template/ TextBlock#PART_SupportingText">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+    </Style>
+
+    <!-- ===== Disabled ===== -->
+    <Style Selector="^:disabled">
+      <Setter Property="Foreground" Value="{DynamicResource M3DisabledContentBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource M3DisabledContentBrush}" />
+      <Setter Property="Background" Value="{DynamicResource M3DisabledFilledFieldBrush}" />
+      <Style Selector="^ /template/ TextBlock#PART_Label">
+        <Setter Property="Foreground" Value="{DynamicResource M3DisabledContentBrush}" />
+      </Style>
+      <Style Selector="^ /template/ PathIcon#DropDownGlyph">
+        <Setter Property="Opacity" Value="{DynamicResource M3DisabledContentOpacity}" />
+      </Style>
+      <Style Selector="^ /template/ TextBlock#PART_SupportingText">
+        <Setter Property="Opacity" Value="{DynamicResource M3DisabledContentOpacity}" />
+      </Style>
+    </Style>
+    <Style Selector="^.Outlined:disabled">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderBrush" Value="{DynamicResource M3DisabledContainerBrush}" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

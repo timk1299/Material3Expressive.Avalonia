@@ -1,0 +1,30 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Material3Expressive.Avalonia.Material3ExpressiveTheme">
+  <Styles.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="avares://Material3Expressive.Avalonia/Resources/Tokens.axaml" />
+        <ResourceInclude Source="avares://Material3Expressive.Avalonia/Themes/Window.axaml" />
+        <ResourceInclude Source="avares://Material3Expressive.Avalonia/Themes/Button.axaml" />
+        <ResourceInclude Source="avares://Material3Expressive.Avalonia/Themes/SplitButton.axaml" />
+        <ResourceInclude Source="avares://Material3Expressive.Avalonia/Themes/SelectionControls.axaml" />
+        <ResourceInclude Source="avares://Material3Expressive.Avalonia/Themes/ToggleSwitch.axaml" />
+        <ResourceInclude Source="avares://Material3Expressive.Avalonia/Themes/Slider.axaml" />
+        <ResourceInclude Source="avares://Material3Expressive.Avalonia/Themes/ProgressBar.axaml" />
+        <ResourceInclude Source="avares://Material3Expressive.Avalonia/Themes/TextBox.axaml" />
+        <ResourceInclude Source="avares://Material3Expressive.Avalonia/Themes/ComboBox.axaml" />
+        <ResourceInclude Source="avares://Material3Expressive.Avalonia/Themes/ListBox.axaml" />
+        <ResourceInclude Source="avares://Material3Expressive.Avalonia/Themes/Menu.axaml" />
+        <ResourceInclude Source="avares://Material3Expressive.Avalonia/Themes/TabControl.axaml" />
+        <ResourceInclude Source="avares://Material3Expressive.Avalonia/Themes/Card.axaml" />
+        <ResourceInclude Source="avares://Material3Expressive.Avalonia/Themes/Misc.axaml" />
+        <ResourceInclude Source="avares://Material3Expressive.Avalonia/Themes/Components.axaml" />
+        <ResourceInclude Source="avares://Material3Expressive.Avalonia/Themes/Expressive.axaml" />
+        <ResourceInclude Source="avares://Material3Expressive.Avalonia/Themes/Pickers.axaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Styles.Resources>
+
+  <StyleInclude Source="avares://Material3Expressive.Avalonia/Resources/Styles.axaml" />
+</Styles>

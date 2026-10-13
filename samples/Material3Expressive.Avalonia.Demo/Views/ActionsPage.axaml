@@ -1,0 +1,195 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:m3="https://github.com/timk1299/material3-expressive-avalonia"
+             x:Class="Material3Expressive.Avalonia.Demo.Views.ActionsPage">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="avares://Material3Expressive.Avalonia.Demo/Views/Icons.axaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+  <UserControl.Styles>
+    <Style Selector="Button StackPanel > TextBlock, ToggleButton StackPanel > TextBlock">
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+  </UserControl.Styles>
+
+  <ScrollViewer>
+    <StackPanel Margin="24,0,24,24" Spacing="16">
+      <m3:Card Classes="Outlined">
+        <StackPanel Spacing="16">
+          <TextBlock Classes="TitleMediumEmphasized" Text="Button groups" />
+          <TextBlock Classes="BodyMedium OnSurfaceVariant" TextWrapping="Wrap"
+                     Text="Pressing a button in a group widens it while its neighbors make room. Standard groups keep the buttons apart; connected groups share one shape and replace segmented buttons." />
+          <StackPanel Orientation="Horizontal" Spacing="32">
+            <m3:ButtonGroup VerticalAlignment="Center">
+              <Button Classes="TonalIcon"><PathIcon Data="{StaticResource IconSkipPrevious}" /></Button>
+              <ToggleButton Classes="FilledIcon Wide" IsChecked="True"><PathIcon Data="{StaticResource IconPlay}" /></ToggleButton>
+              <Button Classes="TonalIcon"><PathIcon Data="{StaticResource IconSkipNext}" /></Button>
+            </m3:ButtonGroup>
+            <m3:ButtonGroup VerticalAlignment="Center">
+              <Button Classes="Medium" Content="Cancel" />
+              <Button Classes="Medium Tonal" Content="Draft" />
+              <Button Classes="Medium Outlined" Content="Later" />
+            </m3:ButtonGroup>
+            <m3:ButtonGroup VerticalAlignment="Center" SelectionMode="None">
+              <ToggleButton Classes="Icon Square"><PathIcon Data="{StaticResource IconBold}" /></ToggleButton>
+              <ToggleButton Classes="Icon Square" IsChecked="True"><PathIcon Data="{StaticResource IconItalic}" /></ToggleButton>
+              <ToggleButton Classes="Icon Square"><PathIcon Data="{StaticResource IconUnderline}" /></ToggleButton>
+            </m3:ButtonGroup>
+          </StackPanel>
+
+          <TextBlock Classes="LabelLargeEmphasized OnSurfaceVariant" Text="Connected (single selection)" />
+          <m3:ButtonGroup Name="ConnectedSingle" IsConnected="True" SelectionMode="SingleRequired" SelectedIndex="0" HorizontalAlignment="Left">
+            <ToggleButton Classes="Tonal" Content="Day" />
+            <ToggleButton Classes="Tonal" Content="Week" />
+            <ToggleButton Classes="Tonal" Content="Month" />
+            <ToggleButton Classes="Tonal" Content="Year" />
+          </m3:ButtonGroup>
+          <TextBlock Classes="LabelLargeEmphasized OnSurfaceVariant" Text="Connected (multi-select, medium, fill width)" />
+          <m3:ButtonGroup IsConnected="True" FillWidth="True" Width="560" HorizontalAlignment="Left">
+            <ToggleButton Classes="Medium">
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <PathIcon Data="{StaticResource IconWifi}" />
+                <TextBlock Text="Wi-Fi" />
+              </StackPanel>
+            </ToggleButton>
+            <ToggleButton Classes="Medium" IsChecked="True">
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <PathIcon Data="{StaticResource IconBluetooth}" />
+                <TextBlock Text="Bluetooth" />
+              </StackPanel>
+            </ToggleButton>
+            <ToggleButton Classes="Medium">
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <PathIcon Data="{StaticResource IconFlag}" />
+                <TextBlock Text="Flight" />
+              </StackPanel>
+            </ToggleButton>
+          </m3:ButtonGroup>
+          <TextBlock Name="SelectionText" Classes="BodySmall OnSurfaceVariant" />
+        </StackPanel>
+      </m3:Card>
+
+      <m3:Card Classes="Outlined">
+        <StackPanel Spacing="16">
+          <TextBlock Classes="TitleMediumEmphasized" Text="Split buttons" />
+          <StackPanel Orientation="Horizontal" Spacing="16">
+            <SplitButton Name="SaveSplit" VerticalAlignment="Center">
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <PathIcon Data="{StaticResource IconSave}" />
+                <TextBlock Text="Save" />
+              </StackPanel>
+              <SplitButton.Flyout>
+                <MenuFlyout Placement="BottomEdgeAlignedRight">
+                  <MenuItem Header="Save as…" />
+                  <MenuItem Header="Save a copy" />
+                  <MenuItem Header="Auto save" ToggleType="CheckBox" IsChecked="True" />
+                </MenuFlyout>
+              </SplitButton.Flyout>
+            </SplitButton>
+            <SplitButton Classes="Tonal" Content="Share" VerticalAlignment="Center">
+              <SplitButton.Flyout>
+                <MenuFlyout Placement="BottomEdgeAlignedRight" FlyoutPresenterClasses="Vibrant">
+                  <MenuItem Header="Copy link" />
+                  <MenuItem Header="Email" />
+                  <MenuItem Header="Nearby share" />
+                </MenuFlyout>
+              </SplitButton.Flyout>
+            </SplitButton>
+            <SplitButton Classes="Outlined" Content="Reply" VerticalAlignment="Center">
+              <SplitButton.Flyout>
+                <MenuFlyout Placement="BottomEdgeAlignedRight">
+                  <MenuItem Header="Reply all" />
+                  <MenuItem Header="Forward" />
+                </MenuFlyout>
+              </SplitButton.Flyout>
+            </SplitButton>
+            <SplitButton Classes="Elevated XSmall" Content="XSmall" VerticalAlignment="Center">
+              <SplitButton.Flyout>
+                <MenuFlyout><MenuItem Header="Option" /></MenuFlyout>
+              </SplitButton.Flyout>
+            </SplitButton>
+            <SplitButton Classes="Medium" VerticalAlignment="Center">
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <PathIcon Data="{StaticResource IconSend}" />
+                <TextBlock Text="Send" />
+              </StackPanel>
+              <SplitButton.Flyout>
+                <MenuFlyout Placement="BottomEdgeAlignedRight">
+                  <MenuItem Header="Schedule send" />
+                </MenuFlyout>
+              </SplitButton.Flyout>
+            </SplitButton>
+            <SplitButton Classes="Tonal Large" Content="Large" VerticalAlignment="Center">
+              <SplitButton.Flyout>
+                <MenuFlyout><MenuItem Header="Option" /></MenuFlyout>
+              </SplitButton.Flyout>
+            </SplitButton>
+          </StackPanel>
+        </StackPanel>
+      </m3:Card>
+
+      <Grid ColumnDefinitions="*,16,*">
+        <m3:Card Classes="Outlined" Grid.Column="0" Padding="0">
+          <Panel Height="400">
+            <TextBlock Margin="16" Classes="TitleMediumEmphasized" Text="FAB menu" />
+            <TextBlock Margin="16,44,16,0" Classes="BodyMedium OnSurfaceVariant" TextWrapping="Wrap"
+                       Text="The FAB morphs into a close button and the items spring in one after another." />
+            <m3:FabMenu Name="Menu" Margin="16" Classes="Medium">
+              <m3:FabMenu.Icon>
+                <PathIcon Width="28" Height="28" Data="{StaticResource IconEdit}" />
+              </m3:FabMenu.Icon>
+              <m3:FabMenuItem Content="Reply">
+                <m3:FabMenuItem.Icon><PathIcon Data="{StaticResource IconReply}" /></m3:FabMenuItem.Icon>
+              </m3:FabMenuItem>
+              <m3:FabMenuItem Content="Share">
+                <m3:FabMenuItem.Icon><PathIcon Data="{StaticResource IconShare}" /></m3:FabMenuItem.Icon>
+              </m3:FabMenuItem>
+              <m3:FabMenuItem Content="Take photo">
+                <m3:FabMenuItem.Icon><PathIcon Data="{StaticResource IconCamera}" /></m3:FabMenuItem.Icon>
+              </m3:FabMenuItem>
+              <m3:FabMenuItem Content="Voice note">
+                <m3:FabMenuItem.Icon><PathIcon Data="{StaticResource IconMic}" /></m3:FabMenuItem.Icon>
+              </m3:FabMenuItem>
+            </m3:FabMenu>
+          </Panel>
+        </m3:Card>
+
+        <m3:Card Classes="Outlined" Grid.Column="2" Padding="0">
+          <Panel Height="400">
+            <TextBlock Margin="16" Classes="TitleMediumEmphasized" Text="Floating toolbars" />
+            <m3:FloatingToolbar VerticalAlignment="Top" Margin="16,56,16,16" HorizontalAlignment="Left">
+              <ToggleButton Classes="Icon" IsChecked="True"><PathIcon Data="{StaticResource IconBold}" /></ToggleButton>
+              <ToggleButton Classes="Icon"><PathIcon Data="{StaticResource IconItalic}" /></ToggleButton>
+              <ToggleButton Classes="Icon"><PathIcon Data="{StaticResource IconUnderline}" /></ToggleButton>
+              <Button Classes="Icon"><PathIcon Data="{StaticResource IconUndo}" /></Button>
+              <Button Classes="Icon"><PathIcon Data="{StaticResource IconRedo}" /></Button>
+            </m3:FloatingToolbar>
+            <m3:FloatingToolbar Classes="Vibrant" VerticalAlignment="Top" Margin="16,148,16,16" HorizontalAlignment="Left">
+              <Button Classes="Icon"><PathIcon Data="{StaticResource IconImage}" /></Button>
+              <ToggleButton Classes="Icon" IsChecked="True"><PathIcon Data="{StaticResource IconCamera}" /></ToggleButton>
+              <Button Classes="Icon"><PathIcon Data="{StaticResource IconMic}" /></Button>
+              <m3:FloatingToolbar.FloatingActionButton>
+                <Button Classes="Fab Filled Tertiary"><PathIcon Data="{StaticResource IconAdd}" /></Button>
+              </m3:FloatingToolbar.FloatingActionButton>
+            </m3:FloatingToolbar>
+            <m3:FloatingToolbar Orientation="Vertical" Margin="16,16,16,80" VerticalAlignment="Bottom">
+              <Button Classes="Icon"><PathIcon Data="{StaticResource IconHome}" /></Button>
+              <Button Classes="Icon"><PathIcon Data="{StaticResource IconSearch}" /></Button>
+              <Button Classes="Icon"><PathIcon Data="{StaticResource IconSettings}" /></Button>
+            </m3:FloatingToolbar>
+            <m3:DockedToolbar VerticalAlignment="Bottom">
+              <Button Classes="Icon"><PathIcon Data="{StaticResource IconReply}" /></Button>
+              <Button Classes="Icon"><PathIcon Data="{StaticResource IconShare}" /></Button>
+              <Button Classes="Icon"><PathIcon Data="{StaticResource IconBookmark}" /></Button>
+              <Button Classes="Icon"><PathIcon Data="{StaticResource IconDelete}" /></Button>
+              <Button Classes="FilledIcon"><PathIcon Data="{StaticResource IconAdd}" /></Button>
+            </m3:DockedToolbar>
+          </Panel>
+        </m3:Card>
+      </Grid>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

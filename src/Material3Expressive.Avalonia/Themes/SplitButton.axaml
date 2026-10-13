@@ -1,0 +1,248 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="using:Material3Expressive.Avalonia.Controls"
+                    xmlns:conv="using:Material3Expressive.Avalonia.Converters"
+                    xmlns:motion="using:Material3Expressive.Avalonia.Motion">
+
+  <!-- One half of a split button. Colors come from the SplitButton; corners are set by its states. -->
+  <ControlTheme x:Key="M3SplitButtonPart" TargetType="Button">
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Stretch" />
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+    <Setter Property="ClipToBounds" Value="False" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <Border Name="PART_FocusRing"
+                  Margin="-5"
+                  BorderThickness="3"
+                  BorderBrush="{DynamicResource M3SecondaryBrush}"
+                  CornerRadius="{Binding #PART_Container.CornerRadius, Converter={x:Static conv:M3Converters.InflateCornerRadius}, ConverterParameter=5}"
+                  IsHitTestVisible="False"
+                  IsVisible="False" />
+          <Border Name="PART_Container"
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="{TemplateBinding CornerRadius}">
+            <Border.Transitions>
+              <Transitions>
+                <CornerRadiusTransition Property="CornerRadius" Duration="{motion:SpringDuration FastSpatial}" Easing="{motion:Spring FastSpatial}" />
+              </Transitions>
+            </Border.Transitions>
+          </Border>
+          <Border Name="PART_StateLayer"
+                  Background="{TemplateBinding Foreground}"
+                  CornerRadius="{Binding #PART_Container.CornerRadius}"
+                  Opacity="0"
+                  IsHitTestVisible="False">
+            <Border.Transitions>
+              <Transitions>
+                <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+              </Transitions>
+            </Border.Transitions>
+          </Border>
+          <controls:Ripple Brush="{TemplateBinding Foreground}"
+                           CornerRadius="{Binding #PART_Container.CornerRadius}" />
+          <ContentPresenter Name="PART_ContentPresenter"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            Padding="{TemplateBinding Padding}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                            RecognizesAccessKey="True" />
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:pointerover /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StateHoverOpacity}" />
+    </Style>
+    <Style Selector="^:focus-visible">
+      <Style Selector="^ /template/ Border#PART_StateLayer">
+        <Setter Property="Opacity" Value="{DynamicResource M3StateFocusOpacity}" />
+      </Style>
+      <Style Selector="^ /template/ Border#PART_FocusRing">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+    </Style>
+  </ControlTheme>
+
+  <!--
+    Material 3 Expressive split button: a leading action and a trailing menu button, 2px apart.
+    Inner corners grow on hover/press; while the flyout is open the trailing button becomes a pill
+    and its chevron turns.
+      Colors : (default) Filled · Tonal · Elevated · Outlined
+      Sizes  : XSmall · Small (default) · Medium · Large · XLarge
+    Usage:
+      <SplitButton Classes="Tonal" Content="Save">
+        <SplitButton.Flyout><MenuFlyout>…</MenuFlyout></SplitButton.Flyout>
+      </SplitButton>
+  -->
+  <ControlTheme x:Key="{x:Type SplitButton}" TargetType="SplitButton">
+    <Setter Property="Background" Value="{DynamicResource M3PrimaryBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource M3OnPrimaryBrush}" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Height" Value="40" />
+    <Setter Property="Padding" Value="16,0,12,0" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="LetterSpacing" Value="0.1" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="ClipToBounds" Value="False" />
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Name="PART_Root" BoxShadow="{DynamicResource M3Elevation0}" CornerRadius="20">
+          <Grid ColumnDefinitions="*,Auto" ColumnSpacing="2">
+            <Button Name="PART_PrimaryButton"
+                    Grid.Column="0"
+                    Theme="{StaticResource M3SplitButtonPart}"
+                    Background="{TemplateBinding Background}"
+                    Foreground="{TemplateBinding Foreground}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    Padding="{TemplateBinding Padding}"
+                    Content="{TemplateBinding Content}"
+                    ContentTemplate="{TemplateBinding ContentTemplate}" />
+            <Button Name="PART_SecondaryButton"
+                    Grid.Column="1"
+                    Theme="{StaticResource M3SplitButtonPart}"
+                    Background="{TemplateBinding Background}"
+                    Foreground="{TemplateBinding Foreground}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}">
+              <PathIcon Name="PART_Chevron"
+                        Classes="M3SplitChevron"
+                        Data="{StaticResource M3ExpandMoreGeometry}">
+                <PathIcon.Transitions>
+                  <Transitions>
+                    <TransformOperationsTransition Property="RenderTransform" Duration="{motion:SpringDuration DefaultSpatial}" Easing="{motion:Spring DefaultSpatial}" />
+                  </Transitions>
+                </PathIcon.Transitions>
+              </PathIcon>
+            </Button>
+          </Grid>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^ /template/ PathIcon#PART_Chevron"><Setter Property="RenderTransform" Value="rotate(0deg)" /></Style>
+    <Style Selector="^ /template/ Button#PART_PrimaryButton"><Setter Property="CornerRadius" Value="20,4,4,20" /></Style>
+    <Style Selector="^ /template/ Button#PART_SecondaryButton">
+      <Setter Property="CornerRadius" Value="4,20,20,4" />
+      <Setter Property="Padding" Value="13,0" />
+    </Style>
+
+    <!-- Colors -->
+    <Style Selector="^.Tonal">
+      <Setter Property="Background" Value="{DynamicResource M3SecondaryContainerBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnSecondaryContainerBrush}" />
+    </Style>
+    <Style Selector="^.Elevated">
+      <Setter Property="Background" Value="{DynamicResource M3SurfaceContainerLowBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3PrimaryBrush}" />
+      <Style Selector="^ /template/ Button /template/ Border#PART_Container">
+        <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation1}" />
+      </Style>
+    </Style>
+    <Style Selector="^.Outlined">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource M3OutlineVariantBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+    </Style>
+
+    <!-- Sizes: height, paddings, icon size; corners below -->
+    <Style Selector="^.XSmall">
+      <Setter Property="Height" Value="32" />
+      <Setter Property="Padding" Value="12,0,10,0" />
+    </Style>
+    <Style Selector="^.Medium">
+      <Setter Property="Height" Value="56" />
+      <Setter Property="Padding" Value="24,0" />
+      <Setter Property="FontSize" Value="16" />
+      <Setter Property="LetterSpacing" Value="0.15" />
+      <Style Selector="^ /template/ Button#PART_SecondaryButton">
+        <Setter Property="Padding" Value="15,0" />
+      </Style>
+    </Style>
+    <Style Selector="^.Large">
+      <Setter Property="Height" Value="96" />
+      <Setter Property="Padding" Value="48,0" />
+      <Setter Property="FontSize" Value="24" />
+      <Setter Property="FontWeight" Value="Normal" />
+      <Setter Property="LetterSpacing" Value="0" />
+      <Style Selector="^ /template/ Button#PART_SecondaryButton">
+        <Setter Property="Padding" Value="29,0" />
+      </Style>
+    </Style>
+    <Style Selector="^.XLarge">
+      <Setter Property="Height" Value="136" />
+      <Setter Property="Padding" Value="64,0" />
+      <Setter Property="FontSize" Value="32" />
+      <Setter Property="FontWeight" Value="Normal" />
+      <Setter Property="LetterSpacing" Value="0" />
+      <Style Selector="^ /template/ Button#PART_SecondaryButton">
+        <Setter Property="Padding" Value="43,0" />
+      </Style>
+    </Style>
+    <Style Selector="^.Outlined.Large">
+      <Setter Property="BorderThickness" Value="2" />
+    </Style>
+    <Style Selector="^.Outlined.XLarge">
+      <Setter Property="BorderThickness" Value="3" />
+    </Style>
+
+    <!-- Corners: outer = full, inner = rest / hover+pressed, trailing becomes a pill while open -->
+    <Style Selector="^.XSmall">
+      <Style Selector="^ /template/ Button#PART_PrimaryButton"><Setter Property="CornerRadius" Value="16,4,4,16" /></Style>
+      <Style Selector="^ /template/ Button#PART_SecondaryButton"><Setter Property="CornerRadius" Value="4,16,16,4" /></Style>
+      <Style Selector="^ /template/ Button#PART_PrimaryButton:pointerover"><Setter Property="CornerRadius" Value="16,8,8,16" /></Style>
+      <Style Selector="^ /template/ Button#PART_SecondaryButton:pointerover"><Setter Property="CornerRadius" Value="8,16,16,8" /></Style>
+    </Style>
+    <Style Selector="^:not(.XSmall):not(.Medium):not(.Large):not(.XLarge), ^.Small">
+      <Style Selector="^ /template/ Button#PART_PrimaryButton:pointerover"><Setter Property="CornerRadius" Value="20,12,12,20" /></Style>
+      <Style Selector="^ /template/ Button#PART_SecondaryButton:pointerover"><Setter Property="CornerRadius" Value="12,20,20,12" /></Style>
+    </Style>
+    <Style Selector="^.Medium">
+      <Style Selector="^ /template/ Button#PART_PrimaryButton"><Setter Property="CornerRadius" Value="28,4,4,28" /></Style>
+      <Style Selector="^ /template/ Button#PART_SecondaryButton"><Setter Property="CornerRadius" Value="4,28,28,4" /></Style>
+      <Style Selector="^ /template/ Button#PART_PrimaryButton:pointerover"><Setter Property="CornerRadius" Value="28,12,12,28" /></Style>
+      <Style Selector="^ /template/ Button#PART_SecondaryButton:pointerover"><Setter Property="CornerRadius" Value="12,28,28,12" /></Style>
+    </Style>
+    <Style Selector="^.Large">
+      <Style Selector="^ /template/ Button#PART_PrimaryButton"><Setter Property="CornerRadius" Value="48,8,8,48" /></Style>
+      <Style Selector="^ /template/ Button#PART_SecondaryButton"><Setter Property="CornerRadius" Value="8,48,48,8" /></Style>
+      <Style Selector="^ /template/ Button#PART_PrimaryButton:pointerover"><Setter Property="CornerRadius" Value="48,20,20,48" /></Style>
+      <Style Selector="^ /template/ Button#PART_SecondaryButton:pointerover"><Setter Property="CornerRadius" Value="20,48,48,20" /></Style>
+    </Style>
+    <Style Selector="^.XLarge">
+      <Style Selector="^ /template/ Button#PART_PrimaryButton"><Setter Property="CornerRadius" Value="68,12,12,68" /></Style>
+      <Style Selector="^ /template/ Button#PART_SecondaryButton"><Setter Property="CornerRadius" Value="12,68,68,12" /></Style>
+      <Style Selector="^ /template/ Button#PART_PrimaryButton:pointerover"><Setter Property="CornerRadius" Value="68,20,20,68" /></Style>
+      <Style Selector="^ /template/ Button#PART_SecondaryButton:pointerover"><Setter Property="CornerRadius" Value="20,68,68,20" /></Style>
+    </Style>
+    <Style Selector="^:flyout-open">
+      <Style Selector="^ /template/ Button#PART_SecondaryButton"><Setter Property="CornerRadius" Value="20" /></Style>
+      <Style Selector="^ /template/ PathIcon#PART_Chevron"><Setter Property="RenderTransform" Value="rotate(180deg)" /></Style>
+    </Style>
+    <Style Selector="^.XSmall:flyout-open /template/ Button#PART_SecondaryButton"><Setter Property="CornerRadius" Value="16" /></Style>
+    <Style Selector="^.Medium:flyout-open /template/ Button#PART_SecondaryButton"><Setter Property="CornerRadius" Value="28" /></Style>
+    <Style Selector="^.Large:flyout-open /template/ Button#PART_SecondaryButton"><Setter Property="CornerRadius" Value="48" /></Style>
+    <Style Selector="^.XLarge:flyout-open /template/ Button#PART_SecondaryButton"><Setter Property="CornerRadius" Value="68" /></Style>
+
+    <!-- Disabled -->
+    <Style Selector="^:disabled">
+      <Setter Property="Foreground" Value="{DynamicResource M3DisabledContentBrush}" />
+      <Setter Property="Background" Value="{DynamicResource M3DisabledContainerBrush}" />
+    </Style>
+    <Style Selector="^.Outlined:disabled">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderBrush" Value="{DynamicResource M3DisabledContainerBrush}" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

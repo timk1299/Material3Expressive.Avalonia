@@ -1,0 +1,334 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="using:System"
+                    xmlns:controls="using:Material3Expressive.Avalonia.Controls"
+                    xmlns:motion="using:Material3Expressive.Avalonia.Motion">
+
+  <!-- Active track segment (before the handle) -->
+  <ControlTheme x:Key="M3SliderActiveTrack" TargetType="RepeatButton">
+    <Setter Property="Focusable" Value="False" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel Background="Transparent">
+          <Border Name="PART_Bar"
+                  Background="{TemplateBinding Background}"
+                  CornerRadius="{TemplateBinding CornerRadius}"
+                  Margin="{TemplateBinding Padding}" />
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- Inactive track segment (after the handle) with the stop indicator at its far end -->
+  <ControlTheme x:Key="M3SliderInactiveTrack" TargetType="RepeatButton">
+    <Setter Property="Focusable" Value="False" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel Background="Transparent" ClipToBounds="True">
+          <Border Name="PART_Bar"
+                  Background="{TemplateBinding Background}"
+                  CornerRadius="{TemplateBinding CornerRadius}"
+                  Margin="{TemplateBinding Padding}" />
+          <Ellipse Name="PART_Stop"
+                   Width="4"
+                   Height="4"
+                   Margin="0,0,6,0"
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Center"
+                   Fill="{TemplateBinding Foreground}" />
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^.Vertical /template/ Ellipse#PART_Stop">
+      <Setter Property="Margin" Value="0,6,0,0" />
+      <Setter Property="HorizontalAlignment" Value="Center" />
+      <Setter Property="VerticalAlignment" Value="Top" />
+    </Style>
+  </ControlTheme>
+
+  <!-- Handle: a 4dp bar with 6dp gaps on both sides (the thumb is 16dp wide); 2dp while pressed -->
+  <ControlTheme x:Key="M3SliderThumb" TargetType="Thumb">
+    <Setter Property="Background" Value="{DynamicResource M3PrimaryBrush}" />
+    <!-- The value label extends past the thumb. -->
+    <Setter Property="ClipToBounds" Value="False" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel Background="Transparent">
+          <Border Name="PART_Handle"
+                  Width="4"
+                  HorizontalAlignment="Center"
+                  CornerRadius="2"
+                  Background="{TemplateBinding Background}">
+            <Border.Transitions>
+              <Transitions>
+                <DoubleTransition Property="Width" Duration="{motion:SpringDuration FastSpatial}" Easing="{motion:Spring FastSpatial}" />
+                <DoubleTransition Property="Height" Duration="{motion:SpringDuration FastSpatial}" Easing="{motion:Spring FastSpatial}" />
+              </Transitions>
+            </Border.Transitions>
+          </Border>
+          <!-- Value indicator (Slider Classes="ValueLabel"); the thumb's DataContext is the slider value -->
+          <Border Name="PART_ValueLabel"
+                  Margin="-40,-56,-40,0"
+                  MinWidth="48"
+                  Height="44"
+                  Padding="16,0"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Top"
+                  CornerRadius="22"
+                  Background="{DynamicResource M3InverseSurfaceBrush}"
+                  IsVisible="False">
+            <TextBlock x:DataType="sys:Double"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="14"
+                       FontWeight="Medium"
+                       LetterSpacing="0.1"
+                       Foreground="{DynamicResource M3InverseOnSurfaceBrush}"
+                       Text="{Binding StringFormat={}{0:0.##}}" />
+          </Border>
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:pressed /template/ Border#PART_Handle, ^:focus-visible /template/ Border#PART_Handle">
+      <Setter Property="Width" Value="2" />
+    </Style>
+    <Style Selector="^[Tag=ValueLabel]:pressed /template/ Border#PART_ValueLabel">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <!-- Vertical slider: the handle is a horizontal bar -->
+    <Style Selector="^.Vertical /template/ Border#PART_Handle">
+      <Setter Property="Width" Value="NaN" />
+      <Setter Property="Height" Value="4" />
+      <Setter Property="HorizontalAlignment" Value="Stretch" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <Style Selector="^.Vertical:pressed /template/ Border#PART_Handle, ^.Vertical:focus-visible /template/ Border#PART_Handle">
+      <Setter Property="Width" Value="NaN" />
+      <Setter Property="Height" Value="2" />
+    </Style>
+    <Style Selector="^.Vertical /template/ Border#PART_ValueLabel">
+      <Setter Property="Margin" Value="-64,-14,0,-14" />
+      <Setter Property="HorizontalAlignment" Value="Left" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+  </ControlTheme>
+
+  <!--
+    Material 3 Expressive slider: a thick track (active = primary, inactive = secondary container)
+    split by a 4dp bar handle with 6dp gaps, and a stop dot at the end of the track.
+      Sizes : (default) XSmall (16dp track, 44dp handle) · Small (24) · Medium (40) · Large (56) · XLarge (96)
+      Classes="ValueLabel" shows the value while dragging; TickPlacement other than None draws stop indicators.
+  -->
+  <ControlTheme x:Key="{x:Type Slider}" TargetType="Slider">
+    <Setter Property="Foreground" Value="{DynamicResource M3PrimaryBrush}" />
+    <Setter Property="Background" Value="{DynamicResource M3SecondaryContainerBrush}" />
+    <!-- Slider clips by default; the value label extends past it. -->
+    <Setter Property="ClipToBounds" Value="False" />
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+
+    <Style Selector="^:horizontal">
+      <Setter Property="MinWidth" Value="80" />
+      <Setter Property="Height" Value="44" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <DataValidationErrors>
+            <Grid Name="PART_Root" Margin="{TemplateBinding Padding}" Background="Transparent">
+              <Track Name="PART_Track"
+                     Minimum="{TemplateBinding Minimum}"
+                     Maximum="{TemplateBinding Maximum}"
+                     Value="{TemplateBinding Value, Mode=TwoWay}"
+                     IsDirectionReversed="{TemplateBinding IsDirectionReversed}"
+                     Orientation="Horizontal">
+                <Track.DecreaseButton>
+                  <RepeatButton Name="PART_DecreaseButton"
+                                Theme="{StaticResource M3SliderActiveTrack}"
+                                Background="{TemplateBinding Foreground}"
+                                Padding="0,14"
+                                CornerRadius="8,2,2,8" />
+                </Track.DecreaseButton>
+                <Track.IncreaseButton>
+                  <RepeatButton Name="PART_IncreaseButton"
+                                Theme="{StaticResource M3SliderInactiveTrack}"
+                                Background="{TemplateBinding Background}"
+                                Foreground="{TemplateBinding Foreground}"
+                                Padding="0,14"
+                                CornerRadius="2,8,8,2" />
+                </Track.IncreaseButton>
+                <Thumb Name="thumb"
+                       Width="16"
+                       Height="44"
+                       Theme="{StaticResource M3SliderThumb}"
+                       Background="{TemplateBinding Foreground}"
+                       DataContext="{TemplateBinding Value}" />
+              </Track>
+              <controls:SliderStops Name="PART_Stops"
+                                    IsVisible="False"
+                                    Orientation="Horizontal"
+                                    ThumbSize="16"
+                                    Minimum="{TemplateBinding Minimum}"
+                                    Maximum="{TemplateBinding Maximum}"
+                                    Value="{TemplateBinding Value}"
+                                    TickFrequency="{TemplateBinding TickFrequency}"
+                                    Ticks="{TemplateBinding Ticks}"
+                                    IsDirectionReversed="{TemplateBinding IsDirectionReversed}"
+                                    ActiveBrush="{DynamicResource M3SecondaryContainerBrush}"
+                                    InactiveBrush="{DynamicResource M3PrimaryBrush}" />
+            </Grid>
+          </DataValidationErrors>
+        </ControlTemplate>
+      </Setter>
+    </Style>
+
+    <Style Selector="^:vertical">
+      <Setter Property="MinHeight" Value="80" />
+      <Setter Property="Width" Value="44" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <DataValidationErrors>
+            <Grid Name="PART_Root" Margin="{TemplateBinding Padding}" Background="Transparent">
+              <Track Name="PART_Track"
+                     Minimum="{TemplateBinding Minimum}"
+                     Maximum="{TemplateBinding Maximum}"
+                     Value="{TemplateBinding Value, Mode=TwoWay}"
+                     IsDirectionReversed="{TemplateBinding IsDirectionReversed}"
+                     Orientation="Vertical">
+                <Track.DecreaseButton>
+                  <RepeatButton Name="PART_DecreaseButton"
+                                Theme="{StaticResource M3SliderActiveTrack}"
+                                Background="{TemplateBinding Foreground}"
+                                Padding="14,0"
+                                CornerRadius="2,2,8,8" />
+                </Track.DecreaseButton>
+                <Track.IncreaseButton>
+                  <RepeatButton Name="PART_IncreaseButton"
+                                Classes="Vertical"
+                                Theme="{StaticResource M3SliderInactiveTrack}"
+                                Background="{TemplateBinding Background}"
+                                Foreground="{TemplateBinding Foreground}"
+                                Padding="14,0"
+                                CornerRadius="8,8,2,2" />
+                </Track.IncreaseButton>
+                <Thumb Name="thumb"
+                       Classes="Vertical"
+                       Width="44"
+                       Height="16"
+                       Theme="{StaticResource M3SliderThumb}"
+                       Background="{TemplateBinding Foreground}"
+                       DataContext="{TemplateBinding Value}" />
+              </Track>
+              <controls:SliderStops Name="PART_Stops"
+                                    IsVisible="False"
+                                    Orientation="Vertical"
+                                    ThumbSize="16"
+                                    Minimum="{TemplateBinding Minimum}"
+                                    Maximum="{TemplateBinding Maximum}"
+                                    Value="{TemplateBinding Value}"
+                                    TickFrequency="{TemplateBinding TickFrequency}"
+                                    Ticks="{TemplateBinding Ticks}"
+                                    IsDirectionReversed="{TemplateBinding IsDirectionReversed}"
+                                    ActiveBrush="{DynamicResource M3SecondaryContainerBrush}"
+                                    InactiveBrush="{DynamicResource M3PrimaryBrush}" />
+            </Grid>
+          </DataValidationErrors>
+        </ControlTemplate>
+      </Setter>
+    </Style>
+
+    <!-- Sizes: track thickness, handle length and track corner radius -->
+    <Style Selector="^:horizontal.Small">
+      <Style Selector="^ /template/ RepeatButton#PART_DecreaseButton"><Setter Property="Padding" Value="0,10" /></Style>
+      <Style Selector="^ /template/ RepeatButton#PART_IncreaseButton"><Setter Property="Padding" Value="0,10" /></Style>
+    </Style>
+    <Style Selector="^:horizontal.Medium">
+      <Setter Property="Height" Value="52" />
+      <Style Selector="^ /template/ Thumb#thumb"><Setter Property="Height" Value="52" /></Style>
+      <Style Selector="^ /template/ RepeatButton#PART_DecreaseButton">
+        <Setter Property="Padding" Value="0,6" />
+        <Setter Property="CornerRadius" Value="12,2,2,12" />
+      </Style>
+      <Style Selector="^ /template/ RepeatButton#PART_IncreaseButton">
+        <Setter Property="Padding" Value="0,6" />
+        <Setter Property="CornerRadius" Value="2,12,12,2" />
+      </Style>
+    </Style>
+    <Style Selector="^:horizontal.Large">
+      <Setter Property="Height" Value="68" />
+      <Style Selector="^ /template/ Thumb#thumb"><Setter Property="Height" Value="68" /></Style>
+      <Style Selector="^ /template/ RepeatButton#PART_DecreaseButton">
+        <Setter Property="Padding" Value="0,6" />
+        <Setter Property="CornerRadius" Value="16,2,2,16" />
+      </Style>
+      <Style Selector="^ /template/ RepeatButton#PART_IncreaseButton">
+        <Setter Property="Padding" Value="0,6" />
+        <Setter Property="CornerRadius" Value="2,16,16,2" />
+      </Style>
+    </Style>
+    <Style Selector="^:horizontal.XLarge">
+      <Setter Property="Height" Value="108" />
+      <Style Selector="^ /template/ Thumb#thumb"><Setter Property="Height" Value="108" /></Style>
+      <Style Selector="^ /template/ RepeatButton#PART_DecreaseButton">
+        <Setter Property="Padding" Value="0,6" />
+        <Setter Property="CornerRadius" Value="28,2,2,28" />
+      </Style>
+      <Style Selector="^ /template/ RepeatButton#PART_IncreaseButton">
+        <Setter Property="Padding" Value="0,6" />
+        <Setter Property="CornerRadius" Value="2,28,28,2" />
+      </Style>
+    </Style>
+    <Style Selector="^:vertical.Small">
+      <Style Selector="^ /template/ RepeatButton#PART_DecreaseButton"><Setter Property="Padding" Value="10,0" /></Style>
+      <Style Selector="^ /template/ RepeatButton#PART_IncreaseButton"><Setter Property="Padding" Value="10,0" /></Style>
+    </Style>
+    <Style Selector="^:vertical.Medium">
+      <Setter Property="Width" Value="52" />
+      <Style Selector="^ /template/ Thumb#thumb"><Setter Property="Width" Value="52" /></Style>
+      <Style Selector="^ /template/ RepeatButton#PART_DecreaseButton">
+        <Setter Property="Padding" Value="6,0" />
+        <Setter Property="CornerRadius" Value="2,2,12,12" />
+      </Style>
+      <Style Selector="^ /template/ RepeatButton#PART_IncreaseButton">
+        <Setter Property="Padding" Value="6,0" />
+        <Setter Property="CornerRadius" Value="12,12,2,2" />
+      </Style>
+    </Style>
+    <Style Selector="^:vertical.Large">
+      <Setter Property="Width" Value="68" />
+      <Style Selector="^ /template/ Thumb#thumb"><Setter Property="Width" Value="68" /></Style>
+      <Style Selector="^ /template/ RepeatButton#PART_DecreaseButton">
+        <Setter Property="Padding" Value="6,0" />
+        <Setter Property="CornerRadius" Value="2,2,16,16" />
+      </Style>
+      <Style Selector="^ /template/ RepeatButton#PART_IncreaseButton">
+        <Setter Property="Padding" Value="6,0" />
+        <Setter Property="CornerRadius" Value="16,16,2,2" />
+      </Style>
+    </Style>
+    <Style Selector="^:vertical.XLarge">
+      <Setter Property="Width" Value="108" />
+      <Style Selector="^ /template/ Thumb#thumb"><Setter Property="Width" Value="108" /></Style>
+      <Style Selector="^ /template/ RepeatButton#PART_DecreaseButton">
+        <Setter Property="Padding" Value="6,0" />
+        <Setter Property="CornerRadius" Value="2,2,28,28" />
+      </Style>
+      <Style Selector="^ /template/ RepeatButton#PART_IncreaseButton">
+        <Setter Property="Padding" Value="6,0" />
+        <Setter Property="CornerRadius" Value="28,28,2,2" />
+      </Style>
+    </Style>
+
+    <!-- Stop indicators for discrete sliders (set TickPlacement and TickFrequency / Ticks) -->
+    <Style Selector="^[TickPlacement=TopLeft], ^[TickPlacement=BottomRight], ^[TickPlacement=Outside]">
+      <Style Selector="^ /template/ controls|SliderStops#PART_Stops">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+    </Style>
+    <Style Selector="^.ValueLabel /template/ Thumb#thumb">
+      <Setter Property="Tag" Value="ValueLabel" />
+    </Style>
+
+    <Style Selector="^:disabled">
+      <Setter Property="Foreground" Value="{DynamicResource M3DisabledContentBrush}" />
+      <Setter Property="Background" Value="{DynamicResource M3DisabledContainerBrush}" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

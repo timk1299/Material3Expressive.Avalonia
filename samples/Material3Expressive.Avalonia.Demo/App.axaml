@@ -1,0 +1,9 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:m3="https://github.com/timk1299/material3-expressive-avalonia"
+             x:Class="Material3Expressive.Avalonia.Demo.App"
+             RequestedThemeVariant="Default">
+  <Application.Styles>
+    <m3:Material3ExpressiveTheme SeedColor="#6750A4" />
+  </Application.Styles>
+</Application>

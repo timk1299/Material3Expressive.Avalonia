@@ -1,0 +1,9 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="using:Material3Expressive.Avalonia.Demo.Views"
+        x:Class="Material3Expressive.Avalonia.Demo.MainWindow"
+        Title="Material 3 Expressive for Avalonia"
+        Width="1200"
+        Height="820">
+  <views:ShowcaseView />
+</Window>

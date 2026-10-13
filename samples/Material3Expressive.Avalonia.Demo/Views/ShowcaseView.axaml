@@ -1,0 +1,654 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:m3="https://github.com/timk1299/material3-expressive-avalonia"
+             xmlns:views="using:Material3Expressive.Avalonia.Demo.Views"
+             x:Class="Material3Expressive.Avalonia.Demo.Views.ShowcaseView">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="avares://Material3Expressive.Avalonia.Demo/Views/Icons.axaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <UserControl.Styles>
+    <Style Selector="Button StackPanel > TextBlock">
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <Style Selector="m3|Card > StackPanel > TextBlock.CardTitle">
+      <Setter Property="Margin" Value="0,0,0,4" />
+    </Style>
+  </UserControl.Styles>
+
+  <DockPanel>
+    <m3:TopAppBar DockPanel.Dock="Top" Title="Material 3 Expressive for Avalonia" Padding="12,0,4,0">
+      <m3:TopAppBar.Actions>
+        <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+          <ItemsControl Name="SeedSwatches" VerticalAlignment="Center">
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate>
+                <StackPanel Orientation="Horizontal" Spacing="0" />
+              </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+          </ItemsControl>
+          <Button Name="VariantButton" Classes="Icon" ToolTip.Tip="Scheme variant">
+            <PathIcon Data="{StaticResource IconPalette}" />
+          </Button>
+          <ToggleButton Name="DarkModeToggle" Classes="Icon" ToolTip.Tip="Dark theme">
+            <PathIcon Data="{StaticResource IconDarkMode}" />
+          </ToggleButton>
+        </StackPanel>
+      </m3:TopAppBar.Actions>
+    </m3:TopAppBar>
+
+    <m3:NavigationRail Name="Pages">
+      <m3:NavigationRail.Header>
+        <Button Name="RailFab" Classes="Fab Tertiary" ToolTip.Tip="New">
+          <PathIcon Data="{StaticResource IconEdit}" />
+        </Button>
+      </m3:NavigationRail.Header>
+      <!-- ================= Buttons ================= -->
+      <TabItem Header="Buttons">
+        <TabItem.Icon>
+          <PathIcon Data="{StaticResource IconTouch}" />
+        </TabItem.Icon>
+        <views:ButtonsPage />
+      </TabItem>
+
+      <!-- ================= Button groups, split buttons, FAB menu, toolbars ================= -->
+      <TabItem Header="Actions">
+        <TabItem.Icon>
+          <PathIcon Data="{StaticResource IconDashboard}" />
+        </TabItem.Icon>
+        <views:ActionsPage />
+      </TabItem>
+
+      <!-- ================= Shapes, loading and progress, motion ================= -->
+      <TabItem Header="Shapes">
+        <TabItem.Icon>
+          <PathIcon Data="{StaticResource IconShapes}" />
+        </TabItem.Icon>
+        <views:ShapesPage />
+      </TabItem>
+
+      <!-- ================= Inputs ================= -->
+      <TabItem Header="Inputs">
+        <TabItem.Icon>
+          <PathIcon Data="{StaticResource IconTextFields}" />
+        </TabItem.Icon>
+        <ScrollViewer>
+          <StackPanel Margin="24,0,24,24" Spacing="16">
+            <m3:Card>
+              <StackPanel Spacing="16">
+                <TextBlock Classes="TitleMedium CardTitle" Text="Text fields" />
+                <Grid ColumnDefinitions="*,24,*" RowDefinitions="Auto,16,Auto,16,Auto,16,Auto">
+                  <TextBox Grid.Column="0" m3:TextFieldAssist.Label="Filled" />
+                  <TextBox Grid.Column="2" Classes="Outlined" m3:TextFieldAssist.Label="Outlined" />
+
+                  <TextBox Grid.Row="2" Grid.Column="0" m3:TextFieldAssist.Label="Email" Text="ada@example.com"
+                           m3:TextFieldAssist.SupportingText="We'll never share it" />
+                  <TextBox Grid.Row="2" Grid.Column="2" Classes="Outlined" m3:TextFieldAssist.Label="Email" Text="ada@example.com"
+                           m3:TextFieldAssist.SupportingText="We'll never share it" />
+
+                  <TextBox Grid.Row="4" Grid.Column="0" Name="ErrorFilled" m3:TextFieldAssist.Label="Username" Text="ada!" />
+                  <TextBox Grid.Row="4" Grid.Column="2" Name="ErrorOutlined" Classes="Outlined" m3:TextFieldAssist.Label="Username" Text="ada!" />
+
+                  <TextBox Grid.Row="6" Grid.Column="0" m3:TextFieldAssist.Label="Search" PlaceholderText="Type to search">
+                    <TextBox.InnerLeftContent>
+                      <PathIcon Width="24" Height="24" Data="{StaticResource IconSearch}" />
+                    </TextBox.InnerLeftContent>
+                  </TextBox>
+                  <TextBox Grid.Row="6" Grid.Column="2" Classes="Outlined" m3:TextFieldAssist.Label="Disabled" Text="Read only" IsEnabled="False" />
+                </Grid>
+                <TextBox Classes="Search" PlaceholderText="Search messages">
+                  <TextBox.InnerLeftContent>
+                    <PathIcon Width="24" Height="24" Data="{StaticResource IconMenu}" />
+                  </TextBox.InnerLeftContent>
+                  <TextBox.InnerRightContent>
+                    <PathIcon Width="24" Height="24" Data="{StaticResource IconSearch}" />
+                  </TextBox.InnerRightContent>
+                </TextBox>
+                <TextBox Classes="Outlined" m3:TextFieldAssist.Label="Message" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="112"
+                         Text="Multi-line text fields grow with their content.&#x0a;Second line." />
+              </StackPanel>
+            </m3:Card>
+
+            <m3:Card>
+              <StackPanel Spacing="16">
+                <TextBlock Classes="TitleMedium CardTitle" Text="Drop-down menus" />
+                <StackPanel Orientation="Horizontal" Spacing="24">
+                  <ComboBox Width="240" m3:TextFieldAssist.Label="Flavor" SelectedIndex="1">
+                    <ComboBoxItem Content="Vanilla" />
+                    <ComboBoxItem Content="Chocolate" />
+                    <ComboBoxItem Content="Strawberry" />
+                  </ComboBox>
+                  <ComboBox Width="240" Classes="Outlined" m3:TextFieldAssist.Label="Size">
+                    <ComboBoxItem Content="Small" />
+                    <ComboBoxItem Content="Medium" />
+                    <ComboBoxItem Content="Large" />
+                  </ComboBox>
+                  <ComboBox Width="240" Classes="Outlined" m3:TextFieldAssist.Label="Topping" SelectedIndex="0"
+                            m3:TextFieldAssist.SupportingText="Pick one">
+                    <ComboBoxItem Content="Sprinkles" />
+                    <ComboBoxItem Content="Nuts" />
+                  </ComboBox>
+                </StackPanel>
+              </StackPanel>
+            </m3:Card>
+
+            <m3:Card>
+              <StackPanel Spacing="16">
+                <TextBlock Classes="TitleMedium CardTitle" Text="Sliders" />
+                <TextBlock Classes="BodyMedium OnSurfaceVariant" TextWrapping="Wrap"
+                           Text="Expressive sliders: thick track, bar handle with gaps, stop dot. Sizes XSmall (default) · Small · Medium · Large · XLarge." />
+                <Grid ColumnDefinitions="*,32,Auto">
+                  <StackPanel Spacing="12">
+                    <Slider Value="40" />
+                    <Slider Classes="ValueLabel" Minimum="0" Maximum="10" Value="4" TickFrequency="1"
+                            IsSnapToTickEnabled="True" TickPlacement="Outside" />
+                    <Slider Classes="Small" Value="55" />
+                    <Slider Classes="Medium" Value="65" />
+                    <Slider Classes="Large" Value="30" />
+                    <Slider Value="70" IsEnabled="False" />
+                  </StackPanel>
+                  <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="16" Height="320">
+                    <Slider Orientation="Vertical" Value="60" />
+                    <Slider Orientation="Vertical" Classes="Medium" Value="35" />
+                    <Slider Orientation="Vertical" Classes="XLarge" Value="80" />
+                  </StackPanel>
+                </Grid>
+              </StackPanel>
+            </m3:Card>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+
+      <!-- ================= Date and time pickers ================= -->
+      <TabItem Header="Pickers">
+        <TabItem.Icon>
+          <PathIcon Data="{StaticResource IconCalendar}" />
+        </TabItem.Icon>
+        <views:PickersPage />
+      </TabItem>
+
+      <!-- ================= Selection ================= -->
+      <TabItem Header="Selection">
+        <TabItem.Icon>
+          <PathIcon Data="{StaticResource IconToggle}" />
+        </TabItem.Icon>
+        <ScrollViewer>
+          <StackPanel Margin="24,0,24,24" Spacing="16">
+            <m3:Card>
+              <StackPanel Spacing="8">
+                <TextBlock Classes="TitleMedium CardTitle" Text="Checkboxes" />
+                <StackPanel Orientation="Horizontal" Spacing="16">
+                  <CheckBox Content="Unchecked" />
+                  <CheckBox Content="Checked" IsChecked="True" />
+                  <CheckBox Content="Indeterminate" IsThreeState="True" IsChecked="{x:Null}" />
+                  <CheckBox Content="Disabled" IsEnabled="False" />
+                  <CheckBox Content="Disabled checked" IsChecked="True" IsEnabled="False" />
+                </StackPanel>
+              </StackPanel>
+            </m3:Card>
+            <m3:Card>
+              <StackPanel Spacing="8">
+                <TextBlock Classes="TitleMedium CardTitle" Text="Radio buttons" />
+                <StackPanel Orientation="Horizontal" Spacing="16">
+                  <RadioButton GroupName="g" Content="Option A" IsChecked="True" />
+                  <RadioButton GroupName="g" Content="Option B" />
+                  <RadioButton GroupName="g" Content="Option C" />
+                  <RadioButton Content="Disabled" IsEnabled="False" />
+                  <RadioButton Content="Disabled selected" IsChecked="True" IsEnabled="False" />
+                </StackPanel>
+              </StackPanel>
+            </m3:Card>
+            <m3:Card>
+              <StackPanel Spacing="8">
+                <TextBlock Classes="TitleMedium CardTitle" Text="Switches" />
+                <StackPanel Orientation="Horizontal" Spacing="32">
+                  <ToggleSwitch IsChecked="True" />
+                  <ToggleSwitch />
+                  <ToggleSwitch IsChecked="True" IsEnabled="False" />
+                  <ToggleSwitch IsEnabled="False" />
+                  <ToggleSwitch Content="With header" OnContent="Wi-Fi on" OffContent="Wi-Fi off" IsChecked="True" />
+                </StackPanel>
+              </StackPanel>
+            </m3:Card>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+
+      <!-- ================= Containers ================= -->
+      <TabItem Header="Containers">
+        <TabItem.Icon>
+          <PathIcon Data="{StaticResource IconList}" />
+        </TabItem.Icon>
+        <ScrollViewer>
+          <StackPanel Margin="24,0,24,24" Spacing="16">
+            <Grid ColumnDefinitions="*,16,*,16,*">
+              <m3:Card Grid.Column="0">
+                <StackPanel Spacing="4">
+                  <TextBlock Classes="TitleMedium" Text="Elevated card" />
+                  <TextBlock Classes="BodyMedium OnSurfaceVariant" TextWrapping="Wrap" Text="Surface container low with elevation level 1." />
+                </StackPanel>
+              </m3:Card>
+              <m3:Card Grid.Column="2" Classes="Filled">
+                <StackPanel Spacing="4">
+                  <TextBlock Classes="TitleMedium" Text="Filled card" />
+                  <TextBlock Classes="BodyMedium OnSurfaceVariant" TextWrapping="Wrap" Text="Surface container highest, no elevation." />
+                </StackPanel>
+              </m3:Card>
+              <m3:Card Grid.Column="4" Classes="Outlined">
+                <StackPanel Spacing="4">
+                  <TextBlock Classes="TitleMedium" Text="Outlined card" />
+                  <TextBlock Classes="BodyMedium OnSurfaceVariant" TextWrapping="Wrap" Text="Surface with an outline variant border." />
+                </StackPanel>
+              </m3:Card>
+            </Grid>
+
+            <Grid ColumnDefinitions="*,16,*">
+              <m3:Card Grid.Column="0" Padding="0,8">
+                <ListBox SelectedIndex="1">
+                  <ListBoxItem>
+                    <StackPanel Orientation="Horizontal" Spacing="16">
+                      <PathIcon Data="{StaticResource IconPerson}" />
+                      <TextBlock Text="One-line list item" VerticalAlignment="Center" />
+                    </StackPanel>
+                  </ListBoxItem>
+                  <ListBoxItem>
+                    <StackPanel Orientation="Horizontal" Spacing="16">
+                      <PathIcon Data="{StaticResource IconMail}" />
+                      <TextBlock Text="Selected item" VerticalAlignment="Center" />
+                    </StackPanel>
+                  </ListBoxItem>
+                  <ListBoxItem>
+                    <StackPanel Spacing="0">
+                      <TextBlock Text="Two-line item" />
+                      <TextBlock Classes="BodyMedium OnSurfaceVariant" Text="Supporting text" />
+                    </StackPanel>
+                  </ListBoxItem>
+                  <ListBoxItem Content="Disabled item" IsEnabled="False" />
+                </ListBox>
+              </m3:Card>
+              <m3:Card Grid.Column="2" Padding="0" Classes="Filled">
+                <ListBox Classes="NavigationDrawer" SelectedIndex="0">
+                  <ListBoxItem>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                      <PathIcon Data="{StaticResource IconInbox}" />
+                      <TextBlock Text="Inbox" VerticalAlignment="Center" />
+                    </StackPanel>
+                  </ListBoxItem>
+                  <ListBoxItem>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                      <PathIcon Data="{StaticResource IconSend}" />
+                      <TextBlock Text="Outbox" VerticalAlignment="Center" />
+                    </StackPanel>
+                  </ListBoxItem>
+                  <ListBoxItem>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                      <PathIcon Data="{StaticResource IconFavorite}" />
+                      <TextBlock Text="Favorites" VerticalAlignment="Center" />
+                    </StackPanel>
+                  </ListBoxItem>
+                  <ListBoxItem>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                      <PathIcon Data="{StaticResource IconDelete}" />
+                      <TextBlock Text="Trash" VerticalAlignment="Center" />
+                    </StackPanel>
+                  </ListBoxItem>
+                </ListBox>
+              </m3:Card>
+            </Grid>
+
+            <Grid ColumnDefinitions="*,16,*">
+              <StackPanel Grid.Column="0" Spacing="8">
+                <TextBlock Classes="TitleMediumEmphasized" Text="Expressive list (ListBox.Expressive)" />
+                <ListBox Classes="Expressive" SelectedIndex="2" Padding="0">
+                  <ListBoxItem>
+                    <StackPanel Orientation="Horizontal" Spacing="16">
+                      <PathIcon Data="{StaticResource IconWifi}" />
+                      <StackPanel>
+                        <TextBlock Text="Network &amp; internet" />
+                        <TextBlock Classes="BodyMedium OnSurfaceVariant" Text="Wi-Fi, mobile, data usage" />
+                      </StackPanel>
+                    </StackPanel>
+                  </ListBoxItem>
+                  <ListBoxItem>
+                    <StackPanel Orientation="Horizontal" Spacing="16">
+                      <PathIcon Data="{StaticResource IconBluetooth}" />
+                      <StackPanel>
+                        <TextBlock Text="Connected devices" />
+                        <TextBlock Classes="BodyMedium OnSurfaceVariant" Text="Bluetooth, pairing" />
+                      </StackPanel>
+                    </StackPanel>
+                  </ListBoxItem>
+                  <ListBoxItem>
+                    <StackPanel Orientation="Horizontal" Spacing="16">
+                      <PathIcon Data="{StaticResource IconPalette}" />
+                      <StackPanel>
+                        <TextBlock Text="Wallpaper &amp; style" />
+                        <TextBlock Classes="BodyMedium OnSurfaceVariant" Text="Colors, themed icons" />
+                      </StackPanel>
+                    </StackPanel>
+                  </ListBoxItem>
+                  <ListBoxItem>
+                    <StackPanel Orientation="Horizontal" Spacing="16">
+                      <PathIcon Data="{StaticResource IconSettings}" />
+                      <StackPanel>
+                        <TextBlock Text="System" />
+                        <TextBlock Classes="BodyMedium OnSurfaceVariant" Text="Languages, gestures, time" />
+                      </StackPanel>
+                    </StackPanel>
+                  </ListBoxItem>
+                </ListBox>
+              </StackPanel>
+              <StackPanel Grid.Column="2" Spacing="8">
+                <TextBlock Classes="TitleMediumEmphasized" Text="Menus" />
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                  <Button Classes="Tonal" Content="Standard menu">
+                    <Button.Flyout>
+                      <MenuFlyout Placement="BottomEdgeAlignedLeft">
+                        <MenuItem Header="Cut" InputGesture="Ctrl+X" />
+                        <MenuItem Header="Copy" InputGesture="Ctrl+C" />
+                        <MenuItem Header="Paste" InputGesture="Ctrl+V" />
+                        <MenuItem Header="-" />
+                        <MenuItem Header="Show grid" ToggleType="CheckBox" IsChecked="True" />
+                        <MenuItem Header="Snap to grid" ToggleType="CheckBox" />
+                      </MenuFlyout>
+                    </Button.Flyout>
+                  </Button>
+                  <Button Classes="Outlined" Content="Vibrant menu">
+                    <Button.Flyout>
+                      <MenuFlyout Placement="BottomEdgeAlignedLeft" FlyoutPresenterClasses="Vibrant">
+                        <MenuItem Header="Small" ToggleType="Radio" GroupName="size" />
+                        <MenuItem Header="Medium" ToggleType="Radio" GroupName="size" IsChecked="True" />
+                        <MenuItem Header="Large" ToggleType="Radio" GroupName="size" />
+                      </MenuFlyout>
+                    </Button.Flyout>
+                  </Button>
+                </StackPanel>
+                <!-- Static preview of an open menu -->
+                <ContextMenu Name="MenuPreview" HorizontalAlignment="Left" Width="260" Margin="-8,0,0,0" IsHitTestVisible="False">
+                  <MenuItem Header="Inbox">
+                    <MenuItem.Icon><PathIcon Data="{StaticResource IconInbox}" /></MenuItem.Icon>
+                  </MenuItem>
+                  <MenuItem Header="Favorites" ToggleType="CheckBox" IsChecked="True">
+                    <MenuItem.Icon><PathIcon Data="{StaticResource IconFavorite}" /></MenuItem.Icon>
+                  </MenuItem>
+                  <MenuItem Header="Trash" InputGesture="Delete">
+                    <MenuItem.Icon><PathIcon Data="{StaticResource IconDelete}" /></MenuItem.Icon>
+                  </MenuItem>
+                </ContextMenu>
+              </StackPanel>
+            </Grid>
+
+            <m3:Card Padding="0">
+              <StackPanel>
+                <Menu Margin="8,4">
+                  <MenuItem Header="_File">
+                    <MenuItem Header="New" InputGesture="Ctrl+N">
+                      <MenuItem.Icon>
+                        <PathIcon Data="{StaticResource IconAdd}" />
+                      </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Open recent">
+                      <MenuItem Header="report.docx" />
+                      <MenuItem Header="notes.md" />
+                    </MenuItem>
+                    <MenuItem Header="-" />
+                    <MenuItem Header="Exit" />
+                  </MenuItem>
+                  <MenuItem Header="_Edit">
+                    <MenuItem Header="Undo" InputGesture="Ctrl+Z" />
+                    <MenuItem Header="Word wrap" ToggleType="CheckBox" IsChecked="True" />
+                  </MenuItem>
+                </Menu>
+                <Separator />
+                <TabControl Margin="0,0,0,0" Height="160">
+                  <TabItem Header="Flights">
+                    <TextBlock Margin="16" Classes="BodyMedium" Text="Primary tabs with a content-width indicator." />
+                  </TabItem>
+                  <TabItem Header="Trips">
+                    <TextBlock Margin="16" Text="Trips" />
+                  </TabItem>
+                  <TabItem Header="Explore">
+                    <TextBlock Margin="16" Text="Explore" />
+                  </TabItem>
+                </TabControl>
+                <TabControl Classes="Secondary" Height="120">
+                  <TabItem Header="Overview">
+                    <TextBlock Margin="16" Classes="BodyMedium" Text="Secondary tabs with a full-width indicator." />
+                  </TabItem>
+                  <TabItem Header="Specifications" />
+                  <TabItem Header="Reviews" />
+                </TabControl>
+              </StackPanel>
+            </m3:Card>
+
+            <m3:Card Padding="0" Height="160" ClipToBounds="True">
+              <TabControl Classes="NavigationBar Horizontal">
+                <TabItem Header="Home">
+                  <TabItem.Icon>
+                    <PathIcon Data="{StaticResource IconHome}" />
+                  </TabItem.Icon>
+                  <TextBlock Margin="16" Classes="BodyMedium" Text="Horizontal navigation bar items (Classes=&quot;NavigationBar Horizontal&quot;) for wide windows" />
+                </TabItem>
+                <TabItem Header="Search">
+                  <TabItem.Icon>
+                    <PathIcon Data="{StaticResource IconSearch}" />
+                  </TabItem.Icon>
+                </TabItem>
+                <TabItem Header="Favorites">
+                  <TabItem.Icon>
+                    <PathIcon Data="{StaticResource IconFavorite}" />
+                  </TabItem.Icon>
+                </TabItem>
+              </TabControl>
+            </m3:Card>
+
+            <m3:Card Padding="0" Height="200" ClipToBounds="True">
+              <TabControl Classes="NavigationBar">
+                <TabItem Header="Home">
+                  <TabItem.Icon>
+                    <PathIcon Data="{StaticResource IconHome}" />
+                  </TabItem.Icon>
+                  <TextBlock Margin="16" Classes="BodyMedium" Text="Navigation bar (TabControl.NavigationBar)" />
+                </TabItem>
+                <TabItem Header="Search">
+                  <TabItem.Icon>
+                    <PathIcon Data="{StaticResource IconSearch}" />
+                  </TabItem.Icon>
+                </TabItem>
+                <TabItem Header="Favorites">
+                  <TabItem.Icon>
+                    <PathIcon Data="{StaticResource IconFavorite}" />
+                  </TabItem.Icon>
+                </TabItem>
+                <TabItem Header="Profile">
+                  <TabItem.Icon>
+                    <PathIcon Data="{StaticResource IconPerson}" />
+                  </TabItem.Icon>
+                </TabItem>
+              </TabControl>
+            </m3:Card>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+
+      <!-- ================= Feedback & app bars ================= -->
+      <TabItem Header="Feedback">
+        <TabItem.Icon>
+          <m3:Badge BadgeContent="3">
+            <PathIcon Data="{StaticResource IconBell}" />
+          </m3:Badge>
+        </TabItem.Icon>
+        <ScrollViewer>
+          <StackPanel Margin="24,0,24,24" Spacing="16">
+            <m3:Card Classes="Outlined">
+              <StackPanel Spacing="16">
+                <TextBlock Classes="TitleMedium CardTitle" Text="Dialogs, snackbars and tooltips" />
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                  <Button Name="ShowDialogButton" Content="Show dialog" />
+                  <Button Name="ShowIconDialogButton" Classes="Tonal" Content="Dialog with icon" />
+                  <Button Name="ShowSnackbarButton" Classes="Outlined" Content="Show snackbar" />
+                  <Button Name="ShowSnackbarActionButton" Classes="Outlined" Content="Snackbar with action" />
+                  <Button Classes="Text" Content="Plain tooltip" ToolTip.Tip="Saved to favorites" />
+                  <Button Classes="Text" Content="Rich tooltip">
+                    <ToolTip.Tip>
+                      <ToolTip Classes="Rich">
+                        <StackPanel Spacing="4">
+                          <TextBlock Classes="TitleSmall OnSurfaceVariant" Text="Rich tooltip" />
+                          <TextBlock TextWrapping="Wrap" Text="Rich tooltips bring attention to a particular element or feature." />
+                        </StackPanel>
+                      </ToolTip>
+                    </ToolTip.Tip>
+                  </Button>
+                </StackPanel>
+                <!-- Static previews of the overlay surfaces -->
+                <StackPanel Orientation="Horizontal" Spacing="24">
+                  <m3:Dialog Headline="Discard draft?" Opacity="1" RenderTransform="none" Margin="0" Width="320">
+                    <TextBlock TextWrapping="Wrap" Text="Your message has not been sent. This action cannot be undone." />
+                    <m3:Dialog.Buttons>
+                      <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Classes="Text" Content="Cancel" />
+                        <Button Classes="Text" Content="Discard" />
+                      </StackPanel>
+                    </m3:Dialog.Buttons>
+                  </m3:Dialog>
+                  <m3:Snackbar Content="Message archived" ActionContent="Undo" ShowCloseButton="True"
+                               Opacity="1" RenderTransform="none" VerticalAlignment="Center" />
+                </StackPanel>
+              </StackPanel>
+            </m3:Card>
+
+            <m3:Card Classes="Outlined">
+              <StackPanel Spacing="16">
+                <TextBlock Classes="TitleMedium CardTitle" Text="Badges" />
+                <StackPanel Orientation="Horizontal" Spacing="32">
+                  <m3:Badge>
+                    <PathIcon Width="24" Height="24" Data="{StaticResource IconMail}" />
+                  </m3:Badge>
+                  <m3:Badge BadgeContent="3">
+                    <PathIcon Width="24" Height="24" Data="{StaticResource IconMail}" />
+                  </m3:Badge>
+                  <m3:Badge BadgeContent="999+">
+                    <PathIcon Width="24" Height="24" Data="{StaticResource IconInbox}" />
+                  </m3:Badge>
+                </StackPanel>
+              </StackPanel>
+            </m3:Card>
+
+            <m3:Card Classes="Outlined" Padding="0">
+              <StackPanel>
+                <m3:TopAppBar Title="Small" Subtitle="With a subtitle">
+                  <m3:TopAppBar.NavigationContent>
+                    <Button Classes="Icon"><PathIcon Data="{StaticResource IconArrowBack}" /></Button>
+                  </m3:TopAppBar.NavigationContent>
+                  <m3:TopAppBar.Actions>
+                    <Button Classes="Icon"><PathIcon Data="{StaticResource IconMoreVert}" /></Button>
+                  </m3:TopAppBar.Actions>
+                </m3:TopAppBar>
+                <Separator />
+                <m3:TopAppBar Classes="CenterAligned Scrolled" Title="Center-aligned (scrolled)">
+                  <m3:TopAppBar.NavigationContent>
+                    <Button Classes="Icon"><PathIcon Data="{StaticResource IconMenu}" /></Button>
+                  </m3:TopAppBar.NavigationContent>
+                  <m3:TopAppBar.Actions>
+                    <Button Classes="Icon"><PathIcon Data="{StaticResource IconPerson}" /></Button>
+                  </m3:TopAppBar.Actions>
+                </m3:TopAppBar>
+                <Separator />
+                <m3:TopAppBar Classes="Medium" Title="Medium flexible" Subtitle="Subtitle">
+                  <m3:TopAppBar.NavigationContent>
+                    <Button Classes="Icon"><PathIcon Data="{StaticResource IconArrowBack}" /></Button>
+                  </m3:TopAppBar.NavigationContent>
+                </m3:TopAppBar>
+                <Separator />
+                <m3:DockedToolbar Classes="Vibrant">
+                  <Button Classes="Icon"><PathIcon Data="{StaticResource IconSearch}" /></Button>
+                  <Button Classes="Icon"><PathIcon Data="{StaticResource IconDelete}" /></Button>
+                  <Button Classes="Icon"><PathIcon Data="{StaticResource IconMail}" /></Button>
+                  <Button Classes="Icon"><PathIcon Data="{StaticResource IconMoreVert}" /></Button>
+                </m3:DockedToolbar>
+                <Separator />
+                <m3:TopAppBar Classes="Large" Title="Large flexible">
+                  <m3:TopAppBar.NavigationContent>
+                    <Button Classes="Icon"><PathIcon Data="{StaticResource IconArrowBack}" /></Button>
+                  </m3:TopAppBar.NavigationContent>
+                  <m3:TopAppBar.Actions>
+                    <Button Classes="Icon"><PathIcon Data="{StaticResource IconMoreVert}" /></Button>
+                  </m3:TopAppBar.Actions>
+                </m3:TopAppBar>
+              </StackPanel>
+            </m3:Card>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+
+      <!-- ================= Colors ================= -->
+      <TabItem Header="Colors">
+        <TabItem.Icon>
+          <PathIcon Data="{StaticResource IconPalette}" />
+        </TabItem.Icon>
+        <ScrollViewer>
+          <StackPanel Margin="24,0,24,24" Spacing="16">
+            <TextBlock Classes="BodyMedium OnSurfaceVariant" TextWrapping="Wrap"
+                       Text="Every color role is a resource: {DynamicResource M3{Role}Brush} / M3{Role}Color. Pick a seed color in the top bar to regenerate the scheme." />
+            <ItemsControl Name="ColorRoles">
+              <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <WrapPanel />
+                </ItemsPanelTemplate>
+              </ItemsControl.ItemsPanel>
+            </ItemsControl>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+
+      <!-- ================= Typography ================= -->
+      <TabItem Header="Type">
+        <TabItem.Icon>
+          <PathIcon Data="{StaticResource IconTitle}" />
+        </TabItem.Icon>
+        <ScrollViewer>
+          <StackPanel Margin="24,0,24,24" Spacing="8">
+            <Grid ColumnDefinitions="*,24,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+              <TextBlock Classes="LabelLarge OnSurfaceVariant" Text="Baseline" />
+              <TextBlock Grid.Column="2" Classes="LabelLargeEmphasized OnSurfaceVariant" Text="Emphasized (Expressive)" />
+              <TextBlock Grid.Row="1" Classes="DisplayLarge" Text="Display Large" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="1" Grid.Column="2" Classes="DisplayLargeEmphasized" Text="Display Large" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="2" Classes="DisplayMedium" Text="Display Medium" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="2" Grid.Column="2" Classes="DisplayMediumEmphasized" Text="Display Medium" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="3" Classes="DisplaySmall" Text="Display Small" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="3" Grid.Column="2" Classes="DisplaySmallEmphasized" Text="Display Small" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="4" Classes="HeadlineLarge" Text="Headline Large" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="4" Grid.Column="2" Classes="HeadlineLargeEmphasized" Text="Headline Large" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="5" Classes="HeadlineMedium" Text="Headline Medium" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="5" Grid.Column="2" Classes="HeadlineMediumEmphasized" Text="Headline Medium" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="6" Classes="HeadlineSmall" Text="Headline Small" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="6" Grid.Column="2" Classes="HeadlineSmallEmphasized" Text="Headline Small" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="7" Classes="TitleLarge" Text="Title Large" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="7" Grid.Column="2" Classes="TitleLargeEmphasized" Text="Title Large" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="8" Classes="TitleMedium" Text="Title Medium" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="8" Grid.Column="2" Classes="TitleMediumEmphasized" Text="Title Medium" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="9" Classes="TitleSmall" Text="Title Small" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="9" Grid.Column="2" Classes="TitleSmallEmphasized" Text="Title Small" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="10" Classes="BodyLarge" Text="Body Large" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="10" Grid.Column="2" Classes="BodyLargeEmphasized" Text="Body Large" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="11" Classes="BodyMedium" Text="Body Medium" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="11" Grid.Column="2" Classes="BodyMediumEmphasized" Text="Body Medium" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="12" Classes="BodySmall" Text="Body Small" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="12" Grid.Column="2" Classes="BodySmallEmphasized" Text="Body Small" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="13" Classes="LabelLarge" Text="Label Large" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="13" Grid.Column="2" Classes="LabelLargeEmphasized" Text="Label Large" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="14" Classes="LabelMedium" Text="Label Medium" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="14" Grid.Column="2" Classes="LabelMediumEmphasized" Text="Label Medium" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="15" Classes="LabelSmall" Text="Label Small" TextTrimming="CharacterEllipsis" />
+              <TextBlock Grid.Row="15" Grid.Column="2" Classes="LabelSmallEmphasized" Text="Label Small" TextTrimming="CharacterEllipsis" />
+            </Grid>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+    </m3:NavigationRail>
+  </DockPanel>
+</UserControl>

@@ -1,0 +1,162 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- Plain tooltip: inverse surface, body small, extra-small corners. -->
+  <ControlTheme x:Key="{x:Type ToolTip}" TargetType="ToolTip">
+    <Setter Property="Foreground" Value="{DynamicResource M3InverseOnSurfaceBrush}" />
+    <Setter Property="Background" Value="{DynamicResource M3InverseSurfaceBrush}" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="LetterSpacing" Value="0.4" />
+    <Setter Property="Padding" Value="8,4" />
+    <Setter Property="MinHeight" Value="24" />
+    <Setter Property="MaxWidth" Value="320" />
+    <Setter Property="CornerRadius" Value="{DynamicResource M3ShapeExtraSmall}" />
+    <Setter Property="Opacity" Value="0" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+      </Transitions>
+    </Setter>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Name="PART_LayoutRoot"
+                Background="{TemplateBinding Background}"
+                Padding="{TemplateBinding Padding}"
+                MinHeight="{TemplateBinding MinHeight}"
+                CornerRadius="{TemplateBinding CornerRadius}">
+          <ContentPresenter Name="PART_ContentPresenter"
+                            MaxWidth="{TemplateBinding MaxWidth}"
+                            VerticalAlignment="Center"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            TextBlock.LetterSpacing="{TemplateBinding LetterSpacing}"
+                            TextBlock.TextWrapping="Wrap" />
+        </Border>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:open">
+      <Setter Property="Opacity" Value="1" />
+    </Style>
+    <!-- Rich tooltip: <ToolTip.Tip><ToolTip Classes="Rich">…</ToolTip></ToolTip.Tip> -->
+    <Style Selector="^.Rich">
+      <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+      <Setter Property="Background" Value="{DynamicResource M3SurfaceContainerBrush}" />
+      <Setter Property="FontSize" Value="14" />
+      <Setter Property="LetterSpacing" Value="0.25" />
+      <Setter Property="Padding" Value="16,12,16,8" />
+      <Setter Property="CornerRadius" Value="{DynamicResource M3ShapeMedium}" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border Name="PART_LayoutRoot"
+                  Margin="8,4,8,10"
+                  Background="{TemplateBinding Background}"
+                  Padding="{TemplateBinding Padding}"
+                  CornerRadius="{TemplateBinding CornerRadius}"
+                  BoxShadow="{DynamicResource M3Elevation2}">
+            <ContentPresenter Name="PART_ContentPresenter"
+                              MaxWidth="{TemplateBinding MaxWidth}"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              TextBlock.LetterSpacing="{TemplateBinding LetterSpacing}"
+                              TextBlock.TextWrapping="Wrap" />
+          </Border>
+        </ControlTemplate>
+      </Setter>
+    </Style>
+  </ControlTheme>
+
+  <!-- Divider -->
+  <ControlTheme x:Key="{x:Type Separator}" TargetType="Separator">
+    <Setter Property="Background" Value="{DynamicResource M3OutlineVariantBrush}" />
+    <Setter Property="Focusable" Value="False" />
+    <Setter Property="MinHeight" Value="1" />
+    <Setter Property="MinWidth" Value="1" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}"
+                Margin="{TemplateBinding Padding}" />
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^.Inset">
+      <Setter Property="Padding" Value="16,0" />
+    </Style>
+  </ControlTheme>
+
+  <!-- Generic flyout content (Button.Flyout etc.): surface container, medium corners, elevation 2. -->
+  <ControlTheme x:Key="{x:Type FlyoutPresenter}" TargetType="FlyoutPresenter">
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+    <Setter Property="Background" Value="{DynamicResource M3SurfaceContainerBrush}" />
+    <Setter Property="Padding" Value="16" />
+    <Setter Property="MinWidth" Value="112" />
+    <Setter Property="MaxWidth" Value="560" />
+    <Setter Property="CornerRadius" Value="{DynamicResource M3ShapeMedium}" />
+    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+    <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Name="LayoutRoot"
+                Margin="8,4,8,10"
+                Background="{TemplateBinding Background}"
+                CornerRadius="{TemplateBinding CornerRadius}"
+                BoxShadow="{DynamicResource M3Elevation2}">
+          <ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                        VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
+            <ContentPresenter Name="PART_ContentPresenter"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              Margin="{TemplateBinding Padding}"
+                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                              HorizontalContentAlignment="Stretch"
+                              VerticalContentAlignment="Stretch" />
+          </ScrollViewer>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- Validation errors shown as error-colored supporting text under the control. -->
+  <ControlTheme x:Key="{x:Type DataValidationErrors}" TargetType="DataValidationErrors">
+    <!-- Floating labels of outlined fields sit above the field bounds -->
+    <Setter Property="ClipToBounds" Value="False" />
+    <Setter Property="Template">
+      <ControlTemplate TargetType="DataValidationErrors">
+        <DockPanel LastChildFill="True">
+          <ContentControl Name="InlineDataValidationContentControl"
+                          x:DataType="Control"
+                          Margin="16,4,16,0"
+                          DockPanel.Dock="Bottom"
+                          Content="{Binding (DataValidationErrors.Errors)}"
+                          ContentTemplate="{TemplateBinding ErrorTemplate}"
+                          DataContext="{TemplateBinding Owner}"
+                          IsVisible="{Binding (DataValidationErrors.HasErrors)}" />
+          <ContentPresenter Name="PART_ContentPresenter"
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            CornerRadius="{TemplateBinding CornerRadius}" />
+        </DockPanel>
+      </ControlTemplate>
+    </Setter>
+    <Setter Property="ErrorTemplate">
+      <DataTemplate>
+        <ItemsControl x:DataType="DataValidationErrors"
+                      Foreground="{DynamicResource M3ErrorBrush}"
+                      FontSize="12"
+                      LetterSpacing="0.4"
+                      ItemsSource="{Binding}">
+          <ItemsControl.Styles>
+            <Style Selector="TextBlock">
+              <Setter Property="TextWrapping" Value="Wrap" />
+              <Setter Property="LineHeight" Value="16" />
+            </Style>
+          </ItemsControl.Styles>
+        </ItemsControl>
+      </DataTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

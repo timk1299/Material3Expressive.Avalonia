@@ -1,0 +1,56 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- Typeface -->
+  <FontFamily x:Key="M3FontFamily">avares://Material3Expressive.Avalonia/Assets/Fonts#Roboto</FontFamily>
+
+  <!-- Shape scale (md.sys.shape.corner.*), including the Expressive Increased / ExtraExtraLarge steps -->
+  <CornerRadius x:Key="M3ShapeNone">0</CornerRadius>
+  <CornerRadius x:Key="M3ShapeExtraSmall">4</CornerRadius>
+  <CornerRadius x:Key="M3ShapeExtraSmallTop">4,4,0,0</CornerRadius>
+  <CornerRadius x:Key="M3ShapeSmall">8</CornerRadius>
+  <CornerRadius x:Key="M3ShapeMedium">12</CornerRadius>
+  <CornerRadius x:Key="M3ShapeLarge">16</CornerRadius>
+  <CornerRadius x:Key="M3ShapeLargeStart">16,0,0,16</CornerRadius>
+  <CornerRadius x:Key="M3ShapeLargeEnd">0,16,16,0</CornerRadius>
+  <CornerRadius x:Key="M3ShapeLargeTop">16,16,0,0</CornerRadius>
+  <CornerRadius x:Key="M3ShapeLargeIncreased">20</CornerRadius>
+  <CornerRadius x:Key="M3ShapeExtraLarge">28</CornerRadius>
+  <CornerRadius x:Key="M3ShapeExtraLargeTop">28,28,0,0</CornerRadius>
+  <CornerRadius x:Key="M3ShapeExtraLargeIncreased">32</CornerRadius>
+  <CornerRadius x:Key="M3ShapeExtraExtraLarge">48</CornerRadius>
+  <CornerRadius x:Key="M3ShapeFull">9999</CornerRadius>
+
+  <!-- State layer opacities (md.sys.state.*) -->
+  <x:Double x:Key="M3StateHoverOpacity">0.08</x:Double>
+  <x:Double x:Key="M3StateFocusOpacity">0.10</x:Double>
+  <x:Double x:Key="M3StatePressedOpacity">0.10</x:Double>
+  <x:Double x:Key="M3StateDraggedOpacity">0.16</x:Double>
+  <x:Double x:Key="M3DisabledContentOpacity">0.38</x:Double>
+  <x:Double x:Key="M3DisabledContainerOpacity">0.12</x:Double>
+
+  <!-- Material icon paths (24x24 grid). PathIcon stretches the path bounds, so templates size them explicitly. -->
+  <StreamGeometry x:Key="M3ArrowDropDownGeometry">M7 10l5 5 5-5z</StreamGeometry>
+  <StreamGeometry x:Key="M3ChevronRightGeometry">M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z</StreamGeometry>
+  <StreamGeometry x:Key="M3ExpandMoreGeometry">M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z</StreamGeometry>
+  <StreamGeometry x:Key="M3CheckGeometry">M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z</StreamGeometry>
+  <StreamGeometry x:Key="M3CloseGeometry">M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z</StreamGeometry>
+  <StreamGeometry x:Key="M3MenuGeometry">M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z</StreamGeometry>
+  <StreamGeometry x:Key="M3MenuOpenGeometry">M3 18h13v-2H3v2zm0-5h10v-2H3v2zm0-7v2h13V6H3zm18 9.59L17.42 12 21 8.41 19.59 7l-5 5 5 5L21 15.59z</StreamGeometry>
+  <!-- Padded to the 24px grid so PathIcon keeps the icon's built-in margin (pickers) -->
+  <StreamGeometry x:Key="M3ChevronRightIconGeometry">M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6zM0 0h.01M24 24h-.01</StreamGeometry>
+  <StreamGeometry x:Key="M3ArrowDropDownIconGeometry">M7 10l5 5 5-5zM0 0h.01M24 24h-.01</StreamGeometry>
+  <StreamGeometry x:Key="M3ChevronLeftGeometry">M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12zM0 0h.01M24 24h-.01</StreamGeometry>
+  <StreamGeometry x:Key="M3CalendarGeometry">M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13zM0 0h.01M24 24h-.01</StreamGeometry>
+  <StreamGeometry x:Key="M3EditGeometry">M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83zM0 0h.01M24 24h-.01</StreamGeometry>
+  <StreamGeometry x:Key="M3ScheduleGeometry">M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67zM0 0h.01M24 24h-.01</StreamGeometry>
+  <StreamGeometry x:Key="M3KeyboardGeometry">M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm9 7H8v-2h8v2zm0-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2zM0 0h.01M24 24h-.01</StreamGeometry>
+  <!-- Stroked check mark for an 18x18 box -->
+  <StreamGeometry x:Key="M3CheckMarkStroke">M4.5,9.2 L7.6,12.2 L13.6,6</StreamGeometry>
+
+  <!-- Fluent fallback tuning (controls that keep their Fluent template) -->
+  <FontFamily x:Key="ContentControlThemeFontFamily">avares://Material3Expressive.Avalonia/Assets/Fonts#Roboto</FontFamily>
+  <x:Double x:Key="ControlContentThemeFontSize">14</x:Double>
+  <CornerRadius x:Key="ControlCornerRadius">4</CornerRadius>
+  <CornerRadius x:Key="OverlayCornerRadius">4</CornerRadius>
+</ResourceDictionary>

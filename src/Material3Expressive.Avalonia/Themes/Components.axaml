@@ -1,0 +1,344 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:motion="using:Material3Expressive.Avalonia.Motion"
+                    xmlns:controls="using:Material3Expressive.Avalonia.Controls">
+
+  <!-- ================= Top app bar ================= -->
+  <!--
+    (default) Small · Classes="CenterAligned" · "Medium" (flexible) · "Large" (flexible); optional Subtitle;
+    :scrolled / .Scrolled switches the container color
+  -->
+  <ControlTheme x:Key="{x:Type controls:TopAppBar}" TargetType="controls:TopAppBar">
+    <Setter Property="Background" Value="{DynamicResource M3SurfaceBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+    <Setter Property="Height" Value="64" />
+    <Setter Property="Padding" Value="4,0" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+          <Border.Transitions>
+            <Transitions>
+              <BrushTransition Property="Background" Duration="0:0:0.15" />
+            </Transitions>
+          </Border.Transitions>
+          <Grid RowDefinitions="64,*" ColumnDefinitions="Auto,*,Auto">
+            <ContentPresenter Name="PART_Navigation"
+                              Grid.Column="0"
+                              Margin="4,0,0,0"
+                              VerticalAlignment="Center"
+                              Content="{TemplateBinding NavigationContent}" />
+            <StackPanel Name="PART_TitleArea" Grid.Column="1" Margin="12,0" VerticalAlignment="Center">
+              <ContentPresenter Name="PART_Title"
+                                FontSize="22"
+                                LineHeight="28"
+                                TextTrimming="CharacterEllipsis"
+                                Content="{TemplateBinding Title}" />
+              <ContentPresenter Name="PART_Subtitle"
+                                FontSize="12"
+                                LineHeight="16"
+                                LetterSpacing="0.5"
+                                FontWeight="Medium"
+                                Foreground="{DynamicResource M3OnSurfaceVariantBrush}"
+                                TextTrimming="CharacterEllipsis"
+                                Content="{TemplateBinding Subtitle}" />
+            </StackPanel>
+            <ContentPresenter Name="PART_Actions"
+                              Grid.Column="2"
+                              Margin="0,0,4,0"
+                              VerticalAlignment="Center"
+                              Foreground="{DynamicResource M3OnSurfaceVariantBrush}"
+                              Content="{TemplateBinding Actions}" />
+            <StackPanel Name="PART_LargeTitleArea"
+                        Grid.Row="1"
+                        Grid.ColumnSpan="3"
+                        Margin="12,0,12,20"
+                        VerticalAlignment="Bottom"
+                        IsVisible="False">
+              <ContentPresenter Name="PART_LargeTitle"
+                                TextTrimming="CharacterEllipsis"
+                                Content="{TemplateBinding Title}" />
+              <ContentPresenter Name="PART_LargeSubtitle"
+                                Foreground="{DynamicResource M3OnSurfaceVariantBrush}"
+                                TextTrimming="CharacterEllipsis"
+                                Content="{TemplateBinding Subtitle}" />
+            </StackPanel>
+          </Grid>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^ /template/ ContentPresenter#PART_Navigation:empty, ^ /template/ ContentPresenter#PART_Actions:empty, ^ /template/ ContentPresenter#PART_Subtitle:empty, ^ /template/ ContentPresenter#PART_LargeSubtitle:empty">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^:navigation /template/ StackPanel#PART_TitleArea">
+      <Setter Property="Margin" Value="8,0,12,0" />
+    </Style>
+    <Style Selector="^:scrolled, ^.Scrolled">
+      <Setter Property="Background" Value="{DynamicResource M3SurfaceContainerBrush}" />
+    </Style>
+    <Style Selector="^.CenterAligned /template/ StackPanel#PART_TitleArea">
+      <Setter Property="Grid.Column" Value="0" />
+      <Setter Property="Grid.ColumnSpan" Value="3" />
+      <Setter Property="HorizontalAlignment" Value="Center" />
+      <Setter Property="Margin" Value="56,0" />
+    </Style>
+    <Style Selector="^.CenterAligned">
+      <Style Selector="^ /template/ ContentPresenter#PART_Title, ^ /template/ ContentPresenter#PART_Subtitle">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+      </Style>
+      <Style Selector="^ /template/ StackPanel#PART_LargeTitleArea">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+      </Style>
+      <Style Selector="^ /template/ ContentPresenter#PART_LargeTitle, ^ /template/ ContentPresenter#PART_LargeSubtitle">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+      </Style>
+    </Style>
+    <Style Selector="^.Medium, ^.Large">
+      <Style Selector="^ /template/ StackPanel#PART_TitleArea">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+      <Style Selector="^ /template/ StackPanel#PART_LargeTitleArea">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+    </Style>
+    <!-- Medium flexible: headline medium title, label large subtitle -->
+    <Style Selector="^.Medium">
+      <Setter Property="Height" Value="112" />
+      <Style Selector="^ /template/ ContentPresenter#PART_LargeTitle">
+        <Setter Property="FontSize" Value="28" />
+        <Setter Property="LineHeight" Value="36" />
+      </Style>
+      <Style Selector="^ /template/ ContentPresenter#PART_LargeSubtitle">
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="LineHeight" Value="20" />
+        <Setter Property="LetterSpacing" Value="0.1" />
+        <Setter Property="FontWeight" Value="Medium" />
+      </Style>
+      <Style Selector="^ /template/ StackPanel#PART_LargeTitleArea">
+        <Setter Property="Margin" Value="12,0,12,12" />
+      </Style>
+    </Style>
+    <Style Selector="^.Medium:subtitle">
+      <Setter Property="Height" Value="136" />
+    </Style>
+    <!-- Large flexible: display small title, title medium subtitle -->
+    <Style Selector="^.Large">
+      <Setter Property="Height" Value="120" />
+      <Style Selector="^ /template/ ContentPresenter#PART_LargeTitle">
+        <Setter Property="FontSize" Value="36" />
+        <Setter Property="LineHeight" Value="44" />
+      </Style>
+      <Style Selector="^ /template/ ContentPresenter#PART_LargeSubtitle">
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="LineHeight" Value="24" />
+        <Setter Property="LetterSpacing" Value="0.15" />
+        <Setter Property="FontWeight" Value="Medium" />
+      </Style>
+      <Style Selector="^ /template/ StackPanel#PART_LargeTitleArea">
+        <Setter Property="Margin" Value="12,0,12,12" />
+      </Style>
+    </Style>
+    <Style Selector="^.Large:subtitle">
+      <Setter Property="Height" Value="152" />
+    </Style>
+  </ControlTheme>
+
+  <!-- ================= Bottom app bar ================= -->
+  <ControlTheme x:Key="{x:Type controls:BottomAppBar}" TargetType="controls:BottomAppBar">
+    <Setter Property="Background" Value="{DynamicResource M3SurfaceContainerBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+    <Setter Property="Height" Value="80" />
+    <Setter Property="Padding" Value="4,12,16,12" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+          <DockPanel>
+            <ContentPresenter Name="PART_Fab"
+                              DockPanel.Dock="Right"
+                              VerticalAlignment="Center"
+                              Content="{TemplateBinding FloatingActionButton}" />
+            <ContentPresenter Name="PART_Actions"
+                              Margin="4,0,0,0"
+                              VerticalAlignment="Center"
+                              Content="{TemplateBinding Actions}" />
+          </DockPanel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- ================= Badge ================= -->
+  <ControlTheme x:Key="{x:Type controls:Badge}" TargetType="controls:Badge">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <controls:BadgePanel IsSmall="{TemplateBinding BadgeContent, Converter={x:Static ObjectConverters.IsNull}}">
+          <ContentPresenter Name="PART_ContentPresenter"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+          <Border Name="PART_Badge"
+                  MinWidth="16"
+                  Height="16"
+                  Padding="4,0"
+                  CornerRadius="8"
+                  Background="{DynamicResource M3ErrorBrush}"
+                  IsVisible="{TemplateBinding IsBadgeVisible}">
+            <ContentPresenter Name="PART_BadgeContent"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              Foreground="{DynamicResource M3OnErrorBrush}"
+                              FontSize="11"
+                              FontWeight="Medium"
+                              LineHeight="16"
+                              LetterSpacing="0.5"
+                              Content="{TemplateBinding BadgeContent}" />
+          </Border>
+        </controls:BadgePanel>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:small /template/ Border#PART_Badge">
+      <Setter Property="MinWidth" Value="6" />
+      <Setter Property="Width" Value="6" />
+      <Setter Property="Height" Value="6" />
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="CornerRadius" Value="3" />
+    </Style>
+  </ControlTheme>
+
+  <!-- ================= Snackbar ================= -->
+  <ControlTheme x:Key="{x:Type controls:Snackbar}" TargetType="controls:Snackbar">
+    <Setter Property="Background" Value="{DynamicResource M3InverseSurfaceBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource M3InverseOnSurfaceBrush}" />
+    <Setter Property="CornerRadius" Value="{DynamicResource M3ShapeExtraSmall}" />
+    <Setter Property="Padding" Value="16,14" />
+    <Setter Property="MinHeight" Value="48" />
+    <Setter Property="MinWidth" Value="288" />
+    <Setter Property="MaxWidth" Value="640" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="LetterSpacing" Value="0.25" />
+    <Setter Property="ClipToBounds" Value="False" />
+    <Setter Property="Opacity" Value="0" />
+    <Setter Property="RenderTransform" Value="translate(0px,16px)" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+        <TransformOperationsTransition Property="RenderTransform" Duration="{motion:SpringDuration DefaultSpatial}" Easing="{motion:Spring DefaultSpatial}" />
+      </Transitions>
+    </Setter>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}"
+                CornerRadius="{TemplateBinding CornerRadius}"
+                MinHeight="{TemplateBinding MinHeight}"
+                BoxShadow="{DynamicResource M3Elevation3}">
+          <DockPanel>
+            <Button Name="PART_CloseButton"
+                    DockPanel.Dock="Right"
+                    Theme="{StaticResource M3InverseIconButton}"
+                    Margin="0,0,4,0"
+                    VerticalAlignment="Center"
+                    IsVisible="{TemplateBinding ShowCloseButton}">
+              <PathIcon Width="14" Height="14" Data="{StaticResource M3CloseGeometry}" />
+            </Button>
+            <Button Name="PART_ActionButton"
+                    DockPanel.Dock="Right"
+                    Theme="{StaticResource M3InverseTextButton}"
+                    Margin="0,0,8,0"
+                    VerticalAlignment="Center"
+                    Content="{TemplateBinding ActionContent}"
+                    IsVisible="{TemplateBinding ActionContent, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            <ContentPresenter Name="PART_ContentPresenter"
+                              Margin="{TemplateBinding Padding}"
+                              VerticalAlignment="Center"
+                              TextWrapping="Wrap"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}" />
+          </DockPanel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:open">
+      <Setter Property="Opacity" Value="1" />
+      <Setter Property="RenderTransform" Value="translate(0px,0px)" />
+    </Style>
+  </ControlTheme>
+
+  <!-- ================= Dialog ================= -->
+  <ControlTheme x:Key="{x:Type controls:Dialog}" TargetType="controls:Dialog">
+    <Setter Property="Background" Value="{DynamicResource M3SurfaceContainerHighBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+    <Setter Property="CornerRadius" Value="{DynamicResource M3ShapeExtraLarge}" />
+    <Setter Property="Padding" Value="24" />
+    <Setter Property="MinWidth" Value="280" />
+    <Setter Property="MaxWidth" Value="560" />
+    <Setter Property="Margin" Value="48" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="LetterSpacing" Value="0.25" />
+    <Setter Property="Focusable" Value="True" />
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+    <Setter Property="ClipToBounds" Value="False" />
+    <Setter Property="Opacity" Value="0" />
+    <Setter Property="RenderTransform" Value="scale(0.92)" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+        <TransformOperationsTransition Property="RenderTransform" Duration="{motion:SpringDuration DefaultSpatial}" Easing="{motion:Spring DefaultSpatial}" />
+      </Transitions>
+    </Setter>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}"
+                CornerRadius="{TemplateBinding CornerRadius}"
+                Padding="{TemplateBinding Padding}"
+                BoxShadow="{DynamicResource M3Elevation3}">
+          <DockPanel>
+            <ContentPresenter Name="PART_Icon"
+                              DockPanel.Dock="Top"
+                              Margin="0,0,0,16"
+                              HorizontalAlignment="Center"
+                              Foreground="{DynamicResource M3SecondaryBrush}"
+                              Content="{TemplateBinding Icon}" />
+            <ContentPresenter Name="PART_Headline"
+                              DockPanel.Dock="Top"
+                              Margin="0,0,0,16"
+                              Foreground="{DynamicResource M3OnSurfaceBrush}"
+                              FontSize="24"
+                              LineHeight="32"
+                              LetterSpacing="0"
+                              TextWrapping="Wrap"
+                              Content="{TemplateBinding Headline}" />
+            <ContentPresenter Name="PART_Buttons"
+                              DockPanel.Dock="Bottom"
+                              Margin="0,24,0,0"
+                              HorizontalAlignment="Right"
+                              Content="{TemplateBinding Buttons}" />
+            <ContentPresenter Name="PART_ContentPresenter"
+                              LineHeight="20"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}" />
+          </DockPanel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^ /template/ ContentPresenter:empty">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <!-- Date and time picker dialogs lay out their own content -->
+    <Style Selector="^.Picker">
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="MaxWidth" Value="1000" />
+      <Style Selector="^ /template/ ContentPresenter#PART_Buttons">
+        <Setter Property="Margin" Value="12,0,12,12" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+      </Style>
+    </Style>
+    <Style Selector="^:icon /template/ ContentPresenter#PART_Headline">
+      <Setter Property="HorizontalAlignment" Value="Center" />
+      <Setter Property="TextAlignment" Value="Center" />
+    </Style>
+    <Style Selector="^:open">
+      <Setter Property="Opacity" Value="1" />
+      <Setter Property="RenderTransform" Value="scale(1)" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

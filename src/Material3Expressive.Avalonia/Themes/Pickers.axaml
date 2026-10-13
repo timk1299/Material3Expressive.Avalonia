@@ -1,0 +1,599 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="using:Material3Expressive.Avalonia"
+                    xmlns:controls="using:Material3Expressive.Avalonia.Controls"
+                    xmlns:motion="using:Material3Expressive.Avalonia.Motion">
+
+  <!-- ================= Calendar ================= -->
+
+  <!-- Day: 48dp cell with a 40dp circle; range band in secondary container (md.comp.date-picker.modal.*) -->
+  <ControlTheme x:Key="M3CalendarDayButton" TargetType="Button">
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Width" Value="48" />
+    <Setter Property="Height" Value="48" />
+    <Setter Property="FontSize" Value="16" />
+    <Setter Property="LetterSpacing" Value="0.5" />
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+    <Setter Property="ClipToBounds" Value="False" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel Background="Transparent">
+          <Border Name="PART_Range" Height="40" Background="{DynamicResource M3SecondaryContainerBrush}" IsVisible="False" />
+          <Border Name="PART_Circle"
+                  Width="40"
+                  Height="40"
+                  CornerRadius="20"
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}">
+            <Border.Transitions>
+              <Transitions>
+                <BrushTransition Property="Background" Duration="{motion:SpringDuration FastEffects}" Easing="{motion:Spring FastEffects}" />
+              </Transitions>
+            </Border.Transitions>
+          </Border>
+          <Border Name="PART_StateLayer"
+                  Width="40"
+                  Height="40"
+                  CornerRadius="20"
+                  Background="{TemplateBinding Foreground}"
+                  Opacity="0"
+                  IsHitTestVisible="False">
+            <Border.Transitions>
+              <Transitions>
+                <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+              </Transitions>
+            </Border.Transitions>
+          </Border>
+          <controls:Ripple Width="40" Height="40" CornerRadius="20" IsCentered="True" Brush="{TemplateBinding Foreground}" />
+          <ContentPresenter Name="PART_ContentPresenter"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Content="{TemplateBinding Content}" />
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:pointerover /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StateHoverOpacity}" />
+    </Style>
+    <Style Selector="^:focus-visible /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StateFocusOpacity}" />
+    </Style>
+    <Style Selector="^.Today">
+      <Setter Property="Foreground" Value="{DynamicResource M3PrimaryBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource M3PrimaryBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+    </Style>
+    <Style Selector="^.InRange">
+      <Setter Property="Foreground" Value="{DynamicResource M3OnSecondaryContainerBrush}" />
+      <Style Selector="^ /template/ Border#PART_Range">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+    </Style>
+    <Style Selector="^.RangeStart /template/ Border#PART_Range">
+      <Setter Property="IsVisible" Value="True" />
+      <Setter Property="Margin" Value="24,0,0,0" />
+    </Style>
+    <Style Selector="^.RangeEnd /template/ Border#PART_Range">
+      <Setter Property="IsVisible" Value="True" />
+      <Setter Property="Margin" Value="0,0,24,0" />
+    </Style>
+    <Style Selector="^.Selected">
+      <Setter Property="Background" Value="{DynamicResource M3PrimaryBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnPrimaryBrush}" />
+    </Style>
+    <Style Selector="^.Outside">
+      <Setter Property="IsHitTestVisible" Value="False" />
+      <Setter Property="Focusable" Value="False" />
+      <Setter Property="Opacity" Value="0" />
+    </Style>
+    <Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Opacity" Value="{DynamicResource M3DisabledContentOpacity}" />
+    </Style>
+  </ControlTheme>
+
+  <!-- Year: 72x36 pill -->
+  <ControlTheme x:Key="M3CalendarYearButton" TargetType="Button">
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Width" Value="72" />
+    <Setter Property="Height" Value="36" />
+    <Setter Property="Margin" Value="0,8" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="FontSize" Value="16" />
+    <Setter Property="LetterSpacing" Value="0.5" />
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <Border Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="18" />
+          <Border Name="PART_StateLayer" CornerRadius="18" Background="{TemplateBinding Foreground}" Opacity="0" IsHitTestVisible="False" />
+          <controls:Ripple CornerRadius="18" Brush="{TemplateBinding Foreground}" />
+          <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Content="{TemplateBinding Content}" />
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:pointerover /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StateHoverOpacity}" />
+    </Style>
+    <Style Selector="^:focus-visible /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StateFocusOpacity}" />
+    </Style>
+    <Style Selector="^.Today">
+      <Setter Property="Foreground" Value="{DynamicResource M3PrimaryBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource M3PrimaryBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+    </Style>
+    <Style Selector="^.Selected">
+      <Setter Property="Background" Value="{DynamicResource M3PrimaryBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnPrimaryBrush}" />
+    </Style>
+  </ControlTheme>
+
+  <!-- Calendar: month header (tap for years), arrows, weekdays and the day grid. 360dp wide. -->
+  <ControlTheme x:Key="{x:Type controls:CalendarView}" TargetType="controls:CalendarView">
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+    <Setter Property="Padding" Value="12,0,12,8" />
+    <Setter Property="Width" Value="360" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Grid Margin="{TemplateBinding Padding}" RowDefinitions="56,Auto">
+          <DockPanel>
+            <StackPanel Name="PART_Nav" DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+              <Button Name="PART_PreviousButton" Classes="Icon" ToolTip.Tip="Previous month">
+                <PathIcon Data="{StaticResource M3ChevronLeftGeometry}" />
+              </Button>
+              <Button Name="PART_NextButton" Classes="Icon" ToolTip.Tip="Next month">
+                <PathIcon Data="{StaticResource M3ChevronRightIconGeometry}" />
+              </Button>
+            </StackPanel>
+            <Button Name="PART_MonthButton"
+                    Classes="Text"
+                    Padding="12,0,8,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center">
+              <StackPanel Orientation="Horizontal" Spacing="4">
+                <TextBlock Name="PART_MonthText" VerticalAlignment="Center" Foreground="{DynamicResource M3OnSurfaceVariantBrush}" />
+                <PathIcon Name="PART_MonthArrow"
+                          Data="{StaticResource M3ArrowDropDownIconGeometry}"
+                          Foreground="{DynamicResource M3OnSurfaceVariantBrush}"
+                          RenderTransform="rotate(0deg)">
+                  <PathIcon.Transitions>
+                    <Transitions>
+                      <TransformOperationsTransition Property="RenderTransform" Duration="{motion:SpringDuration FastSpatial}" Easing="{motion:Spring FastSpatial}" />
+                    </Transitions>
+                  </PathIcon.Transitions>
+                </PathIcon>
+              </StackPanel>
+            </Button>
+          </DockPanel>
+          <Panel Grid.Row="1" ClipToBounds="True">
+            <StackPanel Name="PART_DaysHost">
+              <UniformGrid Name="PART_WeekdayGrid" Columns="7" Height="48" />
+              <UniformGrid Name="PART_DayGrid" Columns="7" Rows="6" />
+            </StackPanel>
+            <ScrollViewer Name="PART_YearScroller" Height="336" IsVisible="False" HorizontalScrollBarVisibility="Disabled">
+              <UniformGrid Name="PART_YearGrid" Columns="3" />
+            </ScrollViewer>
+          </Panel>
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:years">
+      <Style Selector="^ /template/ StackPanel#PART_DaysHost, ^ /template/ StackPanel#PART_Nav">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+      <Style Selector="^ /template/ ScrollViewer#PART_YearScroller">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+      <Style Selector="^ /template/ PathIcon#PART_MonthArrow">
+        <Setter Property="RenderTransform" Value="rotate(180deg)" />
+      </Style>
+    </Style>
+  </ControlTheme>
+
+  <!-- ================= Date picker ================= -->
+  <!-- Header (title, headline, mode toggle), divider, then the calendar or the date input fields. -->
+  <ControlTheme x:Key="{x:Type controls:DatePickerPanel}" TargetType="controls:DatePickerPanel">
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+    <Setter Property="Width" Value="360" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <StackPanel>
+          <Grid Name="PART_Header" Height="120" ColumnDefinitions="*,Auto" RowDefinitions="Auto,*">
+            <TextBlock Grid.ColumnSpan="2"
+                       Margin="24,16,12,0"
+                       Classes="LabelLarge"
+                       Foreground="{DynamicResource M3OnSurfaceVariantBrush}"
+                       Text="{TemplateBinding EffectiveTitle}" />
+            <TextBlock Name="PART_Headline"
+                       Grid.Row="1"
+                       Margin="24,0,12,12"
+                       VerticalAlignment="Bottom"
+                       FontSize="32"
+                       LineHeight="40"
+                       TextTrimming="CharacterEllipsis"
+                       Foreground="{DynamicResource M3OnSurfaceVariantBrush}"
+                       Text="{TemplateBinding Headline}" />
+            <Button Name="PART_ModeToggle"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="0,0,12,12"
+                    VerticalAlignment="Bottom"
+                    Classes="Icon"
+                    ToolTip.Tip="Switch between calendar and keyboard input"
+                    IsVisible="{TemplateBinding ShowModeToggle}">
+              <Panel>
+                <PathIcon Name="PART_EditIcon" Data="{StaticResource M3EditGeometry}" />
+                <PathIcon Name="PART_CalendarIcon" Data="{StaticResource M3CalendarGeometry}" IsVisible="False" />
+              </Panel>
+            </Button>
+          </Grid>
+          <Separator Margin="0" />
+          <controls:CalendarView Name="PART_Calendar"
+                                 Margin="0,4,0,0"
+                                 SelectedDate="{TemplateBinding SelectedDate, Mode=TwoWay}"
+                                 SelectedStartDate="{TemplateBinding SelectedStartDate, Mode=TwoWay}"
+                                 SelectedEndDate="{TemplateBinding SelectedEndDate, Mode=TwoWay}"
+                                 DisplayDate="{TemplateBinding DisplayDate, Mode=TwoWay}"
+                                 SelectionMode="{TemplateBinding SelectionMode}"
+                                 MinDate="{TemplateBinding MinDate}"
+                                 MaxDate="{TemplateBinding MaxDate}" />
+          <StackPanel Name="PART_InputArea" Margin="24,16,24,12" Spacing="16" IsVisible="False">
+            <TextBox Name="PART_StartInput" Classes="Outlined" local:TextFieldAssist.Label="Date" />
+            <TextBox Name="PART_EndInput" Classes="Outlined" local:TextFieldAssist.Label="End date" IsVisible="False" />
+          </StackPanel>
+        </StackPanel>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:range">
+      <Style Selector="^ /template/ Grid#PART_Header">
+        <Setter Property="Height" Value="128" />
+      </Style>
+      <Style Selector="^ /template/ TextBlock#PART_Headline">
+        <Setter Property="FontSize" Value="22" />
+        <Setter Property="LineHeight" Value="28" />
+      </Style>
+      <Style Selector="^ /template/ TextBox#PART_StartInput">
+        <Setter Property="(local:TextFieldAssist.Label)" Value="Start date" />
+      </Style>
+      <Style Selector="^ /template/ TextBox#PART_EndInput">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+    </Style>
+    <Style Selector="^:input">
+      <Style Selector="^ /template/ controls|CalendarView#PART_Calendar">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+      <Style Selector="^ /template/ StackPanel#PART_InputArea">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+      <Style Selector="^ /template/ PathIcon#PART_EditIcon">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+      <Style Selector="^ /template/ PathIcon#PART_CalendarIcon">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+    </Style>
+  </ControlTheme>
+
+  <!-- Docked date picker: text field + calendar below it -->
+  <ControlTheme x:Key="{x:Type controls:DateField}" TargetType="controls:DateField">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <TextBox Name="PART_TextBox"
+                   local:TextFieldAssist.Label="{TemplateBinding Label}"
+                   local:TextFieldAssist.SupportingText="{TemplateBinding Placeholder}"
+                   PlaceholderText="{TemplateBinding Placeholder}">
+            <TextBox.InnerRightContent>
+              <Button Name="PART_Button" Classes="Icon" Margin="0,0,4,0" ToolTip.Tip="Open calendar">
+                <PathIcon Data="{StaticResource M3CalendarGeometry}" />
+              </Button>
+            </TextBox.InnerRightContent>
+          </TextBox>
+          <Popup Name="PART_Popup"
+                 IsOpen="{TemplateBinding IsDropDownOpen, Mode=TwoWay}"
+                 PlacementTarget="{Binding #PART_TextBox}"
+                 Placement="BottomEdgeAlignedLeft"
+                 IsLightDismissEnabled="True"
+                 WindowManagerAddShadowHint="False">
+            <Border Margin="8,0,8,10"
+                    Background="{DynamicResource M3SurfaceContainerHighBrush}"
+                    CornerRadius="{DynamicResource M3ShapeLarge}"
+                    BoxShadow="{DynamicResource M3Elevation3}">
+              <StackPanel>
+                <controls:CalendarView Name="PART_Calendar"
+                                       Margin="0,4,0,0"
+                                       MinDate="{TemplateBinding MinDate}"
+                                       MaxDate="{TemplateBinding MaxDate}" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8" Margin="12,0,12,12">
+                  <Button Name="PART_Cancel" Classes="Text" Content="Cancel" />
+                  <Button Name="PART_Ok" Classes="Text" Content="OK" />
+                </StackPanel>
+              </StackPanel>
+            </Border>
+          </Popup>
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- ================= Time picker ================= -->
+
+  <!-- Hour / minute selector: 96x80, display large -->
+  <ControlTheme x:Key="M3TimeSelector" TargetType="ToggleButton">
+    <Setter Property="Background" Value="{DynamicResource M3SurfaceContainerHighestBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+    <Setter Property="Width" Value="96" />
+    <Setter Property="Height" Value="80" />
+    <Setter Property="FontSize" Value="57" />
+    <Setter Property="LetterSpacing" Value="-0.25" />
+    <Setter Property="FontWeight" Value="Normal" />
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+    <Setter Property="ClipToBounds" Value="False" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel>
+          <Border Name="PART_FocusRing" Margin="-5" BorderThickness="3" CornerRadius="13"
+                  BorderBrush="{DynamicResource M3SecondaryBrush}" IsVisible="False" />
+          <Border Background="{TemplateBinding Background}" CornerRadius="8">
+            <Border.Transitions>
+              <Transitions>
+                <BrushTransition Property="Background" Duration="{motion:SpringDuration FastEffects}" Easing="{motion:Spring FastEffects}" />
+              </Transitions>
+            </Border.Transitions>
+          </Border>
+          <Border Name="PART_StateLayer" CornerRadius="8" Background="{TemplateBinding Foreground}" Opacity="0" IsHitTestVisible="False" />
+          <controls:Ripple CornerRadius="8" Brush="{TemplateBinding Foreground}" />
+          <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" LineHeight="64" Content="{TemplateBinding Content}" />
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:checked">
+      <Setter Property="Background" Value="{DynamicResource M3PrimaryContainerBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnPrimaryContainerBrush}" />
+    </Style>
+    <Style Selector="^:pointerover /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StateHoverOpacity}" />
+    </Style>
+    <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+  </ControlTheme>
+
+  <!-- Hour / minute text field of the input mode: 96x72, display medium -->
+  <ControlTheme x:Key="M3TimeInputField" TargetType="TextBox">
+    <Setter Property="Background" Value="{DynamicResource M3SurfaceContainerHighestBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="2" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Width" Value="96" />
+    <Setter Property="Height" Value="72" />
+    <Setter Property="FontSize" Value="45" />
+    <Setter Property="MaxLength" Value="2" />
+    <Setter Property="TextAlignment" Value="Center" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="CaretBrush" Value="{DynamicResource M3PrimaryBrush}" />
+    <Setter Property="SelectionBrush" Value="{DynamicResource M3TextSelectionBrush}" />
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="{TemplateBinding CornerRadius}">
+          <TextPresenter Name="PART_TextPresenter"
+                         Text="{TemplateBinding Text, Mode=TwoWay}"
+                         CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
+                         CaretIndex="{TemplateBinding CaretIndex}"
+                         SelectionStart="{TemplateBinding SelectionStart}"
+                         SelectionEnd="{TemplateBinding SelectionEnd}"
+                         TextAlignment="{TemplateBinding TextAlignment}"
+                         LetterSpacing="{TemplateBinding LetterSpacing}"
+                         PasswordChar="{TemplateBinding PasswordChar}"
+                         RevealPassword="{TemplateBinding RevealPassword}"
+                         SelectionBrush="{TemplateBinding SelectionBrush}"
+                         SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+                         CaretBrush="{TemplateBinding CaretBrush}"
+                         HorizontalAlignment="Stretch"
+                         VerticalAlignment="Center" />
+        </Border>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:focus">
+      <Setter Property="Background" Value="{DynamicResource M3PrimaryContainerBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnPrimaryContainerBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource M3PrimaryBrush}" />
+    </Style>
+    <Style Selector="^:error">
+      <Setter Property="BorderBrush" Value="{DynamicResource M3ErrorBrush}" />
+    </Style>
+  </ControlTheme>
+
+  <!-- AM / PM halves -->
+  <ControlTheme x:Key="M3PeriodButton" TargetType="ToggleButton">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+    <Setter Property="FontSize" Value="16" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="LetterSpacing" Value="0.15" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="VerticalAlignment" Value="Stretch" />
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel Background="{TemplateBinding Background}">
+          <Panel.Transitions>
+            <Transitions>
+              <BrushTransition Property="Background" Duration="{motion:SpringDuration FastEffects}" Easing="{motion:Spring FastEffects}" />
+            </Transitions>
+          </Panel.Transitions>
+          <Border Name="PART_StateLayer" Background="{TemplateBinding Foreground}" Opacity="0" IsHitTestVisible="False" />
+          <controls:Ripple Brush="{TemplateBinding Foreground}" />
+          <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Content="{TemplateBinding Content}" />
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:checked">
+      <Setter Property="Background" Value="{DynamicResource M3TertiaryContainerBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnTertiaryContainerBrush}" />
+    </Style>
+    <Style Selector="^:pointerover /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StateHoverOpacity}" />
+    </Style>
+    <Style Selector="^:focus-visible /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StateFocusOpacity}" />
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type controls:PeriodSelector}" TargetType="controls:PeriodSelector">
+    <Setter Property="Width" Value="52" />
+    <Setter Property="Height" Value="80" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border BorderBrush="{DynamicResource M3OutlineBrush}" BorderThickness="1" CornerRadius="8" ClipToBounds="True">
+          <Grid RowDefinitions="*,Auto,*">
+            <ToggleButton Name="PART_Am" Theme="{StaticResource M3PeriodButton}" Content="{TemplateBinding AmText}" />
+            <Border Grid.Row="1" Height="1" Background="{DynamicResource M3OutlineBrush}" />
+            <ToggleButton Name="PART_Pm" Grid.Row="2" Theme="{StaticResource M3PeriodButton}" Content="{TemplateBinding PmText}" />
+          </Grid>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:horizontal">
+      <Setter Property="Width" Value="216" />
+      <Setter Property="Height" Value="38" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border BorderBrush="{DynamicResource M3OutlineBrush}" BorderThickness="1" CornerRadius="8" ClipToBounds="True">
+            <Grid ColumnDefinitions="*,Auto,*">
+              <ToggleButton Name="PART_Am" Theme="{StaticResource M3PeriodButton}" Content="{TemplateBinding AmText}" />
+              <Border Grid.Column="1" Width="1" Background="{DynamicResource M3OutlineBrush}" />
+              <ToggleButton Name="PART_Pm" Grid.Column="2" Theme="{StaticResource M3PeriodButton}" Content="{TemplateBinding PmText}" />
+            </Grid>
+          </Border>
+        </ControlTemplate>
+      </Setter>
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type controls:ClockDial}" TargetType="controls:ClockDial">
+    <Setter Property="DialBrush" Value="{DynamicResource M3SurfaceContainerHighestBrush}" />
+    <Setter Property="SelectorBrush" Value="{DynamicResource M3PrimaryBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+    <Setter Property="SelectedForeground" Value="{DynamicResource M3OnPrimaryBrush}" />
+    <Setter Property="Width" Value="256" />
+    <Setter Property="Height" Value="256" />
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+  </ControlTheme>
+
+  <!--
+    Time picker: title, selectors (+ AM/PM) and the dial below; :horizontal puts the dial on the right,
+    :input replaces the selectors and the dial with text fields.
+  -->
+  <ControlTheme x:Key="{x:Type controls:TimePickerPanel}" TargetType="controls:TimePickerPanel">
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+    <Setter Property="Padding" Value="24,24,24,0" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Grid Margin="{TemplateBinding Padding}" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
+          <TextBlock Grid.ColumnSpan="2"
+                     Margin="0,0,0,20"
+                     Classes="LabelMedium"
+                     Foreground="{DynamicResource M3OnSurfaceVariantBrush}"
+                     Text="{TemplateBinding EffectiveTitle}" />
+          <StackPanel Name="PART_Selectors" Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Top">
+            <ToggleButton Name="PART_HourButton" Theme="{StaticResource M3TimeSelector}" Content="{TemplateBinding HourText}" />
+            <TextBlock Classes="M3TimeSeparator" Text=":" />
+            <ToggleButton Name="PART_MinuteButton" Theme="{StaticResource M3TimeSelector}" Content="{TemplateBinding MinuteText}" />
+          </StackPanel>
+          <StackPanel Name="PART_Inputs" Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Top" IsVisible="False">
+            <StackPanel Spacing="7">
+              <TextBox Name="PART_HourInput" Theme="{StaticResource M3TimeInputField}" />
+              <TextBlock Classes="BodySmall OnSurfaceVariant" Text="Hour" />
+            </StackPanel>
+            <Panel Height="72" VerticalAlignment="Top">
+              <TextBlock Classes="M3TimeSeparator" Text=":" />
+            </Panel>
+            <StackPanel Spacing="7">
+              <TextBox Name="PART_MinuteInput" Theme="{StaticResource M3TimeInputField}" />
+              <TextBlock Classes="BodySmall OnSurfaceVariant" Text="Minute" />
+            </StackPanel>
+          </StackPanel>
+          <controls:PeriodSelector Name="PART_Period" Grid.Row="1" Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Top" />
+          <controls:ClockDial Name="PART_Dial"
+                              Grid.Row="2"
+                              Grid.ColumnSpan="2"
+                              Margin="0,36,0,24"
+                              HorizontalAlignment="Center" />
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:hour24">
+      <Style Selector="^ /template/ controls|PeriodSelector#PART_Period">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+      <Style Selector="^ /template/ ToggleButton#PART_HourButton, ^ /template/ ToggleButton#PART_MinuteButton">
+        <Setter Property="Width" Value="114" />
+      </Style>
+    </Style>
+    <!-- Landscape: AM/PM under the selectors (same cell, offset below them), dial on the right -->
+    <Style Selector="^:horizontal">
+      <Style Selector="^ /template/ controls|PeriodSelector#PART_Period">
+        <Setter Property="Grid.Row" Value="1" />
+        <Setter Property="Grid.Column" Value="0" />
+        <Setter Property="Margin" Value="0,92,0,0" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="Orientation" Value="Horizontal" />
+      </Style>
+      <Style Selector="^ /template/ controls|ClockDial#PART_Dial">
+        <Setter Property="Grid.Row" Value="1" />
+        <Setter Property="Grid.Column" Value="1" />
+        <Setter Property="Grid.ColumnSpan" Value="1" />
+        <Setter Property="Margin" Value="52,0,0,24" />
+      </Style>
+    </Style>
+    <Style Selector="^:input">
+      <Style Selector="^ /template/ StackPanel#PART_Selectors, ^ /template/ controls|ClockDial#PART_Dial">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
+      <Style Selector="^ /template/ StackPanel#PART_Inputs">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+      <Style Selector="^ /template/ controls|PeriodSelector#PART_Period">
+        <Setter Property="Grid.Row" Value="1" />
+        <Setter Property="Grid.Column" Value="1" />
+        <Setter Property="Margin" Value="12,0,0,24" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="Orientation" Value="Vertical" />
+        <Setter Property="Height" Value="72" />
+      </Style>
+    </Style>
+  </ControlTheme>
+
+  <!-- Time field: text field with a clock button -->
+  <ControlTheme x:Key="{x:Type controls:TimeField}" TargetType="controls:TimeField">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <TextBox Name="PART_TextBox" local:TextFieldAssist.Label="{TemplateBinding Label}">
+          <TextBox.InnerRightContent>
+            <Button Name="PART_Button" Classes="Icon" Margin="0,0,4,0" ToolTip.Tip="Open time picker">
+              <PathIcon Data="{StaticResource M3ScheduleGeometry}" />
+            </Button>
+          </TextBox.InnerRightContent>
+        </TextBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

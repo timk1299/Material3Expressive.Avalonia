@@ -1,0 +1,277 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:m3="https://github.com/timk1299/material3-expressive-avalonia"
+             x:Class="Material3Expressive.Avalonia.Demo.Views.ButtonsPage">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="avares://Material3Expressive.Avalonia.Demo/Views/Icons.axaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+  <UserControl.Styles>
+    <Style Selector="Button StackPanel > TextBlock, ToggleButton StackPanel > TextBlock">
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <Style Selector="StackPanel.Row">
+      <Setter Property="Orientation" Value="Horizontal" />
+      <Setter Property="Spacing" Value="12" />
+    </Style>
+    <Style Selector="StackPanel.Row > :is(Control)">
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+  </UserControl.Styles>
+
+  <ScrollViewer>
+    <StackPanel Margin="24,0,24,24" Spacing="16">
+      <m3:Card Classes="Outlined">
+        <StackPanel Spacing="16">
+          <TextBlock Classes="TitleMediumEmphasized" Text="Common buttons" />
+          <TextBlock Classes="BodyMedium OnSurfaceVariant" TextWrapping="Wrap"
+                     Text="Press and hold a button: its corners morph to a tighter radius on a fast spatial spring." />
+          <StackPanel Classes="Row">
+            <Button Content="Filled" />
+            <Button Classes="Tonal" Content="Tonal" />
+            <Button Classes="Elevated" Content="Elevated" />
+            <Button Classes="Outlined" Content="Outlined" />
+            <Button Classes="Text" Content="Text" />
+          </StackPanel>
+          <StackPanel Classes="Row">
+            <Button Padding="16,0,24,0">
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <PathIcon Data="{StaticResource IconAdd}" />
+                <TextBlock Text="With icon" />
+              </StackPanel>
+            </Button>
+            <Button Classes="Tonal" Padding="16,0,24,0">
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <PathIcon Data="{StaticResource IconSend}" />
+                <TextBlock Text="Send" />
+              </StackPanel>
+            </Button>
+            <Button Classes="Outlined" Padding="16,0,24,0">
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <PathIcon Data="{StaticResource IconEdit}" />
+                <TextBlock Text="Edit" />
+              </StackPanel>
+            </Button>
+            <Button Classes="Text" Padding="12,0,16,0">
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <PathIcon Data="{StaticResource IconDelete}" />
+                <TextBlock Text="Delete" />
+              </StackPanel>
+            </Button>
+          </StackPanel>
+          <StackPanel Classes="Row">
+            <Button Content="Filled" IsEnabled="False" />
+            <Button Classes="Tonal" Content="Tonal" IsEnabled="False" />
+            <Button Classes="Elevated" Content="Elevated" IsEnabled="False" />
+            <Button Classes="Outlined" Content="Outlined" IsEnabled="False" />
+            <Button Classes="Text" Content="Text" IsEnabled="False" />
+          </StackPanel>
+        </StackPanel>
+      </m3:Card>
+
+      <m3:Card Classes="Outlined">
+        <StackPanel Spacing="16">
+          <TextBlock Classes="TitleMediumEmphasized" Text="Sizes: XSmall · Small · Medium · Large · XLarge" />
+          <StackPanel Classes="Row">
+            <Button Classes="XSmall">
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <PathIcon Data="{StaticResource IconSend}" />
+                <TextBlock Text="XSmall" />
+              </StackPanel>
+            </Button>
+            <Button Classes="Small">
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <PathIcon Data="{StaticResource IconSend}" />
+                <TextBlock Text="Small" />
+              </StackPanel>
+            </Button>
+            <Button Classes="Medium">
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <PathIcon Data="{StaticResource IconSend}" />
+                <TextBlock Text="Medium" />
+              </StackPanel>
+            </Button>
+            <Button Classes="Large">
+              <StackPanel Orientation="Horizontal" Spacing="12">
+                <PathIcon Data="{StaticResource IconSend}" />
+                <TextBlock Text="Large" />
+              </StackPanel>
+            </Button>
+            <Button Classes="XLarge">
+              <StackPanel Orientation="Horizontal" Spacing="16">
+                <PathIcon Data="{StaticResource IconSend}" />
+                <TextBlock Text="XLarge" />
+              </StackPanel>
+            </Button>
+          </StackPanel>
+          <StackPanel Classes="Row">
+            <Button Classes="Tonal Square XSmall" Content="Square" />
+            <Button Classes="Tonal Square Small" Content="Square" />
+            <Button Classes="Tonal Square Medium" Content="Square" />
+            <Button Classes="Outlined Square Large" Content="Square" />
+            <Button Classes="Elevated Square Medium" Content="Elevated" />
+          </StackPanel>
+        </StackPanel>
+      </m3:Card>
+
+      <m3:Card Classes="Outlined">
+        <StackPanel Spacing="16">
+          <TextBlock Classes="TitleMediumEmphasized" Text="Toggle buttons" />
+          <TextBlock Classes="BodyMedium OnSurfaceVariant" TextWrapping="Wrap"
+                     Text="Selecting a toggle button changes its color and morphs a round button to square (and a square one to round)." />
+          <StackPanel Classes="Row">
+            <ToggleButton Content="Filled" />
+            <ToggleButton Content="Filled" IsChecked="True" />
+            <ToggleButton Classes="Tonal" Content="Tonal" />
+            <ToggleButton Classes="Tonal" Content="Tonal" IsChecked="True" />
+            <ToggleButton Classes="Outlined" Content="Outlined" />
+            <ToggleButton Classes="Outlined" Content="Outlined" IsChecked="True" />
+            <ToggleButton Classes="Elevated" Content="Elevated" />
+            <ToggleButton Classes="Elevated" Content="Elevated" IsChecked="True" />
+          </StackPanel>
+          <StackPanel Classes="Row">
+            <ToggleButton Classes="Square Medium" Content="Square" />
+            <ToggleButton Classes="Square Medium" Content="Square" IsChecked="True" />
+            <ToggleButton Classes="Tonal Medium">
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <PathIcon Data="{StaticResource IconBookmark}" />
+                <TextBlock Text="Save for later" />
+              </StackPanel>
+            </ToggleButton>
+          </StackPanel>
+        </StackPanel>
+      </m3:Card>
+
+      <m3:Card Classes="Outlined">
+        <StackPanel Spacing="16">
+          <TextBlock Classes="TitleMediumEmphasized" Text="Icon buttons" />
+          <StackPanel Classes="Row">
+            <Button Classes="Icon" ToolTip.Tip="Standard">
+              <PathIcon Data="{StaticResource IconFavorite}" />
+            </Button>
+            <Button Classes="FilledIcon" ToolTip.Tip="Filled">
+              <PathIcon Data="{StaticResource IconFavorite}" />
+            </Button>
+            <Button Classes="TonalIcon" ToolTip.Tip="Tonal">
+              <PathIcon Data="{StaticResource IconFavorite}" />
+            </Button>
+            <Button Classes="OutlinedIcon" ToolTip.Tip="Outlined">
+              <PathIcon Data="{StaticResource IconFavorite}" />
+            </Button>
+            <Button Classes="FilledIcon Square" ToolTip.Tip="Square">
+              <PathIcon Data="{StaticResource IconFavorite}" />
+            </Button>
+            <Border Width="24" />
+            <TextBlock Classes="BodyMedium OnSurfaceVariant" Text="Toggles:" />
+            <ToggleButton Classes="Icon" IsChecked="True">
+              <PathIcon Data="{StaticResource IconStar}" />
+            </ToggleButton>
+            <ToggleButton Classes="FilledIcon" IsChecked="True">
+              <PathIcon Data="{StaticResource IconStar}" />
+            </ToggleButton>
+            <ToggleButton Classes="FilledIcon">
+              <PathIcon Data="{StaticResource IconStar}" />
+            </ToggleButton>
+            <ToggleButton Classes="TonalIcon" IsChecked="True">
+              <PathIcon Data="{StaticResource IconStar}" />
+            </ToggleButton>
+            <ToggleButton Classes="OutlinedIcon" IsChecked="True">
+              <PathIcon Data="{StaticResource IconStar}" />
+            </ToggleButton>
+            <ToggleButton Classes="OutlinedIcon">
+              <PathIcon Data="{StaticResource IconStar}" />
+            </ToggleButton>
+          </StackPanel>
+          <StackPanel Classes="Row">
+            <Button Classes="FilledIcon XSmall"><PathIcon Data="{StaticResource IconMic}" /></Button>
+            <Button Classes="FilledIcon Small"><PathIcon Data="{StaticResource IconMic}" /></Button>
+            <Button Classes="FilledIcon Medium"><PathIcon Data="{StaticResource IconMic}" /></Button>
+            <Button Classes="FilledIcon Large"><PathIcon Data="{StaticResource IconMic}" /></Button>
+            <Button Classes="FilledIcon XLarge"><PathIcon Data="{StaticResource IconMic}" /></Button>
+            <Border Width="24" />
+            <Button Classes="TonalIcon Medium Narrow" ToolTip.Tip="Narrow"><PathIcon Data="{StaticResource IconCamera}" /></Button>
+            <Button Classes="TonalIcon Medium" ToolTip.Tip="Default"><PathIcon Data="{StaticResource IconCamera}" /></Button>
+            <Button Classes="TonalIcon Medium Wide" ToolTip.Tip="Wide"><PathIcon Data="{StaticResource IconCamera}" /></Button>
+            <ToggleButton Classes="FilledIcon Medium Wide" IsChecked="True"><PathIcon Data="{StaticResource IconPlay}" /></ToggleButton>
+          </StackPanel>
+        </StackPanel>
+      </m3:Card>
+
+      <m3:Card Classes="Outlined">
+        <StackPanel Spacing="16">
+          <TextBlock Classes="TitleMediumEmphasized" Text="Floating action buttons" />
+          <StackPanel Classes="Row" Spacing="16">
+            <Button Classes="Fab" ToolTip.Tip="FAB (56)">
+              <PathIcon Data="{StaticResource IconEdit}" />
+            </Button>
+            <Button Classes="MediumFab" ToolTip.Tip="Medium FAB (80)">
+              <PathIcon Data="{StaticResource IconEdit}" />
+            </Button>
+            <Button Classes="LargeFab" ToolTip.Tip="Large FAB (96)">
+              <PathIcon Data="{StaticResource IconEdit}" />
+            </Button>
+            <Button Classes="ExtendedFab">
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <PathIcon Data="{StaticResource IconEdit}" />
+                <TextBlock Text="Compose" />
+              </StackPanel>
+            </Button>
+            <Button Classes="ExtendedFab Medium">
+              <StackPanel Orientation="Horizontal" Spacing="16">
+                <PathIcon Data="{StaticResource IconEdit}" />
+                <TextBlock Text="Compose" />
+              </StackPanel>
+            </Button>
+            <Button Classes="ExtendedFab Large">
+              <StackPanel Orientation="Horizontal" Spacing="20">
+                <PathIcon Data="{StaticResource IconEdit}" />
+                <TextBlock Text="Compose" />
+              </StackPanel>
+            </Button>
+          </StackPanel>
+          <StackPanel Classes="Row" Spacing="16">
+            <Button Classes="Fab Secondary"><PathIcon Data="{StaticResource IconAdd}" /></Button>
+            <Button Classes="Fab Tertiary"><PathIcon Data="{StaticResource IconAdd}" /></Button>
+            <Button Classes="Fab Surface"><PathIcon Data="{StaticResource IconAdd}" /></Button>
+            <Button Classes="Fab Filled" ToolTip.Tip="Primary"><PathIcon Data="{StaticResource IconAdd}" /></Button>
+            <Button Classes="Fab Filled Secondary" ToolTip.Tip="Secondary"><PathIcon Data="{StaticResource IconAdd}" /></Button>
+            <Button Classes="Fab Filled Tertiary" ToolTip.Tip="Tertiary"><PathIcon Data="{StaticResource IconAdd}" /></Button>
+            <Button Classes="Fab Lowered" ToolTip.Tip="Lowered FAB"><PathIcon Data="{StaticResource IconAdd}" /></Button>
+          </StackPanel>
+        </StackPanel>
+      </m3:Card>
+
+      <m3:Card Classes="Outlined">
+        <StackPanel Spacing="16">
+          <TextBlock Classes="TitleMediumEmphasized" Text="Chips" />
+          <StackPanel Classes="Row" Spacing="8">
+            <Button Classes="AssistChip" Padding="8,0,16,0">
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <PathIcon Data="{StaticResource IconStar}" />
+                <TextBlock Text="Assist" />
+              </StackPanel>
+            </Button>
+            <Button Classes="SuggestionChip" Content="Suggestion" />
+            <ToggleButton Classes="FilterChip" Content="Filter (on)" IsChecked="True" />
+            <ToggleButton Classes="FilterChip" Content="Filter (off)" />
+            <Button Classes="AssistChip" Content="Disabled" IsEnabled="False" />
+          </StackPanel>
+          <StackPanel Classes="Row" Spacing="8">
+            <Button Classes="AssistChip Elevated" Content="Elevated assist" />
+            <Button Classes="SuggestionChip Elevated" Content="Elevated suggestion" />
+            <ToggleButton Classes="FilterChip Elevated" Content="Elevated filter" IsChecked="True" />
+            <Button Classes="InputChip">
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBlock Text="Input chip" />
+                <PathIcon Width="18" Height="18" Data="{StaticResource IconClose}" />
+              </StackPanel>
+            </Button>
+          </StackPanel>
+        </StackPanel>
+      </m3:Card>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

@@ -1,0 +1,439 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:Material3Expressive.Avalonia.Controls">
+
+  <!-- Material 3 type scale (md.sys.typescale.*). Usage: <TextBlock Classes="HeadlineSmall" /> -->
+  <Style Selector=":is(TextBlock).DisplayLarge">
+    <Setter Property="FontSize" Value="57" />
+    <Setter Property="LineHeight" Value="64" />
+    <Setter Property="LetterSpacing" Value="-0.25" />
+    <Setter Property="FontWeight" Value="Normal" />
+  </Style>
+  <Style Selector=":is(TextBlock).DisplayMedium">
+    <Setter Property="FontSize" Value="45" />
+    <Setter Property="LineHeight" Value="52" />
+    <Setter Property="LetterSpacing" Value="0" />
+    <Setter Property="FontWeight" Value="Normal" />
+  </Style>
+  <Style Selector=":is(TextBlock).DisplaySmall">
+    <Setter Property="FontSize" Value="36" />
+    <Setter Property="LineHeight" Value="44" />
+    <Setter Property="LetterSpacing" Value="0" />
+    <Setter Property="FontWeight" Value="Normal" />
+  </Style>
+  <Style Selector=":is(TextBlock).HeadlineLarge">
+    <Setter Property="FontSize" Value="32" />
+    <Setter Property="LineHeight" Value="40" />
+    <Setter Property="LetterSpacing" Value="0" />
+    <Setter Property="FontWeight" Value="Normal" />
+  </Style>
+  <Style Selector=":is(TextBlock).HeadlineMedium">
+    <Setter Property="FontSize" Value="28" />
+    <Setter Property="LineHeight" Value="36" />
+    <Setter Property="LetterSpacing" Value="0" />
+    <Setter Property="FontWeight" Value="Normal" />
+  </Style>
+  <Style Selector=":is(TextBlock).HeadlineSmall">
+    <Setter Property="FontSize" Value="24" />
+    <Setter Property="LineHeight" Value="32" />
+    <Setter Property="LetterSpacing" Value="0" />
+    <Setter Property="FontWeight" Value="Normal" />
+  </Style>
+  <Style Selector=":is(TextBlock).TitleLarge">
+    <Setter Property="FontSize" Value="22" />
+    <Setter Property="LineHeight" Value="28" />
+    <Setter Property="LetterSpacing" Value="0" />
+    <Setter Property="FontWeight" Value="Normal" />
+  </Style>
+  <Style Selector=":is(TextBlock).TitleMedium">
+    <Setter Property="FontSize" Value="16" />
+    <Setter Property="LineHeight" Value="24" />
+    <Setter Property="LetterSpacing" Value="0.15" />
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector=":is(TextBlock).TitleSmall">
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="LineHeight" Value="20" />
+    <Setter Property="LetterSpacing" Value="0.1" />
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector=":is(TextBlock).BodyLarge">
+    <Setter Property="FontSize" Value="16" />
+    <Setter Property="LineHeight" Value="24" />
+    <Setter Property="LetterSpacing" Value="0.5" />
+    <Setter Property="FontWeight" Value="Normal" />
+  </Style>
+  <Style Selector=":is(TextBlock).BodyMedium">
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="LineHeight" Value="20" />
+    <Setter Property="LetterSpacing" Value="0.25" />
+    <Setter Property="FontWeight" Value="Normal" />
+  </Style>
+  <Style Selector=":is(TextBlock).BodySmall">
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="LineHeight" Value="16" />
+    <Setter Property="LetterSpacing" Value="0.4" />
+    <Setter Property="FontWeight" Value="Normal" />
+  </Style>
+  <Style Selector=":is(TextBlock).LabelLarge">
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="LineHeight" Value="20" />
+    <Setter Property="LetterSpacing" Value="0.1" />
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector=":is(TextBlock).LabelMedium">
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="LineHeight" Value="16" />
+    <Setter Property="LetterSpacing" Value="0.5" />
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector=":is(TextBlock).LabelSmall">
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="LineHeight" Value="16" />
+    <Setter Property="LetterSpacing" Value="0.5" />
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+
+
+  <!--
+    Emphasized type scale (Material 3 Expressive): same metrics, heavier weight.
+    Use either Classes="TitleMedium Emphasized" or Classes="TitleMediumEmphasized".
+  -->
+  <Style Selector=":is(TextBlock).DisplayLargeEmphasized">
+    <Setter Property="FontSize" Value="57" />
+    <Setter Property="LineHeight" Value="64" />
+    <Setter Property="LetterSpacing" Value="-0.25" />
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector=":is(TextBlock).DisplayLarge.Emphasized">
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector=":is(TextBlock).DisplayMediumEmphasized">
+    <Setter Property="FontSize" Value="45" />
+    <Setter Property="LineHeight" Value="52" />
+    <Setter Property="LetterSpacing" Value="0" />
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector=":is(TextBlock).DisplayMedium.Emphasized">
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector=":is(TextBlock).DisplaySmallEmphasized">
+    <Setter Property="FontSize" Value="36" />
+    <Setter Property="LineHeight" Value="44" />
+    <Setter Property="LetterSpacing" Value="0" />
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector=":is(TextBlock).DisplaySmall.Emphasized">
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector=":is(TextBlock).HeadlineLargeEmphasized">
+    <Setter Property="FontSize" Value="32" />
+    <Setter Property="LineHeight" Value="40" />
+    <Setter Property="LetterSpacing" Value="0" />
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector=":is(TextBlock).HeadlineLarge.Emphasized">
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector=":is(TextBlock).HeadlineMediumEmphasized">
+    <Setter Property="FontSize" Value="28" />
+    <Setter Property="LineHeight" Value="36" />
+    <Setter Property="LetterSpacing" Value="0" />
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector=":is(TextBlock).HeadlineMedium.Emphasized">
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector=":is(TextBlock).HeadlineSmallEmphasized">
+    <Setter Property="FontSize" Value="24" />
+    <Setter Property="LineHeight" Value="32" />
+    <Setter Property="LetterSpacing" Value="0" />
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector=":is(TextBlock).HeadlineSmall.Emphasized">
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector=":is(TextBlock).TitleLargeEmphasized">
+    <Setter Property="FontSize" Value="22" />
+    <Setter Property="LineHeight" Value="28" />
+    <Setter Property="LetterSpacing" Value="0" />
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector=":is(TextBlock).TitleLarge.Emphasized">
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector=":is(TextBlock).TitleMediumEmphasized">
+    <Setter Property="FontSize" Value="16" />
+    <Setter Property="LineHeight" Value="24" />
+    <Setter Property="LetterSpacing" Value="0.15" />
+    <Setter Property="FontWeight" Value="Bold" />
+  </Style>
+  <Style Selector=":is(TextBlock).TitleMedium.Emphasized">
+    <Setter Property="FontWeight" Value="Bold" />
+  </Style>
+  <Style Selector=":is(TextBlock).TitleSmallEmphasized">
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="LineHeight" Value="20" />
+    <Setter Property="LetterSpacing" Value="0.1" />
+    <Setter Property="FontWeight" Value="Bold" />
+  </Style>
+  <Style Selector=":is(TextBlock).TitleSmall.Emphasized">
+    <Setter Property="FontWeight" Value="Bold" />
+  </Style>
+  <Style Selector=":is(TextBlock).BodyLargeEmphasized">
+    <Setter Property="FontSize" Value="16" />
+    <Setter Property="LineHeight" Value="24" />
+    <Setter Property="LetterSpacing" Value="0.5" />
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector=":is(TextBlock).BodyLarge.Emphasized">
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector=":is(TextBlock).BodyMediumEmphasized">
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="LineHeight" Value="20" />
+    <Setter Property="LetterSpacing" Value="0.25" />
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector=":is(TextBlock).BodyMedium.Emphasized">
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector=":is(TextBlock).BodySmallEmphasized">
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="LineHeight" Value="16" />
+    <Setter Property="LetterSpacing" Value="0.4" />
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector=":is(TextBlock).BodySmall.Emphasized">
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector=":is(TextBlock).LabelLargeEmphasized">
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="LineHeight" Value="20" />
+    <Setter Property="LetterSpacing" Value="0.1" />
+    <Setter Property="FontWeight" Value="Bold" />
+  </Style>
+  <Style Selector=":is(TextBlock).LabelLarge.Emphasized">
+    <Setter Property="FontWeight" Value="Bold" />
+  </Style>
+  <Style Selector=":is(TextBlock).LabelMediumEmphasized">
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="LineHeight" Value="16" />
+    <Setter Property="LetterSpacing" Value="0.5" />
+    <Setter Property="FontWeight" Value="Bold" />
+  </Style>
+  <Style Selector=":is(TextBlock).LabelMedium.Emphasized">
+    <Setter Property="FontWeight" Value="Bold" />
+  </Style>
+  <Style Selector=":is(TextBlock).LabelSmallEmphasized">
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="LineHeight" Value="16" />
+    <Setter Property="LetterSpacing" Value="0.5" />
+    <Setter Property="FontWeight" Value="Bold" />
+  </Style>
+  <Style Selector=":is(TextBlock).LabelSmall.Emphasized">
+    <Setter Property="FontWeight" Value="Bold" />
+  </Style>
+
+  <!-- Color role helpers for text: <TextBlock Classes="BodyMedium OnSurfaceVariant" /> -->
+  <Style Selector=":is(TextBlock).Primary">
+    <Setter Property="Foreground" Value="{DynamicResource M3PrimaryBrush}" />
+  </Style>
+  <Style Selector=":is(TextBlock).Secondary">
+    <Setter Property="Foreground" Value="{DynamicResource M3SecondaryBrush}" />
+  </Style>
+  <Style Selector=":is(TextBlock).Tertiary">
+    <Setter Property="Foreground" Value="{DynamicResource M3TertiaryBrush}" />
+  </Style>
+  <Style Selector=":is(TextBlock).Error">
+    <Setter Property="Foreground" Value="{DynamicResource M3ErrorBrush}" />
+  </Style>
+  <Style Selector=":is(TextBlock).OnSurface">
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+  </Style>
+  <Style Selector=":is(TextBlock).OnSurfaceVariant">
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+  </Style>
+
+  <!-- Icon sizes inside components (content is not reachable from ControlTheme styles). -->
+  <Style Selector=":is(Button) PathIcon">
+    <Setter Property="Width" Value="20" />
+    <Setter Property="Height" Value="20" />
+  </Style>
+  <Style Selector=":is(Button).Medium PathIcon">
+    <Setter Property="Width" Value="24" />
+    <Setter Property="Height" Value="24" />
+  </Style>
+  <Style Selector=":is(Button).Large PathIcon">
+    <Setter Property="Width" Value="32" />
+    <Setter Property="Height" Value="32" />
+  </Style>
+  <Style Selector=":is(Button).XLarge PathIcon">
+    <Setter Property="Width" Value="40" />
+    <Setter Property="Height" Value="40" />
+  </Style>
+  <!-- Icon buttons: 24 (S, M), 20 (XS), 32 (L), 40 (XL) -->
+  <Style Selector=":is(Button).Icon PathIcon, :is(Button).FilledIcon PathIcon, :is(Button).TonalIcon PathIcon, :is(Button).OutlinedIcon PathIcon">
+    <Setter Property="Width" Value="24" />
+    <Setter Property="Height" Value="24" />
+  </Style>
+  <Style Selector=":is(Button).XSmall.Icon PathIcon, :is(Button).XSmall.FilledIcon PathIcon, :is(Button).XSmall.TonalIcon PathIcon, :is(Button).XSmall.OutlinedIcon PathIcon">
+    <Setter Property="Width" Value="20" />
+    <Setter Property="Height" Value="20" />
+  </Style>
+  <Style Selector=":is(Button).Large.Icon PathIcon, :is(Button).Large.FilledIcon PathIcon, :is(Button).Large.TonalIcon PathIcon, :is(Button).Large.OutlinedIcon PathIcon">
+    <Setter Property="Width" Value="32" />
+    <Setter Property="Height" Value="32" />
+  </Style>
+  <Style Selector=":is(Button).XLarge.Icon PathIcon, :is(Button).XLarge.FilledIcon PathIcon, :is(Button).XLarge.TonalIcon PathIcon, :is(Button).XLarge.OutlinedIcon PathIcon">
+    <Setter Property="Width" Value="40" />
+    <Setter Property="Height" Value="40" />
+  </Style>
+  <!-- FABs: 24 (FAB, small extended), 28 (medium), 32 (large) -->
+  <Style Selector="Button.Fab PathIcon, Button.SmallFab PathIcon, Button.ExtendedFab PathIcon">
+    <Setter Property="Width" Value="24" />
+    <Setter Property="Height" Value="24" />
+  </Style>
+  <Style Selector="Button.MediumFab PathIcon, Button.ExtendedFab.Medium PathIcon">
+    <Setter Property="Width" Value="28" />
+    <Setter Property="Height" Value="28" />
+  </Style>
+  <Style Selector="Button.LargeFab PathIcon, Button.ExtendedFab.Large PathIcon">
+    <Setter Property="Width" Value="32" />
+    <Setter Property="Height" Value="32" />
+  </Style>
+  <!-- Split buttons: leading icon by size, then the trailing chevron -->
+  <Style Selector="SplitButton.Medium PathIcon">
+    <Setter Property="Width" Value="24" />
+    <Setter Property="Height" Value="24" />
+  </Style>
+  <Style Selector="SplitButton.Large PathIcon">
+    <Setter Property="Width" Value="32" />
+    <Setter Property="Height" Value="32" />
+  </Style>
+  <Style Selector="SplitButton.XLarge PathIcon">
+    <Setter Property="Width" Value="40" />
+    <Setter Property="Height" Value="40" />
+  </Style>
+  <Style Selector="PathIcon.M3SplitChevron">
+    <Setter Property="Width" Value="22" />
+    <Setter Property="Height" Value="22" />
+  </Style>
+  <Style Selector="SplitButton.Medium PathIcon.M3SplitChevron">
+    <Setter Property="Width" Value="26" />
+    <Setter Property="Height" Value="26" />
+  </Style>
+  <Style Selector="SplitButton.Large PathIcon.M3SplitChevron">
+    <Setter Property="Width" Value="38" />
+    <Setter Property="Height" Value="38" />
+  </Style>
+  <Style Selector="SplitButton.XLarge PathIcon.M3SplitChevron">
+    <Setter Property="Width" Value="50" />
+    <Setter Property="Height" Value="50" />
+  </Style>
+  <Style Selector="Button.AssistChip PathIcon, Button.SuggestionChip PathIcon, Button.InputChip PathIcon, ToggleButton.FilterChip PathIcon">
+    <Setter Property="Width" Value="18" />
+    <Setter Property="Height" Value="18" />
+  </Style>
+  <Style Selector="Button.AssistChip PathIcon">
+    <Setter Property="Foreground" Value="{DynamicResource M3PrimaryBrush}" />
+  </Style>
+  <Style Selector="Button.AssistChip:disabled PathIcon">
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+  </Style>
+  <Style Selector="TabItem PathIcon, ListBoxItem PathIcon">
+    <Setter Property="Width" Value="24" />
+    <Setter Property="Height" Value="24" />
+  </Style>
+  <Style Selector="MenuItem PathIcon">
+    <Setter Property="Width" Value="20" />
+    <Setter Property="Height" Value="20" />
+  </Style>
+  <!-- List leading/trailing icons use on-surface-variant (on-secondary-container when selected). -->
+  <Style Selector="ListBoxItem PathIcon">
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+  </Style>
+  <Style Selector="ListBoxItem:selected PathIcon">
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSecondaryContainerBrush}" />
+  </Style>
+  <!-- Vibrant menus: tertiary container, selected = tertiary -->
+  <Style Selector="MenuFlyoutPresenter.Vibrant MenuItem, ContextMenu.Vibrant MenuItem">
+    <Setter Property="Foreground" Value="{DynamicResource M3OnTertiaryContainerBrush}" />
+  </Style>
+  <Style Selector="MenuFlyoutPresenter.Vibrant MenuItem:checked, ContextMenu.Vibrant MenuItem:checked">
+    <Setter Property="Background" Value="{DynamicResource M3TertiaryBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource M3OnTertiaryBrush}" />
+  </Style>
+  <Style Selector="MenuFlyoutPresenter.Vibrant MenuItem /template/ ContentControl#PART_IconPresenter, ContextMenu.Vibrant MenuItem /template/ ContentControl#PART_IconPresenter">
+    <Setter Property="Foreground" Value="{Binding $parent[MenuItem].Foreground}" />
+  </Style>
+  <Style Selector="MenuItem /template/ ContentControl#PART_IconPresenter PathIcon">
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+  </Style>
+
+  <!-- Date and time pickers -->
+  <Style Selector="TextBlock.M3CalendarWeekday">
+    <Setter Property="FontSize" Value="16" />
+    <Setter Property="LineHeight" Value="24" />
+    <Setter Property="LetterSpacing" Value="0.5" />
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+  </Style>
+  <Style Selector="TextBlock.M3TimeSeparator">
+    <Setter Property="Width" Value="24" />
+    <Setter Property="FontSize" Value="57" />
+    <Setter Property="LineHeight" Value="64" />
+    <Setter Property="TextAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+  </Style>
+
+  <!-- FAB menu items follow the menu color -->
+  <Style Selector="controls|FabMenu.Secondary controls|FabMenuItem">
+    <Setter Property="Background" Value="{DynamicResource M3SecondaryContainerBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSecondaryContainerBrush}" />
+  </Style>
+  <Style Selector="controls|FabMenu.Tertiary controls|FabMenuItem">
+    <Setter Property="Background" Value="{DynamicResource M3TertiaryContainerBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource M3OnTertiaryContainerBrush}" />
+  </Style>
+  <Style Selector="controls|FabMenuItem PathIcon">
+    <Setter Property="Width" Value="24" />
+    <Setter Property="Height" Value="24" />
+  </Style>
+
+  <!-- Toolbars: actions take the toolbar's content color; vibrant selected actions use surface container -->
+  <Style Selector="controls|FloatingToolbar Button.Icon, controls|DockedToolbar Button.Icon">
+    <Setter Property="Foreground" Value="{Binding $parent[ItemsControl].Foreground}" />
+  </Style>
+  <Style Selector="controls|FloatingToolbar.Vibrant ToggleButton.Icon:checked, controls|FloatingToolbar.Vibrant ToggleButton.FilledIcon:checked, controls|DockedToolbar.Vibrant ToggleButton.Icon:checked">
+    <Setter Property="Background" Value="{DynamicResource M3SurfaceContainerBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+  </Style>
+  <Style Selector="controls|FloatingToolbar.Vibrant Button.Text, controls|DockedToolbar.Vibrant Button.Text">
+    <Setter Property="Foreground" Value="{DynamicResource M3OnPrimaryContainerBrush}" />
+  </Style>
+
+  <!-- Fluent fallback controls embed a TextBox; keep it compact instead of a full M3 text field. -->
+  <Style Selector="NumericUpDown /template/ TextBox#PART_TextBox, CalendarDatePicker /template/ TextBox#PART_TextBox, AutoCompleteBox /template/ TextBox#PART_TextBox">
+    <Setter Property="Theme" Value="{DynamicResource M3InlineTextBox}" />
+  </Style>
+
+  <!-- SplitView as a navigation drawer: surface container low pane -->
+  <Style Selector="SplitView">
+    <Setter Property="PaneBackground" Value="{DynamicResource M3SurfaceContainerLowBrush}" />
+  </Style>
+
+  <!-- Scrim behind dialogs (added to the overlay layer by Dialog.ShowAsync). -->
+  <Style Selector="Border.M3DialogScrim">
+    <Setter Property="Background" Value="{DynamicResource M3ScrimOverlayBrush}" />
+    <Setter Property="Opacity" Value="0" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="Border.M3DialogScrim.Open">
+    <Setter Property="Opacity" Value="1" />
+  </Style>
+</Styles>

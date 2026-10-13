@@ -1,0 +1,235 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="using:Material3Expressive.Avalonia.Controls">
+
+  <!-- ================= CheckBox ================= -->
+  <ControlTheme x:Key="{x:Type CheckBox}" TargetType="CheckBox">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+    <Setter Property="Padding" Value="4,0,8,0" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="LetterSpacing" Value="0.25" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Grid ColumnDefinitions="Auto,*" Background="{TemplateBinding Background}">
+          <Panel Width="40" Height="40" VerticalAlignment="Center">
+            <Border Name="PART_StateLayer"
+                    CornerRadius="20"
+                    Background="{DynamicResource M3OnSurfaceBrush}"
+                    Opacity="0">
+              <Border.Transitions>
+                <Transitions>
+                  <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+                </Transitions>
+              </Border.Transitions>
+            </Border>
+            <controls:Ripple Name="PART_Ripple"
+                             CornerRadius="20"
+                             IsCentered="True"
+                             Brush="{DynamicResource M3OnSurfaceBrush}" />
+            <Panel Name="PART_Box" Width="18" Height="18">
+              <Border Name="PART_BoxBorder"
+                      CornerRadius="2"
+                      BorderThickness="2"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      Background="Transparent">
+                <Border.Transitions>
+                  <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.1" />
+                  </Transitions>
+                </Border.Transitions>
+              </Border>
+              <Path Name="PART_CheckMark"
+                    Stroke="{DynamicResource M3OnPrimaryBrush}"
+                    StrokeThickness="2"
+                    StrokeLineCap="Square"
+                    StrokeJoin="Miter"
+                    Data="{StaticResource M3CheckMarkStroke}"
+                    IsVisible="False" />
+              <Border Name="PART_IndeterminateMark"
+                      Width="10"
+                      Height="2"
+                      Background="{DynamicResource M3OnPrimaryBrush}"
+                      IsVisible="False" />
+            </Panel>
+          </Panel>
+          <ContentPresenter Name="PART_ContentPresenter"
+                            Grid.Column="1"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            Padding="{TemplateBinding Padding}"
+                            VerticalAlignment="Center"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                            RecognizesAccessKey="True"
+                            TextWrapping="Wrap" />
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter:empty">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <Style Selector="^:pointerover">
+      <Setter Property="BorderBrush" Value="{DynamicResource M3OnSurfaceBrush}" />
+      <Style Selector="^ /template/ Border#PART_StateLayer">
+        <Setter Property="Opacity" Value="{DynamicResource M3StateHoverOpacity}" />
+      </Style>
+    </Style>
+    <Style Selector="^:focus-visible /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StateFocusOpacity}" />
+    </Style>
+
+    <Style Selector="^:checked, ^:indeterminate">
+      <Setter Property="BorderBrush" Value="{DynamicResource M3PrimaryBrush}" />
+      <Style Selector="^ /template/ Border#PART_BoxBorder">
+        <Setter Property="Background" Value="{DynamicResource M3PrimaryBrush}" />
+      </Style>
+      <Style Selector="^ /template/ Border#PART_StateLayer">
+        <Setter Property="Background" Value="{DynamicResource M3PrimaryBrush}" />
+      </Style>
+      <Style Selector="^ /template/ controls|Ripple#PART_Ripple">
+        <Setter Property="Brush" Value="{DynamicResource M3PrimaryBrush}" />
+      </Style>
+    </Style>
+    <Style Selector="^:checked /template/ Path#PART_CheckMark">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <Style Selector="^:indeterminate /template/ Border#PART_IndeterminateMark">
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+
+    <Style Selector="^:error">
+      <Setter Property="BorderBrush" Value="{DynamicResource M3ErrorBrush}" />
+      <Style Selector="^ /template/ Border#PART_BoxBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource M3ErrorBrush}" />
+      </Style>
+    </Style>
+    <Style Selector="^:error:checked /template/ Border#PART_BoxBorder, ^:error:indeterminate /template/ Border#PART_BoxBorder">
+      <Setter Property="Background" Value="{DynamicResource M3ErrorBrush}" />
+    </Style>
+
+    <Style Selector="^:disabled">
+      <Setter Property="BorderBrush" Value="{DynamicResource M3DisabledContentBrush}" />
+      <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Opacity" Value="{DynamicResource M3DisabledContentOpacity}" />
+      </Style>
+    </Style>
+    <Style Selector="^:disabled:checked, ^:disabled:indeterminate">
+      <Setter Property="BorderBrush" Value="Transparent" />
+      <Style Selector="^ /template/ Border#PART_BoxBorder">
+        <Setter Property="Background" Value="{DynamicResource M3DisabledContentBrush}" />
+      </Style>
+      <Style Selector="^ /template/ Path#PART_CheckMark">
+        <Setter Property="Stroke" Value="{DynamicResource M3SurfaceBrush}" />
+      </Style>
+      <Style Selector="^ /template/ Border#PART_IndeterminateMark">
+        <Setter Property="Background" Value="{DynamicResource M3SurfaceBrush}" />
+      </Style>
+    </Style>
+  </ControlTheme>
+
+  <!-- ================= RadioButton ================= -->
+  <ControlTheme x:Key="{x:Type RadioButton}" TargetType="RadioButton">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+    <Setter Property="Padding" Value="4,0,8,0" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="LetterSpacing" Value="0.25" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Grid ColumnDefinitions="Auto,*" Background="{TemplateBinding Background}">
+          <Panel Width="40" Height="40" VerticalAlignment="Center">
+            <Border Name="PART_StateLayer"
+                    CornerRadius="20"
+                    Background="{DynamicResource M3OnSurfaceBrush}"
+                    Opacity="0">
+              <Border.Transitions>
+                <Transitions>
+                  <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+                </Transitions>
+              </Border.Transitions>
+            </Border>
+            <controls:Ripple Name="PART_Ripple"
+                             CornerRadius="20"
+                             IsCentered="True"
+                             Brush="{DynamicResource M3OnSurfaceBrush}" />
+            <Ellipse Name="PART_Ring"
+                     Width="20"
+                     Height="20"
+                     StrokeThickness="2"
+                     Stroke="{TemplateBinding BorderBrush}" />
+            <Ellipse Name="PART_Dot"
+                     Width="10"
+                     Height="10"
+                     Fill="{DynamicResource M3PrimaryBrush}"
+                     Opacity="0"
+                     RenderTransform="scale(0)">
+              <Ellipse.Transitions>
+                <Transitions>
+                  <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.15" Easing="CubicEaseOut" />
+                </Transitions>
+              </Ellipse.Transitions>
+            </Ellipse>
+          </Panel>
+          <ContentPresenter Name="PART_ContentPresenter"
+                            Grid.Column="1"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            Padding="{TemplateBinding Padding}"
+                            VerticalAlignment="Center"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                            RecognizesAccessKey="True"
+                            TextWrapping="Wrap" />
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+
+    <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter:empty">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^:pointerover">
+      <Setter Property="BorderBrush" Value="{DynamicResource M3OnSurfaceBrush}" />
+      <Style Selector="^ /template/ Border#PART_StateLayer">
+        <Setter Property="Opacity" Value="{DynamicResource M3StateHoverOpacity}" />
+      </Style>
+    </Style>
+    <Style Selector="^:focus-visible /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StateFocusOpacity}" />
+    </Style>
+
+    <Style Selector="^:checked">
+      <Setter Property="BorderBrush" Value="{DynamicResource M3PrimaryBrush}" />
+      <Style Selector="^ /template/ Ellipse#PART_Dot">
+        <Setter Property="Opacity" Value="1" />
+        <Setter Property="RenderTransform" Value="scale(1)" />
+      </Style>
+      <Style Selector="^ /template/ Border#PART_StateLayer">
+        <Setter Property="Background" Value="{DynamicResource M3PrimaryBrush}" />
+      </Style>
+      <Style Selector="^ /template/ controls|Ripple#PART_Ripple">
+        <Setter Property="Brush" Value="{DynamicResource M3PrimaryBrush}" />
+      </Style>
+    </Style>
+
+    <Style Selector="^:disabled">
+      <Setter Property="BorderBrush" Value="{DynamicResource M3DisabledContentBrush}" />
+      <Style Selector="^ /template/ Ellipse#PART_Dot">
+        <Setter Property="Fill" Value="{DynamicResource M3DisabledContentBrush}" />
+      </Style>
+      <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Opacity" Value="{DynamicResource M3DisabledContentOpacity}" />
+      </Style>
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>
