@@ -287,6 +287,8 @@
 
   <!-- Docked date picker: text field + calendar below it -->
   <ControlTheme x:Key="{x:Type controls:DateField}" TargetType="controls:DateField">
+    <!-- The outlined field's floating label sits on the outline, half above the field's bounds -->
+    <Setter Property="ClipToBounds" Value="False" />
     <Setter Property="Template">
       <ControlTemplate>
         <Panel>
@@ -401,6 +403,7 @@
                          SelectionEnd="{TemplateBinding SelectionEnd}"
                          TextAlignment="{TemplateBinding TextAlignment}"
                          LetterSpacing="{TemplateBinding LetterSpacing}"
+                         LineHeight="52"
                          PasswordChar="{TemplateBinding PasswordChar}"
                          RevealPassword="{TemplateBinding RevealPassword}"
                          SelectionBrush="{TemplateBinding SelectionBrush}"
@@ -441,7 +444,7 @@
           </Panel.Transitions>
           <Border Name="PART_StateLayer" Background="{TemplateBinding Foreground}" Opacity="0" IsHitTestVisible="False" />
           <controls:Ripple Brush="{TemplateBinding Foreground}" />
-          <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Content="{TemplateBinding Content}" />
+          <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" LineHeight="24" Content="{TemplateBinding Content}" />
         </Panel>
       </ControlTemplate>
     </Setter>
@@ -462,13 +465,21 @@
     <Setter Property="Height" Value="80" />
     <Setter Property="Template">
       <ControlTemplate>
-        <Border BorderBrush="{DynamicResource M3OutlineBrush}" BorderThickness="1" CornerRadius="8" ClipToBounds="True">
-          <Grid RowDefinitions="*,Auto,*">
-            <ToggleButton Name="PART_Am" Theme="{StaticResource M3PeriodButton}" Content="{TemplateBinding AmText}" />
-            <Border Grid.Row="1" Height="1" Background="{DynamicResource M3OutlineBrush}" />
-            <ToggleButton Name="PART_Pm" Grid.Row="2" Theme="{StaticResource M3PeriodButton}" Content="{TemplateBinding PmText}" />
-          </Grid>
-        </Border>
+        <!-- The outline is a separate layer above the halves: as the Border's own stroke it would be
+             painted before the children, and the selected fill would cover it at the rounded corners.
+             The divider overlays the PM half so both halves get the same whole-pixel size (a separate
+             1px row leaves 39.5px halves and labels on half pixels, which jump when the dialog's
+             open transform ends). -->
+        <Panel>
+          <Border CornerRadius="8" ClipToBounds="True">
+            <Grid RowDefinitions="*,*">
+              <ToggleButton Name="PART_Am" Theme="{StaticResource M3PeriodButton}" Content="{TemplateBinding AmText}" />
+              <ToggleButton Name="PART_Pm" Grid.Row="1" Theme="{StaticResource M3PeriodButton}" Content="{TemplateBinding PmText}" />
+              <Border Grid.Row="1" Height="1" VerticalAlignment="Top" Background="{DynamicResource M3OutlineBrush}" IsHitTestVisible="False" />
+            </Grid>
+          </Border>
+          <Border BorderBrush="{DynamicResource M3OutlineBrush}" BorderThickness="1" CornerRadius="8" IsHitTestVisible="False" />
+        </Panel>
       </ControlTemplate>
     </Setter>
     <Style Selector="^:horizontal">
@@ -476,13 +487,16 @@
       <Setter Property="Height" Value="38" />
       <Setter Property="Template">
         <ControlTemplate>
-          <Border BorderBrush="{DynamicResource M3OutlineBrush}" BorderThickness="1" CornerRadius="8" ClipToBounds="True">
-            <Grid ColumnDefinitions="*,Auto,*">
-              <ToggleButton Name="PART_Am" Theme="{StaticResource M3PeriodButton}" Content="{TemplateBinding AmText}" />
-              <Border Grid.Column="1" Width="1" Background="{DynamicResource M3OutlineBrush}" />
-              <ToggleButton Name="PART_Pm" Grid.Column="2" Theme="{StaticResource M3PeriodButton}" Content="{TemplateBinding PmText}" />
-            </Grid>
-          </Border>
+          <Panel>
+            <Border CornerRadius="8" ClipToBounds="True">
+              <Grid ColumnDefinitions="*,*">
+                <ToggleButton Name="PART_Am" Theme="{StaticResource M3PeriodButton}" Content="{TemplateBinding AmText}" />
+                <ToggleButton Name="PART_Pm" Grid.Column="1" Theme="{StaticResource M3PeriodButton}" Content="{TemplateBinding PmText}" />
+                <Border Grid.Column="1" Width="1" HorizontalAlignment="Left" Background="{DynamicResource M3OutlineBrush}" IsHitTestVisible="False" />
+              </Grid>
+            </Border>
+            <Border BorderBrush="{DynamicResource M3OutlineBrush}" BorderThickness="1" CornerRadius="8" IsHitTestVisible="False" />
+          </Panel>
         </ControlTemplate>
       </Setter>
     </Style>
@@ -584,6 +598,8 @@
 
   <!-- Time field: text field with a clock button -->
   <ControlTheme x:Key="{x:Type controls:TimeField}" TargetType="controls:TimeField">
+    <!-- The outlined field's floating label sits on the outline, half above the field's bounds -->
+    <Setter Property="ClipToBounds" Value="False" />
     <Setter Property="Template">
       <ControlTemplate>
         <TextBox Name="PART_TextBox" local:TextFieldAssist.Label="{TemplateBinding Label}">

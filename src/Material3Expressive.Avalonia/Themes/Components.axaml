@@ -327,6 +327,10 @@
     <Style Selector="^.Picker">
       <Setter Property="Padding" Value="0" />
       <Setter Property="MaxWidth" Value="1000" />
+      <!-- Not the 20px body-text line height: it is inherited and would squeeze the large picker text -->
+      <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="LineHeight" Value="NaN" />
+      </Style>
       <Style Selector="^ /template/ ContentPresenter#PART_Buttons">
         <Setter Property="Margin" Value="12,0,12,12" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
