@@ -50,7 +50,8 @@
                   BoxShadow="{DynamicResource M3Elevation0}">
             <Border.Transitions>
               <Transitions>
-                <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.15" />
+                <!-- material-web md-elevation: 280 ms, emphasized easing. -->
+                <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.28" Easing="0.2,0,0,1" />
                 <CornerRadiusTransition Property="CornerRadius" Duration="{motion:SpringDuration FastSpatial}" Easing="{motion:Spring FastSpatial}" />
                 <BrushTransition Property="Background" Duration="{motion:SpringDuration FastEffects}" Easing="{motion:Spring FastEffects}" />
               </Transitions>
@@ -529,7 +530,8 @@
                   BoxShadow="{DynamicResource M3Elevation0}">
             <Border.Transitions>
               <Transitions>
-                <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.15" />
+                <!-- material-web md-elevation: 280 ms, emphasized easing. -->
+                <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.28" Easing="0.2,0,0,1" />
                 <CornerRadiusTransition Property="CornerRadius" Duration="{motion:SpringDuration FastSpatial}" Easing="{motion:Spring FastSpatial}" />
                 <BrushTransition Property="Background" Duration="{motion:SpringDuration FastEffects}" Easing="{motion:Spring FastEffects}" />
               </Transitions>

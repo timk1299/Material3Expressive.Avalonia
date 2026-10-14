@@ -49,16 +49,37 @@ public class Material3ExpressiveTheme : Styles
     public static readonly StyledProperty<bool> UseFluentFallbackProperty =
         AvaloniaProperty.Register<Material3ExpressiveTheme, bool>(nameof(UseFluentFallback), true);
 
-    // Material 3 elevation levels 0–5 (key + ambient shadow).
-    private static readonly string[] ElevationShadows =
+    // Material 3 elevation levels 0–5 as in material-web (elevation/internal/_elevation.scss):
+    // key shadow (y, blur) at 30 % and ambient shadow (y, blur, spread) at 15 % of the shadow color,
+    // values in CSS pixels. Level 0 keeps both shadows with zero size, so a transition from level 0
+    // grows the shadow out of the surface – BoxShadowsTransition only interpolates equal-length lists.
+    private static readonly (double KeyY, double KeyBlur, double AmbientY, double AmbientBlur, double AmbientSpread)[] ElevationLevels =
     [
-        "0 0 0 0 #00000000",
-        "0 1 2 0 #4D000000, 0 1 3 1 #26000000",
-        "0 1 2 0 #4D000000, 0 2 6 2 #26000000",
-        "0 1 3 0 #4D000000, 0 4 8 3 #26000000",
-        "0 2 3 0 #4D000000, 0 6 10 4 #26000000",
-        "0 4 4 0 #4D000000, 0 8 12 6 #26000000",
+        (0, 0, 0, 0, 0),
+        (1, 2, 1, 3, 1),
+        (1, 2, 2, 6, 2),
+        (1, 3, 4, 8, 3),
+        (2, 3, 6, 10, 4),
+        (4, 4, 8, 12, 6),
     ];
+
+    private static readonly Color KeyShadowColor = Color.FromArgb(0x4D, 0, 0, 0);
+    private static readonly Color AmbientShadowColor = Color.FromArgb(0x26, 0, 0, 0);
+
+    /// <summary>
+    /// CSS blur radius → Avalonia blur. CSS draws a Gaussian with σ = radius / 2, Avalonia's Skia
+    /// backend uses σ = 0.288675 · blur + 0.5; without the conversion larger shadows look harder.
+    /// </summary>
+    internal static double CssBlurToAvalonia(double cssBlur) =>
+        cssBlur <= 1 ? Math.Max(0, cssBlur) : (cssBlur / 2 - 0.5) / 0.288675;
+
+    internal static BoxShadows Elevation(int level)
+    {
+        var (keyY, keyBlur, ambientY, ambientBlur, ambientSpread) = ElevationLevels[level];
+        return new BoxShadows(
+            new BoxShadow { OffsetY = keyY, Blur = CssBlurToAvalonia(keyBlur), Color = KeyShadowColor },
+            [new BoxShadow { OffsetY = ambientY, Blur = CssBlurToAvalonia(ambientBlur), Spread = ambientSpread, Color = AmbientShadowColor }]);
+    }
 
     private readonly FluentTheme _fluent;
     private readonly ColorPaletteResources _fluentLight = new();
@@ -68,8 +89,8 @@ public class Material3ExpressiveTheme : Styles
     {
         AvaloniaXamlLoader.Load(serviceProvider, this);
 
-        for (var level = 0; level < ElevationShadows.Length; level++)
-            Resources[$"M3Elevation{level}"] = BoxShadows.Parse(ElevationShadows[level]);
+        for (var level = 0; level < ElevationLevels.Length; level++)
+            Resources[$"M3Elevation{level}"] = Elevation(level);
 
         _fluent = new FluentTheme(serviceProvider);
         _fluent.Palettes[ThemeVariant.Light] = _fluentLight;
