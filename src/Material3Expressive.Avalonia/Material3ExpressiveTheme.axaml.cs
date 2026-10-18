@@ -26,6 +26,11 @@ namespace Material3Expressive.Avalonia;
 /// Controls without a Material 3 template (DatePicker, Calendar, NumericUpDown, …) fall back to the
 /// Fluent theme, recolored with the Material 3 scheme.
 /// </para>
+/// <para>
+/// Templated controls do not clip to their bounds (Avalonia 12 clips them by default), so elevation
+/// shadows and focus rings are not cut off by containers. Controls appear in their final state:
+/// template transitions start once a control is shown and its bindings have settled.
+/// </para>
 /// </summary>
 public class Material3ExpressiveTheme : Styles
 {
@@ -97,6 +102,7 @@ public class Material3ExpressiveTheme : Styles
         _fluent.Palettes[ThemeVariant.Dark] = _fluentDark;
         Insert(0, _fluent);
 
+        SettledTransitions.Install();
         UpdateColors();
     }
 

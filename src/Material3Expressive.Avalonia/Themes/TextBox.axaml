@@ -175,6 +175,14 @@
       </ControlTemplate>
     </Setter>
 
+    <!--
+      A single-line field cannot scroll vertically, but its ScrollViewer (Auto) would still take a vertical
+      swipe, and the list behind the field would not scroll.
+    -->
+    <Style Selector="^[AcceptsReturn=False]">
+      <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
+    </Style>
+
     <Style Selector="^ /template/ ContentPresenter:empty">
       <Setter Property="IsVisible" Value="False" />
     </Style>

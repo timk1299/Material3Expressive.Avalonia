@@ -27,6 +27,11 @@ Reference the project (`src/Material3Expressive.Avalonia`) and add the theme to 
 
 Do **not** add `<FluentTheme />` as well. The theme already includes it as the fallback layer. Set `UseFluentFallback="False"` to drop it.
 
+The theme also sets two app-wide behaviors:
+
+- **No clipped shadows.** Avalonia 12 clips every templated control to its bounds. The theme turns that off for all templated controls (`Resources/Styles.axaml`), so the elevation shadow of a hovered button at the edge of a `UserControl`, `ItemsControl` or tab is not cut off. Scrolled content is still clipped by the `ScrollContentPresenter`. `TabControl` and `NavigationRail` clip their content only when a `PageTransition` is set.
+- **No flicker when controls appear.** Bindings and styles of a new or re-shown view settle in several steps, and the template transitions would fade each step. The transitions of a control and its template parts start only once it is attached and settled (`Motion/SettledTransitions.cs`). Hover, press and later state changes animate as usual.
+
 Run the showcase:
 
 ```sh
@@ -248,6 +253,7 @@ Dates are typed in the culture's short date pattern with two-digit day and month
 | `m3:TopAppBar` | Small (default), `CenterAligned`, `Medium` and `Large` (the flexible app bars: HeadlineMedium / DisplaySmall titles), and an optional `Subtitle`. `IsScrolled` or `Scrolled` switches to the scrolled color. |
 | `ListBox` | M3 list; `Expressive` for a segmented Expressive list (rounded items 2 px apart whose corners grow on hover, press and selection); `NavigationDrawer` for drawer destinations. |
 | `Menu`, `ContextMenu`, `MenuFlyout` | Expressive menus: 16 px container corners, 44 px items, and checked items shown as selected (tertiary container). `FlyoutPresenterClasses="Vibrant"` on a `MenuFlyout`, or `Classes="Vibrant"` on a `ContextMenu`, gives the vibrant (tertiary) menu. |
+| `GridSplitter` | A transparent grab area with a 2 px divider line (outline variant); `Handle` shows the Material 3 drag handle (4 × 48 pill) instead. Hover and dragging color it primary. Set `ResizeDirection="Rows"` for horizontal splitters. |
 | `m3:Card`, `m3:BottomAppBar`, `Separator`, `SplitView`, `Window` | Same as Material 3. |
 
 Text fields use `TextFieldAssist`:
@@ -265,6 +271,10 @@ Dialogs and snackbars need no host control. They appear in the window's overlay 
 bool discard = await Dialog.ShowMessageAsync(this, "Discard draft?", "This cannot be undone.", "Discard", "Cancel");
 Snackbar.Show(this, "Conversation archived", "Undo", () => Restore());
 ```
+
+A single-line `TextBox` (`AcceptsReturn="False"`) does not scroll vertically, so a vertical swipe over it scrolls the list behind it.
+
+Scroll bars that should stay visible: set `AllowAutoHide="False"` on the `ScrollViewer`, or `ScrollViewer.AllowAutoHide="False"` on a `ListBox` or `TextBox`. The content then gets its own space beside the bars. Setting it on the `ScrollBar` instead keeps the bars visible but leaves them over the content.
 
 Icons: `PathIcon` stretches its geometry's bounds. For 24 px Material icon paths, add `M0 0h.01M24 24h-.01` to the path so the icon keeps its built-in padding (the demo does this), or use an icon package such as Material.Icons.Avalonia. Icon sizes inside buttons follow the button size (20, 24, 32 or 40 px).
 
@@ -296,7 +306,7 @@ tests/Material3Expressive.Avalonia.Tests/    Color, motion and shape tests, head
 - In an outlined text field with a leading icon, the floating label stays aligned with the text instead of moving over the icon.
 - Roboto is bundled; the Expressive brand typeface (Google Sans Flex) is not.
 - `MotionScheme` changes apply to animations created after the change.
-- Writing your own templates: in Avalonia 12, `ContentControl`, `ItemsControl` and `Slider` clip to their bounds by default. Set `ClipToBounds="False"` on controls whose shadows, focus rings or state layers should extend past their edges.
+- Writing your own templates: the theme turns off clipping for templated controls, but plain panels and borders inside a template still clip when they set `ClipToBounds="True"`. Keep shadows, focus rings and state layers inside an element that does not clip.
 
 ## Credits
 

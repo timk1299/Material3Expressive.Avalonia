@@ -82,6 +82,53 @@
     </Style>
   </ControlTheme>
 
+  <!--
+    Grid splitter: a transparent grab area with a divider line in the middle; Classes="Handle" shows the
+    Material 3 drag handle (4 × 48 pill) instead. Hover and dragging color it with the primary color.
+    Horizontal splitters need ResizeDirection="Rows".
+  -->
+  <ControlTheme x:Key="{x:Type GridSplitter}" TargetType="GridSplitter">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource M3OutlineVariantBrush}" />
+    <Setter Property="Focusable" Value="True" />
+    <Setter Property="MinWidth" Value="6" />
+    <Setter Property="MinHeight" Value="6" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}">
+          <Border Name="PART_Handle"
+                  Width="2"
+                  HorizontalAlignment="Center"
+                  CornerRadius="1"
+                  Background="{TemplateBinding Foreground}" />
+        </Border>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^[ResizeDirection=Rows] /template/ Border#PART_Handle">
+      <Setter Property="Width" Value="NaN" />
+      <Setter Property="Height" Value="2" />
+      <Setter Property="HorizontalAlignment" Value="Stretch" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <Style Selector="^.Handle">
+      <Setter Property="Foreground" Value="{DynamicResource M3OutlineBrush}" />
+      <Style Selector="^ /template/ Border#PART_Handle">
+        <Setter Property="Width" Value="4" />
+        <Setter Property="Height" Value="48" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="CornerRadius" Value="2" />
+      </Style>
+      <Style Selector="^[ResizeDirection=Rows] /template/ Border#PART_Handle">
+        <Setter Property="Width" Value="48" />
+        <Setter Property="Height" Value="4" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+      </Style>
+    </Style>
+    <Style Selector="^:pointerover, ^:pressed, ^:focus-visible">
+      <Setter Property="Foreground" Value="{DynamicResource M3PrimaryBrush}" />
+    </Style>
+  </ControlTheme>
+
   <!-- Generic flyout content (Button.Flyout etc.): surface container, medium corners, elevation 2. -->
   <ControlTheme x:Key="{x:Type FlyoutPresenter}" TargetType="FlyoutPresenter">
     <Setter Property="HorizontalContentAlignment" Value="Stretch" />

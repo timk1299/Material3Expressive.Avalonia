@@ -461,7 +461,8 @@
               </ScrollViewer>
             </DockPanel>
           </Border>
-          <Panel ClipToBounds="True">
+          <!-- Clips only for a sliding page transition; otherwise it would cut off the shadows of the content. -->
+          <Panel ClipToBounds="{TemplateBinding PageTransition, Converter={x:Static ObjectConverters.IsNotNull}}">
             <ContentPresenter Name="PART_SelectedContentHost2"
                               Margin="{TemplateBinding Padding}"
                               HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"

@@ -2,6 +2,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="using:Material3Expressive.Avalonia.Controls">
 
+  <!--
+    Avalonia 12 clips every templated control to its bounds. The theme draws elevation shadows and focus
+    rings outside the bounds (a hovered button rises to elevation 1) and clips explicitly inside its own
+    templates where content must not spill over. Containers without a theme of their own (UserControl,
+    ContentControl, ItemsControl, ScrollViewer …) would cut those shadows off whenever a control touches
+    their edge. Scrolled content is still clipped by the ScrollContentPresenter.
+  -->
+  <Style Selector=":is(TemplatedControl)">
+    <Setter Property="ClipToBounds" Value="False" />
+  </Style>
+
   <!-- Material 3 type scale (md.sys.typescale.*). Usage: <TextBlock Classes="HeadlineSmall" /> -->
   <Style Selector=":is(TextBlock).DisplayLarge">
     <Setter Property="FontSize" Value="57" />
