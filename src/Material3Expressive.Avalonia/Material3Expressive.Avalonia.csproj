@@ -16,11 +16,11 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Tim Kleinehelleforth</Authors>
     <Copyright>Copyright (c) 2026 Tim Kleinehelleforth</Copyright>
-    <RepositoryUrl>https://github.com/timk1299/avalonia_material_3_expressive</RepositoryUrl>
+    <RepositoryUrl>https://github.com/timk1299/Material3Expressive.Avalonia</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageProjectUrl>https://github.com/timk1299/avalonia_material_3_expressive</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/timk1299/Material3Expressive.Avalonia</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageReleaseNotes>https://github.com/timk1299/avalonia_material_3_expressive/blob/main/CHANGELOG.md</PackageReleaseNotes>
+    <PackageReleaseNotes>https://github.com/timk1299/Material3Expressive.Avalonia/blob/main/CHANGELOG.md</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

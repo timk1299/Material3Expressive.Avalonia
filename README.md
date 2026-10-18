@@ -13,7 +13,7 @@ Token values come from Google's Material 3 token set as published in Jetpack Com
 
 ## Getting started
 
-Reference the project (`src/Material3Expressive.Avalonia`), or the NuGet package attached to a [release](https://github.com/timk1299/avalonia_material_3_expressive/releases) (put the `.nupkg` into a local package source). Then add the theme to `App.axaml`:
+Reference the project (`src/Material3Expressive.Avalonia`), or the NuGet package attached to a [release](https://github.com/timk1299/Material3Expressive.Avalonia/releases) (put the `.nupkg` into a local package source). Then add the theme to `App.axaml`:
 
 ```xml
 <Application xmlns="https://github.com/avaloniaui"
