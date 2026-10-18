@@ -1,3 +1,6 @@
+// Based on HCT from material-color-utilities (Apache License 2.0, Copyright Google LLC),
+// translated to C# and modified.
+
 using System;
 using Avalonia.Media;
 
