@@ -14,10 +14,18 @@
     <Description>Material 3 Expressive theme for Avalonia UI: spring motion, shape morphing, the Material shape library, expressive components (button groups, split buttons, FAB menu, loading indicator, toolbars) and dynamic color (HCT).</Description>
     <PackageTags>avalonia;material;material3;material-you;material-expressive;theme;design</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Authors>Tim Kleinehelleforth</Authors>
+    <Copyright>Copyright (c) 2026 Tim Kleinehelleforth</Copyright>
+    <RepositoryUrl>https://github.com/timk1299/avalonia_material_3_expressive</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/timk1299/avalonia_material_3_expressive</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReleaseNotes>https://github.com/timk1299/avalonia_material_3_expressive/blob/main/CHANGELOG.md</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
