@@ -1,6 +1,6 @@
 # Material3Expressive.Avalonia
 
-A [Material 3 Expressive](https://m3.material.io) theme for [Avalonia UI](https://avaloniaui.net) 12. It is built on [Material3.Avalonia](https://github.com/timk1299/avalonia_material_3) (a `Styles`-based theme object, class-based variants, assist attached properties) and adds the Expressive update of the design system:
+A [Material 3 Expressive](https://m3.material.io) theme for [Avalonia UI](https://avaloniaui.net) 12. It is built on the architecture of [Material.Avalonia](https://github.com/AvaloniaCommunity/Material.Avalonia) (a `Styles`-based theme object, class-based variants, assist attached properties) and adds the Expressive update of the design system:
 
 - **Spring motion.** Every theme animation runs on the M3 spring tokens (`md.sys.motion.spring.*`). The theme has the Expressive and Standard motion schemes, and you can use the same springs in your own transitions and code.
 - **Shape.** The expanded corner scale (`LargeIncreased`, `ExtraLargeIncreased`, `ExtraExtraLarge`), all 35 shapes of the Material shape library, and shape morphing.
