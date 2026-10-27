@@ -182,6 +182,10 @@
     <Style Selector="^.Icon">
       <Setter Property="Background" Value="Transparent" />
       <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+      <!-- Level 0 keeps both shadows at zero size; without a container they leave a hairline ring -->
+      <Style Selector="^ /template/ Border#PART_Container">
+        <Setter Property="BoxShadow" Value="0 0 0 0 Transparent, 0 0 0 0 Transparent" />
+      </Style>
     </Style>
     <Style Selector="^.TonalIcon">
       <Setter Property="Background" Value="{DynamicResource M3SecondaryContainerBrush}" />

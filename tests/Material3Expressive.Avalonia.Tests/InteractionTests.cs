@@ -285,4 +285,48 @@ public class InteractionTests
             theme.TextFieldVariant = TextFieldVariant.Filled;
         }
     }
+
+    [AvaloniaFact]
+    public void Search_bar_widens_while_active_and_its_back_button_leaves_it()
+    {
+        Application.Current!.RequestedThemeVariant = ThemeVariant.Light;
+        var search = new TextBox { Classes = { "Search" }, Width = 384, PlaceholderText = "Search" };
+        var window = CreateWindow(new StackPanel { Margin = new Thickness(24), Spacing = 24, Children = { search, new Button { Content = "Other" } } });
+        window.Show();
+        RenderingTests.Render(window);
+        T Part<T>(string name) where T : Control =>
+            search.GetVisualDescendants().OfType<T>().Single(part => part.Name == name && part.TemplatedParent == search);
+        var field = Part<Panel>("PART_Field");
+        var clear = Part<Button>("PART_ClearButton");
+        var back = Part<Button>("PART_BackButton");
+        Assert.Equal(new Thickness(12, 0), field.Margin);
+        Assert.False(clear.IsHitTestVisible);
+        Assert.False(back.IsHitTestVisible);
+
+        window.MouseDown(Center(search, window), MouseButton.Left);
+        window.MouseUp(Center(search, window), MouseButton.Left);
+        Thread.Sleep(600);
+        RenderingTests.Render(window);
+        Assert.True(search.IsFocused);
+        Assert.Equal(new Thickness(0), field.Margin);
+        Assert.Equal(search.Bounds.Width, field.Bounds.Width, 0.5);
+        Assert.True(clear.IsHitTestVisible, "An active search bar shows its clear button.");
+        Assert.Equal(0, Part<PathIcon>("PART_SearchIcon").Opacity);
+
+        search.Text = "pump";
+        window.MouseDown(Center(clear, window), MouseButton.Left);
+        window.MouseUp(Center(clear, window), MouseButton.Left);
+        Assert.Equal(string.Empty, search.Text ?? string.Empty);
+        Assert.True(search.IsFocused);
+
+        search.Text = "pump";
+        window.MouseDown(Center(back, window), MouseButton.Left);
+        window.MouseUp(Center(back, window), MouseButton.Left);
+        Thread.Sleep(600);
+        RenderingTests.Render(window);
+        Assert.Equal(string.Empty, search.Text ?? string.Empty);
+        Assert.False(search.IsFocused);
+        Assert.Equal(new Thickness(12, 0), field.Margin);
+        window.Close();
+    }
 }
