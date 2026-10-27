@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Slider: the outer ends of the track no longer move by a pixel while the value changes. Layout
+  rounding rounded the origin and size of the track segments separately; the new `SliderTrack`
+  snaps every segment edge to the track ends or the handle.
+
 ## 0.1.0 – 2026-10-18
 
 First release, for Avalonia 12.1.

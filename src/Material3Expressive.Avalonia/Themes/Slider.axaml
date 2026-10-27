@@ -133,34 +133,34 @@
         <ControlTemplate>
           <DataValidationErrors>
             <Grid Name="PART_Root" Margin="{TemplateBinding Padding}" Background="Transparent">
-              <Track Name="PART_Track"
+              <controls:SliderTrack Name="PART_Track"
                      Minimum="{TemplateBinding Minimum}"
                      Maximum="{TemplateBinding Maximum}"
                      Value="{TemplateBinding Value, Mode=TwoWay}"
                      IsDirectionReversed="{TemplateBinding IsDirectionReversed}"
                      Orientation="Horizontal">
-                <Track.DecreaseButton>
+                <controls:SliderTrack.DecreaseButton>
                   <RepeatButton Name="PART_DecreaseButton"
                                 Theme="{StaticResource M3SliderActiveTrack}"
                                 Background="{TemplateBinding Foreground}"
                                 Padding="0,14"
                                 CornerRadius="8,2,2,8" />
-                </Track.DecreaseButton>
-                <Track.IncreaseButton>
+                </controls:SliderTrack.DecreaseButton>
+                <controls:SliderTrack.IncreaseButton>
                   <RepeatButton Name="PART_IncreaseButton"
                                 Theme="{StaticResource M3SliderInactiveTrack}"
                                 Background="{TemplateBinding Background}"
                                 Foreground="{TemplateBinding Foreground}"
                                 Padding="0,14"
                                 CornerRadius="2,8,8,2" />
-                </Track.IncreaseButton>
+                </controls:SliderTrack.IncreaseButton>
                 <Thumb Name="thumb"
                        Width="16"
                        Height="44"
                        Theme="{StaticResource M3SliderThumb}"
                        Background="{TemplateBinding Foreground}"
                        DataContext="{TemplateBinding Value}" />
-              </Track>
+              </controls:SliderTrack>
               <controls:SliderStops Name="PART_Stops"
                                     IsVisible="False"
                                     Orientation="Horizontal"
@@ -186,20 +186,20 @@
         <ControlTemplate>
           <DataValidationErrors>
             <Grid Name="PART_Root" Margin="{TemplateBinding Padding}" Background="Transparent">
-              <Track Name="PART_Track"
+              <controls:SliderTrack Name="PART_Track"
                      Minimum="{TemplateBinding Minimum}"
                      Maximum="{TemplateBinding Maximum}"
                      Value="{TemplateBinding Value, Mode=TwoWay}"
                      IsDirectionReversed="{TemplateBinding IsDirectionReversed}"
                      Orientation="Vertical">
-                <Track.DecreaseButton>
+                <controls:SliderTrack.DecreaseButton>
                   <RepeatButton Name="PART_DecreaseButton"
                                 Theme="{StaticResource M3SliderActiveTrack}"
                                 Background="{TemplateBinding Foreground}"
                                 Padding="14,0"
                                 CornerRadius="2,2,8,8" />
-                </Track.DecreaseButton>
-                <Track.IncreaseButton>
+                </controls:SliderTrack.DecreaseButton>
+                <controls:SliderTrack.IncreaseButton>
                   <RepeatButton Name="PART_IncreaseButton"
                                 Classes="Vertical"
                                 Theme="{StaticResource M3SliderInactiveTrack}"
@@ -207,7 +207,7 @@
                                 Foreground="{TemplateBinding Foreground}"
                                 Padding="14,0"
                                 CornerRadius="8,8,2,2" />
-                </Track.IncreaseButton>
+                </controls:SliderTrack.IncreaseButton>
                 <Thumb Name="thumb"
                        Classes="Vertical"
                        Width="44"
@@ -215,7 +215,7 @@
                        Theme="{StaticResource M3SliderThumb}"
                        Background="{TemplateBinding Foreground}"
                        DataContext="{TemplateBinding Value}" />
-              </Track>
+              </controls:SliderTrack>
               <controls:SliderStops Name="PART_Stops"
                                     IsVisible="False"
                                     Orientation="Vertical"

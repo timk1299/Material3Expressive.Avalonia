@@ -210,4 +210,50 @@ public class InteractionTests
         window.MouseUp(Center(thumb, window), MouseButton.Left);
         window.Close();
     }
+
+    [AvaloniaTheory]
+    [InlineData(Orientation.Vertical)]
+    [InlineData(Orientation.Horizontal)]
+    public void Slider_track_ends_stay_put_while_the_value_changes(Orientation orientation)
+    {
+        // Fractional track lengths: Track places the segments at fractional positions.
+        var slider = new Slider { Orientation = orientation, Minimum = 0, Maximum = 100 };
+        if (orientation == Orientation.Vertical)
+            slider.Height = 213.37;
+        else
+            slider.Width = 213.37;
+        var window = CreateWindow(new Border { Padding = new Thickness(10.3, 7.3), Child = slider,
+            HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top });
+        window.Show();
+
+        var outerEnds = new HashSet<double>();
+        var innerEnds = new HashSet<double>();
+        foreach (var value in new[] { 1.0, 3, 7, 13, 27, 33, 50, 66, 71, 99 })
+        {
+            slider.Value = value;
+            RenderingTests.Render(window);
+            var track = slider.GetVisualDescendants().OfType<Track>().Single();
+            var active = track.DecreaseButton!.Bounds;
+            var inactive = track.IncreaseButton!.Bounds;
+            var thumb = track.Thumb!.Bounds;
+            if (orientation == Orientation.Vertical)
+            {
+                outerEnds.Add(active.Bottom);
+                innerEnds.Add(inactive.Top);
+                Assert.Equal(thumb.Bottom, active.Top);
+                Assert.Equal(thumb.Top, inactive.Bottom);
+            }
+            else
+            {
+                outerEnds.Add(active.Left);
+                innerEnds.Add(inactive.Right);
+                Assert.Equal(thumb.Left, active.Right);
+                Assert.Equal(thumb.Right, inactive.Left);
+            }
+        }
+        window.Close();
+
+        Assert.Single(outerEnds);
+        Assert.Single(innerEnds);
+    }
 }
