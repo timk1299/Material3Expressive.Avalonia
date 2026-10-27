@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Search bar (`Classes="Search"`) after the M3 Expressive spec: the bar keeps 12dp to each side at rest and
+  widens with a spring when tapped (margins 24dp → 12dp at the content edge of a 12dp container). It brings
+  its own search icon, which turns into a back button while active (clears the search and leaves it), and a
+  clear button that shows while active or while there is text. Pill on Surface container high, 56dp.
+- Icon buttons (`Icon`) no longer show a hairline ring: their zero-size elevation shadows are transparent.
 - `TextFieldVariant` on the theme: `Outlined` makes every `TextBox` and `ComboBox` without a class of its own
   outlined. Fields in control templates, fields with their own `Theme`, search bars and fields with the class
   `Filled` stay as they are.

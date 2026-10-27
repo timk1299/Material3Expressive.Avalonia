@@ -212,7 +212,7 @@ Pressing a button morphs its corners to a tighter radius on the fast spatial spr
 | Control | Notes |
 |---|---|
 | `Slider` | Expressive slider: a thick track (primary and secondary container), a 4 px bar handle with 6 px gaps that narrows while dragged, and a stop dot. Sizes: `XSmall` (default, 16 px track), `Small`, `Medium`, `Large`, `XLarge` (96 px), horizontal or vertical. `ValueLabel` shows the value; `TickPlacement` + `TickFrequency` draw stop indicators. |
-| `TextBox`, `ComboBox` | Filled (default) or `Outlined` M3 text fields with `TextFieldAssist.Label` and `SupportingText`. `Search` for a search bar. `TextFieldVariant="Outlined"` on the theme makes every field without a class of its own outlined (`Filled` keeps one filled). |
+| `TextBox`, `ComboBox` | Filled (default) or `Outlined` M3 text fields with `TextFieldAssist.Label` and `SupportingText`. `Search` for an M3 Expressive search bar (own search icon, widens when tapped, back and clear buttons). `TextFieldVariant="Outlined"` on the theme makes every field without a class of its own outlined (`Filled` keeps one filled). |
 | `CheckBox`, `RadioButton`, `ToggleSwitch` | M3 selection controls; the switch handle moves on a spring. |
 
 ### Date and time pickers
