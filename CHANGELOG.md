@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.2.0 – 2026-10-27
 
 - Drop-down lists and menus open aligned with their field or item again. Avalonia places a popup's content
   without its margin, so the offsets that compensated the shadow margin moved the list of a `ComboBox`
