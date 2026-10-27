@@ -104,7 +104,7 @@
 
   <!--
     Material 3 exposed drop-down menu, styled like a text field.
-      (default) Filled · Classes="Outlined"
+      (default) Filled · Classes="Outlined" · all fields: Material3ExpressiveTheme TextFieldVariant="Outlined"
       m3:TextFieldAssist.Label / SupportingText work like on TextBox.
   -->
   <ControlTheme x:Key="{x:Type ComboBox}" TargetType="ComboBox">

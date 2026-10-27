@@ -51,6 +51,9 @@ public class Material3ExpressiveTheme : Styles
     public static readonly StyledProperty<MotionScheme> MotionSchemeProperty =
         AvaloniaProperty.Register<Material3ExpressiveTheme, MotionScheme>(nameof(MotionScheme));
 
+    public static readonly StyledProperty<TextFieldVariant> TextFieldVariantProperty =
+        AvaloniaProperty.Register<Material3ExpressiveTheme, TextFieldVariant>(nameof(TextFieldVariant));
+
     public static readonly StyledProperty<bool> UseFluentFallbackProperty =
         AvaloniaProperty.Register<Material3ExpressiveTheme, bool>(nameof(UseFluentFallback), true);
 
@@ -103,6 +106,7 @@ public class Material3ExpressiveTheme : Styles
         Insert(0, _fluent);
 
         SettledTransitions.Install();
+        TextFieldAssist.Install();
         UpdateColors();
     }
 
@@ -143,6 +147,18 @@ public class Material3ExpressiveTheme : Styles
     {
         get => GetValue(MotionSchemeProperty);
         set => SetValue(MotionSchemeProperty, value);
+    }
+
+    /// <summary>
+    /// Look of text boxes and combo boxes without a class of their own: <see cref="Avalonia.TextFieldVariant.Filled"/>
+    /// (default) or <see cref="Avalonia.TextFieldVariant.Outlined"/>. With Outlined, <c>Classes="Filled"</c> keeps a field
+    /// filled; search bars (<c>Classes="Search"</c>) stay as they are. Applies to fields created after the change, so set
+    /// it in XAML.
+    /// </summary>
+    public TextFieldVariant TextFieldVariant
+    {
+        get => GetValue(TextFieldVariantProperty);
+        set => SetValue(TextFieldVariantProperty, value);
     }
 
     /// <summary>
@@ -191,6 +207,10 @@ public class Material3ExpressiveTheme : Styles
         else if (change.Property == MotionSchemeProperty)
         {
             M3Motion.Scheme = change.GetNewValue<MotionScheme>();
+        }
+        else if (change.Property == TextFieldVariantProperty)
+        {
+            TextFieldAssist.DefaultVariant = change.GetNewValue<TextFieldVariant>();
         }
         else if (change.Property == UseFluentFallbackProperty)
         {

@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- `TextFieldVariant` on the theme: `Outlined` makes every `TextBox` and `ComboBox` without a class of its own
+  outlined. Fields in control templates, fields with their own `Theme`, search bars and fields with the class
+  `Filled` stay as they are.
 - Slider: the outer ends of the track no longer move by a pixel while the value changes. Layout
   rounding rounded the origin and size of the track segments separately; the new `SliderTrack`
   snaps every segment edge to the track ends or the handle.

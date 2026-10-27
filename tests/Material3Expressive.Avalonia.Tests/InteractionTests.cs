@@ -256,4 +256,33 @@ public class InteractionTests
         Assert.Single(outerEnds);
         Assert.Single(innerEnds);
     }
+
+    [AvaloniaFact]
+    public void Text_field_variant_outlined_applies_to_fields_without_a_class_of_their_own()
+    {
+        var theme = Material3ExpressiveTheme.Find()!;
+        theme.TextFieldVariant = TextFieldVariant.Outlined;
+        try
+        {
+            var plain = new TextBox();
+            var combo = new ComboBox();
+            var search = new TextBox { Classes = { "Search" } };
+            var filled = new TextBox { Classes = { "Filled" } };
+            var calendar = new CalendarDatePicker();
+            var window = CreateWindow(new StackPanel { Children = { plain, combo, search, filled, calendar } });
+            window.Show();
+            RenderingTests.Render(window);
+
+            Assert.Contains("Outlined", plain.Classes);
+            Assert.Contains("Outlined", combo.Classes);
+            Assert.DoesNotContain("Outlined", search.Classes);
+            Assert.DoesNotContain("Outlined", filled.Classes);
+            Assert.All(calendar.GetVisualDescendants().OfType<TextBox>(), box => Assert.DoesNotContain("Outlined", box.Classes));
+            window.Close();
+        }
+        finally
+        {
+            theme.TextFieldVariant = TextFieldVariant.Filled;
+        }
+    }
 }

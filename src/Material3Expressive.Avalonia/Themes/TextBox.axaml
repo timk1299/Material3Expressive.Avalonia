@@ -6,7 +6,7 @@
 
   <!--
     Material 3 text field.
-      (default) Filled · Classes="Outlined"
+      (default) Filled · Classes="Outlined" · all fields: Material3ExpressiveTheme TextFieldVariant="Outlined"
       m3:TextFieldAssist.Label          floating label
       m3:TextFieldAssist.SupportingText helper text (validation errors replace it)
       PlaceholderText                   shown while focused and empty
