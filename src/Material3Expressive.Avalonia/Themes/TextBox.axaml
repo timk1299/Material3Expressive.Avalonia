@@ -335,7 +335,8 @@
       M3 Expressive contained search bar: a pill on Surface container high, 56dp high. At rest it keeps 12dp
       to each side of its bounds (24dp margins → 12dp when focused), so the bar widens when it is tapped and
       narrows again when it is left. Its search icon turns into a back button and a clear button fades in.
-      Place the field 12dp further out than the content it lines up with (Margin="-12,0").
+      The bar so keeps the margins of the spec when the field sits at the content edge of its container
+      (e.g. 12dp padding: 24dp at rest, 12dp when focused); do not move the field outwards.
     -->
     <Style Selector="^.Search">
       <Setter Property="Background" Value="{DynamicResource M3SurfaceContainerHighBrush}" />
