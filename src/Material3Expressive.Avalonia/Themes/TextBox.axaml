@@ -170,6 +170,11 @@
                 <Button Name="PART_ClearButton"
                         Grid.Column="2"
                         Classes="Icon"
+                        Width="40"
+                        Height="40"
+                        MinWidth="0"
+                        MinHeight="0"
+                        Padding="8"
                         Margin="0,0,8,0"
                         VerticalAlignment="Center"
                         Focusable="False"
@@ -178,7 +183,7 @@
                         Opacity="0"
                         RenderTransform="scale(0.6)"
                         AutomationProperties.Name="Clear">
-                  <PathIcon Width="24" Height="24" Data="{StaticResource M3CloseGeometry}" />
+                  <PathIcon Width="24" Height="24" Data="{StaticResource M3CloseIconGeometry}" />
                   <Button.Transitions>
                     <Transitions>
                       <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
