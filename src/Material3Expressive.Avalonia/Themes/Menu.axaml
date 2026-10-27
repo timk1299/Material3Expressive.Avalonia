@@ -98,11 +98,11 @@
                   CornerRadius="{Binding #PART_LayoutRoot.CornerRadius}"
                   Opacity="0"
                   IsHitTestVisible="False" />
+          <!-- Avalonia places the menu itself (without its shadow margin): the first item of the submenu lines up with this item -->
           <Popup Name="PART_Popup"
                  WindowManagerAddShadowHint="False"
                  Placement="RightEdgeAlignedTop"
-                 HorizontalOffset="-8"
-                 VerticalOffset="-12"
+                 VerticalOffset="-4"
                  IsLightDismissEnabled="False"
                  IsOpen="{TemplateBinding IsSubMenuOpen, Mode=TwoWay}">
             <Border Theme="{StaticResource M3MenuPopupBorder}">
@@ -207,10 +207,11 @@
                   CornerRadius="{TemplateBinding CornerRadius}"
                   Opacity="0"
                   IsHitTestVisible="False" />
+          <!-- Avalonia places the menu itself (without its shadow margin): at the left edge of the item, 4dp below it -->
           <Popup Name="PART_Popup"
                  WindowManagerAddShadowHint="False"
                  Placement="BottomEdgeAlignedLeft"
-                 HorizontalOffset="-8"
+                 VerticalOffset="4"
                  IsLightDismissEnabled="True"
                  IsOpen="{TemplateBinding IsSubMenuOpen, Mode=TwoWay}"
                  OverlayInputPassThroughElement="{Binding $parent[Menu]}">

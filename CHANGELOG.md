@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Drop-down lists and menus open aligned with their field or item again. Avalonia places a popup's content
+  without its margin, so the offsets that compensated the shadow margin moved the list of a `ComboBox`
+  and the menu of a menu bar 8dp to the left and a submenu 8dp into its parent menu and up. Now: lists 2dp
+  below the field, menus 4dp below the item, the first item of a submenu level with its parent item.
 - Search bar (`Classes="Search"`) after the M3 Expressive spec: the bar keeps 12dp to each side at rest and
   widens with a spring when tapped (margins 24dp → 12dp at the content edge of a 12dp container). It brings
   its own search icon, which turns into a back button while active (clears the search and leaves it), and a

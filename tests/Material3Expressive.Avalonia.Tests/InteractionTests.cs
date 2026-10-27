@@ -329,4 +329,41 @@ public class InteractionTests
         Assert.Equal(new Thickness(12, 0), field.Margin);
         window.Close();
     }
+
+    [AvaloniaFact]
+    public void Drop_down_lists_and_menus_open_aligned_with_their_field_or_item()
+    {
+        var combo = new ComboBox { Width = 240, ItemsSource = new[] { "One", "Two", "Three" }, SelectedIndex = 0 };
+        var sub = new MenuItem { Header = "More", ItemsSource = new[] { new MenuItem { Header = "A" }, new MenuItem { Header = "B" } } };
+        var top = new MenuItem { Header = "File", ItemsSource = new object[] { new MenuItem { Header = "Open" }, sub } };
+        var window = CreateWindow(new StackPanel
+        {
+            Margin = new Thickness(40),
+            Spacing = 40,
+            Children = { new Menu { ItemsSource = new[] { top } }, combo },
+        });
+        window.Show();
+        RenderingTests.Render(window);
+        static Point At(Visual visual) => visual.PointToScreen(default).ToPoint(1);
+        static Control List(Control owner) => (Control)owner.GetVisualDescendants().OfType<Popup>().First().Child!;
+
+        // The shadow margin of a list is not part of its placement (it was compensated twice: 8dp to the left).
+        combo.IsDropDownOpen = true;
+        RenderingTests.Render(window);
+        var field = combo.GetVisualDescendants().OfType<Control>().First(part => part.Name == "PART_Field");
+        Assert.Equal(At(field).X, At(List(combo)).X);
+        Assert.Equal(At(field).Y + field.Bounds.Height + 2, At(List(combo)).Y);
+        combo.IsDropDownOpen = false;
+
+        top.IsSubMenuOpen = true;
+        RenderingTests.Render(window);
+        Assert.Equal(At(top).X, At(List(top)).X);
+        Assert.Equal(At(top).Y + top.Bounds.Height + 4, At(List(top)).Y);
+
+        sub.IsSubMenuOpen = true;
+        RenderingTests.Render(window);
+        Assert.Equal(At(sub).X + sub.Bounds.Width, At(List(sub)).X);
+        Assert.Equal(At(sub).Y, At(List(sub).GetVisualDescendants().OfType<MenuItem>().First()).Y);
+        window.Close();
+    }
 }

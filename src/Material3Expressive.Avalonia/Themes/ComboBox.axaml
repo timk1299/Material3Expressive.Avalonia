@@ -233,13 +233,17 @@
                 </PathIcon>
               </Grid>
 
+              <!--
+                Avalonia places the list itself (without its margin) at the field; the margin only leaves room for
+                the shadow. The list starts at the left edge of the field, 2dp below it.
+              -->
               <Popup Name="PART_Popup"
                      WindowManagerAddShadowHint="False"
                      IsOpen="{TemplateBinding IsDropDownOpen, Mode=TwoWay}"
                      MaxHeight="{TemplateBinding MaxDropDownHeight}"
                      PlacementTarget="PART_Field"
                      Placement="BottomEdgeAlignedLeft"
-                     HorizontalOffset="-8"
+                     VerticalOffset="2"
                      IsLightDismissEnabled="True"
                      InheritsTransform="True">
                 <Border Name="PopupBorder"
