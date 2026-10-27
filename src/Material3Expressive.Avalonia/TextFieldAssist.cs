@@ -58,9 +58,18 @@ public static class TextFieldAssist
         _templateApplied ??= TemplatedControl.TemplateAppliedEvent.AddClassHandler<TemplatedControl>((control, _) => ApplyDefaultVariant(control));
         _clearClicked ??= Button.ClickEvent.AddClassHandler<Button>((button, _) =>
         {
-            // The clear button of a search bar (Themes/TextBox.axaml).
-            if (button.Name == "PART_ClearButton" && button.TemplatedParent is TextBox textBox)
+            // The clear and back buttons of a search bar (Themes/TextBox.axaml): back also leaves the search.
+            if (button.TemplatedParent is not TextBox textBox)
+                return;
+            if (button.Name == "PART_ClearButton")
+            {
                 textBox.Clear();
+            }
+            else if (button.Name == "PART_BackButton")
+            {
+                textBox.Clear();
+                TopLevel.GetTopLevel(textBox)?.FocusManager?.Focus(null);
+            }
         });
     }
 
