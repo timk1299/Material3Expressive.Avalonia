@@ -84,9 +84,14 @@ public class Material3ExpressiveTheme : Styles
     internal static BoxShadows Elevation(int level)
     {
         var (keyY, keyBlur, ambientY, ambientBlur, ambientSpread) = ElevationLevels[level];
+        // Level 0 is transparent: a zero-size shadow in the shadow color left a hairline ring around
+        // controls without a container, e.g. a transparent icon button. The transition to a higher
+        // level fades the color in.
+        var keyColor = level == 0 ? Colors.Transparent : KeyShadowColor;
+        var ambientColor = level == 0 ? Colors.Transparent : AmbientShadowColor;
         return new BoxShadows(
-            new BoxShadow { OffsetY = keyY, Blur = CssBlurToAvalonia(keyBlur), Color = KeyShadowColor },
-            [new BoxShadow { OffsetY = ambientY, Blur = CssBlurToAvalonia(ambientBlur), Spread = ambientSpread, Color = AmbientShadowColor }]);
+            new BoxShadow { OffsetY = keyY, Blur = CssBlurToAvalonia(keyBlur), Color = keyColor },
+            [new BoxShadow { OffsetY = ambientY, Blur = CssBlurToAvalonia(ambientBlur), Spread = ambientSpread, Color = ambientColor }]);
     }
 
     private readonly FluentTheme _fluent;

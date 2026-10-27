@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Elevation level 0 is transparent: buttons without a container (e.g. a transparent `Button` of an app) no
+  longer show a hairline ring. Replaces the fix for `Icon` buttons only; transitions from level 0 fade the
+  shadow in.
+
 ## 0.2.0 – 2026-10-27
 
 - Drop-down lists and menus open aligned with their field or item again. Avalonia places a popup's content

@@ -5,6 +5,7 @@ using Avalonia.Headless;
 using Avalonia.Headless.XUnit;
 using Avalonia.Input;
 using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.Styling;
 using Avalonia.Controls.Templates;
 using Avalonia.LogicalTree;
@@ -364,6 +365,28 @@ public class InteractionTests
         RenderingTests.Render(window);
         Assert.Equal(At(sub).X + sub.Bounds.Width, At(List(sub)).X);
         Assert.Equal(At(sub).Y, At(List(sub).GetVisualDescendants().OfType<MenuItem>().First()).Y);
+        window.Close();
+    }
+
+    [AvaloniaFact]
+    public void Buttons_without_a_container_have_no_hairline_ring()
+    {
+        Application.Current!.RequestedThemeVariant = ThemeVariant.Light;
+        var icon = new Button { Classes = { "Icon" }, Content = new PathIcon { Data = (Geometry)Application.Current.FindResource("M3CloseIconGeometry")! } };
+        var transparent = new Button { Background = Brushes.Transparent, Content = "Text", CornerRadius = new CornerRadius(18) };
+        var window = CreateWindow(new StackPanel { Margin = new Thickness(40), Spacing = 40, Background = Brushes.White, Children = { icon, transparent } });
+        window.Background = Brushes.White;
+        window.Show();
+        var frame = RenderingTests.Render(window);
+        foreach (var button in new[] { icon, transparent })
+        {
+            var at = button.TranslatePoint(new Point(0, button.Bounds.Height / 2), window)!.Value;
+            for (var dx = -2; dx <= 2; dx++)
+            {
+                var pixel = RenderingTests.PixelAt(frame, (int)at.X + dx, (int)at.Y);
+                Assert.True(pixel.R > 250 && pixel.G > 250 && pixel.B > 250, $"Ring at the edge of {button.Content}: {pixel}");
+            }
+        }
         window.Close();
     }
 }
