@@ -24,6 +24,7 @@ public static class TextFieldAssist
     public const string FilledClass = "Filled";
 
     private static IDisposable? _templateApplied;
+    private static IDisposable? _clearClicked;
 
     internal static TextFieldVariant DefaultVariant { get; set; }
 
@@ -52,8 +53,16 @@ public static class TextFieldAssist
     /// fields in a control template, fields with their own <c>Theme</c>, search bars and fields with the class
     /// <see cref="FilledClass"/>. Installed by <see cref="Material3ExpressiveTheme"/>.
     /// </summary>
-    internal static void Install() =>
+    internal static void Install()
+    {
         _templateApplied ??= TemplatedControl.TemplateAppliedEvent.AddClassHandler<TemplatedControl>((control, _) => ApplyDefaultVariant(control));
+        _clearClicked ??= Button.ClickEvent.AddClassHandler<Button>((button, _) =>
+        {
+            // The clear button of a search bar (Themes/TextBox.axaml).
+            if (button.Name == "PART_ClearButton" && button.TemplatedParent is TextBox textBox)
+                textBox.Clear();
+        });
+    }
 
     private static void ApplyDefaultVariant(TemplatedControl control)
     {

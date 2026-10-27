@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:m3="using:Material3Expressive.Avalonia"
                     xmlns:controls="using:Material3Expressive.Avalonia.Controls"
-                    xmlns:conv="using:Material3Expressive.Avalonia.Converters">
+                    xmlns:conv="using:Material3Expressive.Avalonia.Converters"
+                    xmlns:motion="using:Material3Expressive.Avalonia.Motion">
 
   <!--
     Material 3 text field.
@@ -39,7 +40,14 @@
             <Panel Name="PART_Field" MinHeight="56">
               <Border Name="PART_Container"
                       Background="{TemplateBinding Background}"
-                      CornerRadius="{TemplateBinding CornerRadius}" />
+                      CornerRadius="{TemplateBinding CornerRadius}">
+                <Border.Transitions>
+                  <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.2" />
+                    <CornerRadiusTransition Property="CornerRadius" Duration="{motion:SpringDuration FastSpatial}" Easing="{motion:Spring FastSpatial}" />
+                  </Transitions>
+                </Border.Transitions>
+              </Border>
               <Border Name="PART_StateLayer"
                       Background="{DynamicResource M3OnSurfaceBrush}"
                       CornerRadius="{TemplateBinding CornerRadius}"
@@ -48,6 +56,7 @@
                 <Border.Transitions>
                   <Transitions>
                     <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+                    <CornerRadiusTransition Property="CornerRadius" Duration="{motion:SpringDuration FastSpatial}" Easing="{motion:Spring FastSpatial}" />
                   </Transitions>
                 </Border.Transitions>
               </Border>
@@ -69,13 +78,19 @@
                 </controls:OutlineBorder.Transitions>
               </controls:OutlineBorder>
 
-              <Grid ColumnDefinitions="Auto,*,Auto">
+              <Grid ColumnDefinitions="Auto,*,Auto,Auto">
                 <ContentPresenter Name="PART_LeadingContent"
                                   Grid.Column="0"
                                   Margin="12,0,-4,0"
                                   VerticalAlignment="Center"
                                   Foreground="{DynamicResource M3OnSurfaceVariantBrush}"
-                                  Content="{TemplateBinding InnerLeftContent}" />
+                                  Content="{TemplateBinding InnerLeftContent}">
+                  <ContentPresenter.Transitions>
+                    <Transitions>
+                      <BrushTransition Property="Foreground" Duration="0:0:0.2" />
+                    </Transitions>
+                  </ContentPresenter.Transitions>
+                </ContentPresenter>
                 <DockPanel Name="PART_InnerDockPanel"
                            Grid.Column="1"
                            Margin="{TemplateBinding Padding}"
@@ -151,8 +166,28 @@
                     </Transitions>
                   </TextBlock.Transitions>
                 </TextBlock>
+                <!-- Search bar: clears the text (TextFieldAssist), fades in while there is text -->
+                <Button Name="PART_ClearButton"
+                        Grid.Column="2"
+                        Classes="Icon"
+                        Margin="0,0,8,0"
+                        VerticalAlignment="Center"
+                        Focusable="False"
+                        IsVisible="False"
+                        IsHitTestVisible="False"
+                        Opacity="0"
+                        RenderTransform="scale(0.6)"
+                        AutomationProperties.Name="Clear">
+                  <PathIcon Width="24" Height="24" Data="{StaticResource M3CloseGeometry}" />
+                  <Button.Transitions>
+                    <Transitions>
+                      <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+                      <TransformOperationsTransition Property="RenderTransform" Duration="{motion:SpringDuration FastSpatial}" Easing="{motion:Spring FastSpatial}" />
+                    </Transitions>
+                  </Button.Transitions>
+                </Button>
                 <ContentPresenter Name="PART_TrailingContent"
-                                  Grid.Column="2"
+                                  Grid.Column="3"
                                   Margin="-4,0,12,0"
                                   VerticalAlignment="Center"
                                   Foreground="{DynamicResource M3OnSurfaceVariantBrush}"
@@ -257,10 +292,15 @@
       </Style>
     </Style>
 
-    <!-- ===== Search bar: Classes="Search" (use PlaceholderText, not a label) ===== -->
+    <!--
+      ===== Search bar: Classes="Search" (use PlaceholderText, not a label) =====
+      Tapped, the bar becomes active: a darker container whose corners spring from the pill to Large and a
+      primary leading icon; leaving it springs back. A clear button fades in while there is text.
+    -->
     <Style Selector="^.Search">
       <Setter Property="Background" Value="{DynamicResource M3SurfaceContainerHighBrush}" />
-      <Setter Property="CornerRadius" Value="{DynamicResource M3ShapeFull}" />
+      <!-- 28 instead of Full (9999): the corner transition needs a real start value -->
+      <Setter Property="CornerRadius" Value="{DynamicResource M3ShapeExtraLarge}" />
       <Setter Property="Padding" Value="16" />
       <Style Selector="^ /template/ Border#PART_ActiveIndicator">
         <Setter Property="IsVisible" Value="False" />
@@ -270,6 +310,21 @@
       </Style>
       <Style Selector="^ /template/ ContentPresenter#PART_TrailingContent">
         <Setter Property="Margin" Value="0,0,16,0" />
+      </Style>
+      <Style Selector="^ /template/ Button#PART_ClearButton">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+      <Style Selector="^:not(:empty) /template/ Button#PART_ClearButton">
+        <Setter Property="Opacity" Value="1" />
+        <Setter Property="RenderTransform" Value="scale(1)" />
+        <Setter Property="IsHitTestVisible" Value="True" />
+      </Style>
+      <Style Selector="^:focus">
+        <Setter Property="Background" Value="{DynamicResource M3SurfaceContainerHighestBrush}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource M3ShapeLarge}" />
+        <Style Selector="^ /template/ ContentPresenter#PART_LeadingContent">
+          <Setter Property="Foreground" Value="{DynamicResource M3PrimaryBrush}" />
+        </Style>
       </Style>
     </Style>
 

@@ -285,4 +285,38 @@ public class InteractionTests
             theme.TextFieldVariant = TextFieldVariant.Filled;
         }
     }
+
+    [AvaloniaFact]
+    public void Search_bar_becomes_active_on_focus_and_its_clear_button_empties_it()
+    {
+        Application.Current!.RequestedThemeVariant = ThemeVariant.Light;
+        var search = new TextBox { Classes = { "Search" }, Width = 360, PlaceholderText = "Search" };
+        var other = new Button { Content = "Other" };
+        var window = CreateWindow(new StackPanel { Margin = new Thickness(24), Spacing = 24, Children = { search, other } });
+        window.Show();
+        RenderingTests.Render(window);
+        var container = search.GetVisualDescendants().OfType<Border>().Single(border => border.Name == "PART_Container" && border.TemplatedParent == search);
+        var clear = search.GetVisualDescendants().OfType<Button>().Single(button => button.Name == "PART_ClearButton");
+        var resting = container.CornerRadius;
+        Assert.False(clear.IsHitTestVisible);
+
+        window.MouseDown(Center(search, window), MouseButton.Left);
+        window.MouseUp(Center(search, window), MouseButton.Left);
+        search.Text = "pump";
+        Thread.Sleep(600);
+        RenderingTests.Render(window);
+        Assert.True(search.IsFocused);
+        Assert.True(container.CornerRadius.TopLeft < resting.TopLeft, "The active search bar keeps its pill shape.");
+        Assert.True(clear.IsHitTestVisible);
+
+        window.MouseDown(Center(clear, window), MouseButton.Left);
+        window.MouseUp(Center(clear, window), MouseButton.Left);
+        Assert.Equal(string.Empty, search.Text ?? string.Empty);
+
+        other.Focus();
+        Thread.Sleep(600);
+        RenderingTests.Render(window);
+        Assert.Equal(resting, container.CornerRadius);
+        window.Close();
+    }
 }
