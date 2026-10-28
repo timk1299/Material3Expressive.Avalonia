@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Scrollable tabs (`Classes="Scrollable"`) scroll: the tab strip lies in a `ScrollViewer` (scrolling off
+  without the class, so other tabs keep their layout). Tabs that do not fit scroll sideways without a scroll
+  bar, by swipe or mouse wheel (`HorizontalWheel.IsEnabled` on a `ScrollViewer` turns the wheel sideways).
 - Elevation level 0 is transparent: buttons without a container (e.g. a transparent `Button` of an app) no
   longer show a hairline ring. Replaces the fix for `Icon` buttons only; transitions from level 0 fade the
   shadow in.

@@ -300,7 +300,12 @@
                     DockPanel.Dock="{TemplateBinding TabStripPlacement}"
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="0,0,0,1">
-              <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+              <!-- Scrolls only with the class Scrollable; otherwise the strip keeps the size of the control. -->
+              <ScrollViewer Name="PART_TabScrollViewer"
+                            HorizontalScrollBarVisibility="Disabled"
+                            VerticalScrollBarVisibility="Disabled">
+                <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+              </ScrollViewer>
             </Border>
             <!-- Clips only for a sliding page transition; otherwise it would cut off the shadows of the content. -->
             <Panel ClipToBounds="{TemplateBinding PageTransition, Converter={x:Static ObjectConverters.IsNotNull}}">
@@ -342,6 +347,12 @@
           <StackPanel Orientation="Horizontal" />
         </ItemsPanelTemplate>
       </Setter>
+      <!-- Tabs that do not fit scroll sideways without a scroll bar (swipe, wheel), as the M3 scrollable tabs;
+           the tab at the edge is cut off and shows that there are more. -->
+      <Style Selector="^ /template/ ScrollViewer#PART_TabScrollViewer">
+        <Setter Property="HorizontalScrollBarVisibility" Value="Hidden" />
+        <Setter Property="controls:HorizontalWheel.IsEnabled" Value="True" />
+      </Style>
     </Style>
     <Style Selector="^.Secondary">
       <Setter Property="ItemContainerTheme" Value="{StaticResource M3SecondaryTabItem}" />
