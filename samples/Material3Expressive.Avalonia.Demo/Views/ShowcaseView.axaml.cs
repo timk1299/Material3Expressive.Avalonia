@@ -41,6 +41,8 @@ public partial class ShowcaseView : UserControl
         ("Outline", "Surface"), ("OutlineVariant", "OnSurface"),
     ];
 
+    private bool _syncingDarkMode;
+
     public ShowcaseView()
     {
         InitializeComponent();
@@ -77,6 +79,8 @@ public partial class ShowcaseView : UserControl
         DataValidationErrors.SetErrors(ErrorOutlined, ["Only letters and digits"]);
 
         DarkModeToggle.IsCheckedChanged += OnDarkModeChanged;
+        // The system theme can arrive after the view is shown (and change while it runs).
+        ActualThemeVariantChanged += (_, _) => SyncDarkModeToggle();
 
         ShowDialogButton.Click += async (_, _) =>
         {
@@ -119,12 +123,20 @@ public partial class ShowcaseView : UserControl
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
+        SyncDarkModeToggle();
+    }
+
+    // Shows the current theme without fixing it: the app keeps following the system until the switch is used.
+    private void SyncDarkModeToggle()
+    {
+        _syncingDarkMode = true;
         DarkModeToggle.IsChecked = ActualThemeVariant == ThemeVariant.Dark;
+        _syncingDarkMode = false;
     }
 
     private void OnDarkModeChanged(object? sender, RoutedEventArgs e)
     {
-        if (Application.Current is { } app)
+        if (!_syncingDarkMode && Application.Current is { } app)
             app.RequestedThemeVariant = DarkModeToggle.IsChecked == true ? ThemeVariant.Dark : ThemeVariant.Light;
     }
 
