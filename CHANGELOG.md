@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.1 – 2026-10-29
 
 - Each text field has its own context menu (`M3TextBoxContextFlyout`, Cut · Copy · Paste) instead of
   Avalonia's `DefaultTextBoxContextFlyout`, one menu for all fields. A field keeps its selection while it loses
