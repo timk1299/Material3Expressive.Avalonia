@@ -15,8 +15,10 @@ namespace Material3Expressive.Avalonia.Controls;
 /// </summary>
 public class FloatingToolbar : ItemsControl
 {
+    // StackPanel's default is Vertical; the toolbar is horizontal unless set otherwise.
     public static readonly StyledProperty<Orientation> OrientationProperty =
-        StackPanel.OrientationProperty.AddOwner<FloatingToolbar>();
+        StackPanel.OrientationProperty.AddOwner<FloatingToolbar>(
+            new StyledPropertyMetadata<Orientation>(Orientation.Horizontal));
 
     public static readonly StyledProperty<object?> FloatingActionButtonProperty =
         AvaloniaProperty.Register<FloatingToolbar, object?>(nameof(FloatingActionButton));

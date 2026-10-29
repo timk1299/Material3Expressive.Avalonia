@@ -9,12 +9,6 @@
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </UserControl.Resources>
-  <UserControl.Styles>
-    <Style Selector="Button StackPanel > TextBlock, ToggleButton StackPanel > TextBlock">
-      <Setter Property="VerticalAlignment" Value="Center" />
-    </Style>
-  </UserControl.Styles>
-
   <ScrollViewer>
     <StackPanel Margin="24,0,24,24" Spacing="16">
       <m3:Card Classes="Outlined">

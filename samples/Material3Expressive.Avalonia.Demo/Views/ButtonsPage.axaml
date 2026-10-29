@@ -10,9 +10,6 @@
     </ResourceDictionary>
   </UserControl.Resources>
   <UserControl.Styles>
-    <Style Selector="Button StackPanel > TextBlock, ToggleButton StackPanel > TextBlock">
-      <Setter Property="VerticalAlignment" Value="Center" />
-    </Style>
     <Style Selector="StackPanel.Row">
       <Setter Property="Orientation" Value="Horizontal" />
       <Setter Property="Spacing" Value="12" />

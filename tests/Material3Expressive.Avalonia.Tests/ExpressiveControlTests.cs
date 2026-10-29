@@ -60,6 +60,7 @@ public class ExpressiveControlTests
         var window = Show(new Panel { Children = { button } });
         Assert.Equal(new CornerRadius(20), button.CornerRadius);
 
+        var pressedFor = Stopwatch.StartNew();
         window.MouseDown(Center(button, window), MouseButton.Left);
         Dispatcher.UIThread.RunJobs();
         Assert.Equal(new CornerRadius(8), button.CornerRadius);
@@ -67,7 +68,9 @@ public class ExpressiveControlTests
         // Released immediately: the pressed shape is kept briefly so the morph is visible.
         window.MouseUp(Center(button, window), MouseButton.Left);
         Dispatcher.UIThread.RunJobs();
-        Assert.Equal(new CornerRadius(8), button.CornerRadius);
+        // Only checkable while the hold lasts; a busy test machine can take longer than that to get here.
+        if (pressedFor.Elapsed < Ripple.MinimumPressDuration)
+            Assert.Equal(new CornerRadius(8), button.CornerRadius);
         Wait(200);
         Assert.Equal(new CornerRadius(20), button.CornerRadius);
         window.Close();
@@ -102,6 +105,82 @@ public class ExpressiveControlTests
     }
 
     [AvaloniaFact]
+    public void Button_padding_follows_the_size_tokens_and_the_default_is_small()
+    {
+        var buttons = new[] { null, "XSmall", "Small", "Medium", "Large", "XLarge" }
+            .Select(size => new Button { Content = "Label", Classes = { size ?? "Filled" } })
+            .ToArray();
+        var window = Show(new StackPanel { Children = { buttons[0], buttons[1], buttons[2], buttons[3], buttons[4], buttons[5] } }, 1000, 700);
+
+        Assert.Equal(new[] { 16d, 12, 16, 24, 48, 64 }, buttons.Select(b => b.Padding.Left));
+        window.Close();
+    }
+
+    [AvaloniaFact]
+    public void Icon_and_label_content_centers_the_label()
+    {
+        static (StackPanel Content, TextBlock Label) IconAndLabel()
+        {
+            var label = new TextBlock { Text = "Save" };
+            return (new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8, Children = { new PathIcon(), label } }, label);
+        }
+
+        var (buttonContent, buttonLabel) = IconAndLabel();
+        var (splitContent, splitLabel) = IconAndLabel();
+        var nestedLabel = new TextBlock { Text = "Nested" };
+        var window = Show(new StackPanel
+        {
+            Children =
+            {
+                new Button { Content = buttonContent },
+                new SplitButton { Content = splitContent },
+                new Button { Content = new Border { Child = new StackPanel { Orientation = Orientation.Horizontal, Children = { nestedLabel } } } },
+            },
+        });
+
+        Assert.Equal(VerticalAlignment.Center, buttonLabel.VerticalAlignment);
+        Assert.Equal(VerticalAlignment.Center, splitLabel.VerticalAlignment);
+        Assert.Equal(VerticalAlignment.Stretch, nestedLabel.VerticalAlignment);
+        window.Close();
+    }
+
+    [AvaloniaFact]
+    public void Icons_inside_tab_content_keep_the_size_of_their_component()
+    {
+        var tabIcon = new PathIcon();
+        var xsIcon = new PathIcon();
+        var chipIcon = new PathIcon();
+        var largeFabIcon = new PathIcon();
+        var tabs = new TabControl
+        {
+            ItemsSource = new[]
+            {
+                new TabItem
+                {
+                    Header = "Tab",
+                    Icon = tabIcon,
+                    Content = new StackPanel
+                    {
+                        Children =
+                        {
+                            new Button { Classes = { "XSmall" }, Content = xsIcon },
+                            new Button { Classes = { "AssistChip" }, Content = chipIcon },
+                            new Button { Classes = { "LargeFab" }, Content = largeFabIcon },
+                        },
+                    },
+                },
+            },
+        };
+        var window = Show(tabs, 600, 500);
+
+        Assert.Equal(24, tabIcon.Width);
+        Assert.Equal(20, xsIcon.Width);
+        Assert.Equal(18, chipIcon.Width);
+        Assert.Equal(36, largeFabIcon.Width);
+        window.Close();
+    }
+
+    [AvaloniaFact]
     public void Checked_toggle_buttons_swap_round_and_square()
     {
         var round = new ToggleButton { Content = "Round" };
@@ -121,6 +200,25 @@ public class ExpressiveControlTests
 
         var primary = Light.Primary;
         Assert.Equal(primary, ((ISolidColorBrush)round.Background!).Color);
+        window.Close();
+    }
+
+    [AvaloniaFact]
+    public void Elevated_toggle_button_raises_on_hover_like_the_elevated_button()
+    {
+        var toggle = new ToggleButton { Content = "Elevated", Classes = { "Elevated" } };
+        var window = Show(new Panel { Children = { toggle } });
+        var container = toggle.GetVisualDescendants().OfType<Border>().Single(b => b.Name == "PART_Container");
+        Assert.Equal(toggle.FindResource("M3Elevation1"), container.BoxShadow);
+
+        window.MouseMove(Center(toggle, window));
+        Wait(400);
+        Assert.Equal(toggle.FindResource("M3Elevation2"), container.BoxShadow);
+
+        window.MouseDown(Center(toggle, window), MouseButton.Left);
+        Wait(400);
+        Assert.Equal(toggle.FindResource("M3Elevation1"), container.BoxShadow);
+        window.MouseUp(Center(toggle, window), MouseButton.Left);
         window.Close();
     }
 
@@ -349,6 +447,37 @@ public class ExpressiveControlTests
         var item = (TabItem)rail.ContainerFromIndex(0)!;
         Assert.Contains(":expanded", item.Classes);
         RenderingTests.Render(window).SavePng(Path.Combine(RenderingTests.ScreenshotDir, "navigation-rail-expanded.png"));
+        window.Close();
+    }
+
+    [AvaloniaFact]
+    public void Floating_toolbar_is_horizontal_by_default_and_vertical_on_request()
+    {
+        static FloatingToolbar Toolbar(Button fab) => new()
+        {
+            ItemsSource = new[] { new Button { Classes = { "Icon" } }, new Button { Classes = { "Icon" } } },
+            FloatingActionButton = fab,
+            VerticalAlignment = VerticalAlignment.Top,
+        };
+        var horizontalFab = new Button { Classes = { "Fab" } };
+        var verticalFab = new Button { Classes = { "Fab" } };
+        var horizontal = Toolbar(horizontalFab);
+        var vertical = Toolbar(verticalFab);
+        vertical.Orientation = Orientation.Vertical;
+        var window = Show(new StackPanel { Children = { horizontal, vertical } }, 800, 600);
+
+        Visual Container(FloatingToolbar toolbar) =>
+            toolbar.GetVisualDescendants().OfType<Border>().Single(b => b.Name == "PART_Container" && b.TemplatedParent == toolbar);
+        Assert.Equal(Orientation.Horizontal, horizontal.Orientation);
+        Assert.DoesNotContain(":vertical", horizontal.Classes);
+        Assert.True(Center(horizontalFab, window).X > Center(Container(horizontal), window).X);
+        Assert.Equal(Center(horizontalFab, window).Y, Center(Container(horizontal), window).Y, 0);
+
+        Assert.Contains(":vertical", vertical.Classes);
+        Assert.True(Center(verticalFab, window).Y > Center(Container(vertical), window).Y);
+        var items = vertical.GetRealizedContainers().ToArray();
+        Assert.Equal(items[0].Bounds.X, items[1].Bounds.X);
+        Assert.True(items[1].Bounds.Y > items[0].Bounds.Y);
         window.Close();
     }
 

@@ -22,7 +22,7 @@
     <Setter Property="BorderBrush" Value="Transparent" />
     <Setter Property="BorderThickness" Value="0" />
     <Setter Property="CornerRadius" Value="20" />
-    <Setter Property="Padding" Value="24,0" />
+    <Setter Property="Padding" Value="16,0" />
     <Setter Property="MinHeight" Value="40" />
     <Setter Property="HorizontalContentAlignment" Value="Center" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -109,7 +109,7 @@
     <!-- ===== Sizes (md.comp.button.{xsmall…xlarge}) ===== -->
     <Style Selector="^.XSmall">
       <Setter Property="MinHeight" Value="32" />
-      <Setter Property="Padding" Value="16,0" />
+      <Setter Property="Padding" Value="12,0" />
       <Setter Property="CornerRadius" Value="16" />
     </Style>
     <Style Selector="^.Small">
@@ -641,6 +641,13 @@
 
     <Style Selector="^:pointerover /template/ Border#PART_Container">
       <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation0}" />
+    </Style>
+    <!-- The rule above also covers the elevated toggle: restore its hover and pressed levels -->
+    <Style Selector="^.Elevated:pointerover:not(:disabled) /template/ Border#PART_Container">
+      <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation2}" />
+    </Style>
+    <Style Selector="^.Elevated:pressed:not(:disabled) /template/ Border#PART_Container">
+      <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation1}" />
     </Style>
 
     <!-- Outlined selectables shared by filter chips and (legacy) segmented buttons -->

@@ -266,6 +266,11 @@
     <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
   </Style>
 
+  <!-- Icon + label content (a horizontal StackPanel): the label is centered on the icon. -->
+  <Style Selector=":is(Button) > StackPanel[Orientation=Horizontal] > TextBlock, SplitButton > StackPanel[Orientation=Horizontal] > TextBlock">
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+
   <!-- Icon sizes inside components (content is not reachable from ControlTheme styles). -->
   <Style Selector=":is(Button) PathIcon">
     <Setter Property="Width" Value="20" />
@@ -300,7 +305,7 @@
     <Setter Property="Width" Value="40" />
     <Setter Property="Height" Value="40" />
   </Style>
-  <!-- FABs: 24 (FAB, small extended), 28 (medium), 32 (large) -->
+  <!-- FABs: 24 (FAB, small extended), 28 (medium), 36 (large) -->
   <Style Selector="Button.Fab PathIcon, Button.SmallFab PathIcon, Button.ExtendedFab PathIcon">
     <Setter Property="Width" Value="24" />
     <Setter Property="Height" Value="24" />
@@ -310,8 +315,8 @@
     <Setter Property="Height" Value="28" />
   </Style>
   <Style Selector="Button.LargeFab PathIcon, Button.ExtendedFab.Large PathIcon">
-    <Setter Property="Width" Value="32" />
-    <Setter Property="Height" Value="32" />
+    <Setter Property="Width" Value="36" />
+    <Setter Property="Height" Value="36" />
   </Style>
   <!-- Split buttons: leading icon by size, then the trailing chevron -->
   <Style Selector="SplitButton.Medium PathIcon">
@@ -352,7 +357,8 @@
   <Style Selector="Button.AssistChip:disabled PathIcon">
     <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
   </Style>
-  <Style Selector="TabItem PathIcon, ListBoxItem PathIcon">
+  <!-- Tabs: only the tab's own icon; PathIcons in the tab content keep the size of their component. -->
+  <Style Selector="TabItem /template/ ContentPresenter#PART_IconPresenter PathIcon, ListBoxItem PathIcon">
     <Setter Property="Width" Value="24" />
     <Setter Property="Height" Value="24" />
   </Style>
