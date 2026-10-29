@@ -8,6 +8,25 @@
 - Elevation level 0 is transparent: buttons without a container (e.g. a transparent `Button` of an app) no
   longer show a hairline ring. Replaces the fix for `Icon` buttons only; transitions from level 0 fade the
   shadow in.
+- Buttons without a size class have the padding of `Small` (16dp), the documented default; `XSmall` has 12dp.
+  Large FABs (`LargeFab`, `ExtendedFab Large`) have 36dp icons.
+- Icons in tab content keep the size of their component: the 24dp tab icon size applies to the tab's own
+  icon only (it made the icons of XSmall/Small buttons, chips and FABs on a tab page 24dp).
+- Elevated toggle buttons keep their shadow: level 2 on hover, level 1 while pressed (was level 0).
+- `FloatingToolbar` is horizontal by default, with the FAB beside it, and `Orientation="Vertical"` stacks its
+  items (the property took StackPanel's vertical default, so neither worked).
+- Keyboard: Tab reaches the content of a dialog before its buttons; the month of a calendar is one Tab stop
+  (the selected day, else today), the arrow keys move between the days; the modal date picker opens with the
+  focus on the selected day, and picker dialogs in input mode keep the focus in their field. Escape closes the
+  calendar of a `DateField` and, like Cancel, returns the focus to the field. Escape in a search bar leaves
+  the search like the back button.
+- Menus highlight the item under the pointer or the keyboard focus, no longer the item Avalonia selects when
+  a menu opens under the mouse. Menu separators (`Header="-"`) are a thin line with 8dp above and below
+  instead of a 44dp high bar.
+- An icon with a label in a button (a horizontal `StackPanel` with a `TextBlock`, also in a `SplitButton`)
+  centers the label.
+- Removed the unused `M3Converters.PercentToSweepAngle` and `M3Converters.CornerRadiusToDouble` and the
+  resource `M3ChevronRightGeometry` (use `M3ChevronRightIconGeometry`).
 
 ## 0.2.0 – 2026-10-27
 

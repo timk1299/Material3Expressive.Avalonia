@@ -212,7 +212,7 @@ Pressing a button morphs its corners to a tighter radius on the fast spatial spr
 | Control | Notes |
 |---|---|
 | `Slider` | Expressive slider: a thick track (primary and secondary container), a 4 px bar handle with 6 px gaps that narrows while dragged, and a stop dot. Sizes: `XSmall` (default, 16 px track), `Small`, `Medium`, `Large`, `XLarge` (96 px), horizontal or vertical. `ValueLabel` shows the value; `TickPlacement` + `TickFrequency` draw stop indicators. |
-| `TextBox`, `ComboBox` | Filled (default) or `Outlined` M3 text fields with `TextFieldAssist.Label` and `SupportingText`. `Search` for an M3 Expressive search bar (own search icon, widens when tapped, back and clear buttons). `TextFieldVariant="Outlined"` on the theme makes every field without a class of its own outlined (`Filled` keeps one filled). |
+| `TextBox`, `ComboBox` | Filled (default) or `Outlined` M3 text fields with `TextFieldAssist.Label` and `SupportingText`. `Search` for an M3 Expressive search bar (own search icon, widens when tapped, back and clear buttons; Escape leaves the search like the back button). `TextFieldVariant="Outlined"` on the theme makes every field without a class of its own outlined (`Filled` keeps one filled). |
 | `CheckBox`, `RadioButton`, `ToggleSwitch` | M3 selection controls; the switch handle moves on a spring. |
 
 ### Date and time pickers
@@ -276,7 +276,7 @@ A single-line `TextBox` (`AcceptsReturn="False"`) does not scroll vertically, so
 
 Scroll bars that should stay visible: set `AllowAutoHide="False"` on the `ScrollViewer`, or `ScrollViewer.AllowAutoHide="False"` on a `ListBox` or `TextBox`. The content then gets its own space beside the bars. Setting it on the `ScrollBar` instead keeps the bars visible but leaves them over the content.
 
-Icons: `PathIcon` stretches its geometry's bounds. For 24 px Material icon paths, add `M0 0h.01M24 24h-.01` to the path so the icon keeps its built-in padding (the demo does this), or use an icon package such as Material.Icons.Avalonia. Icon sizes inside buttons follow the button size (20, 24, 32 or 40 px).
+Icons: `PathIcon` stretches its geometry's bounds. For 24 px Material icon paths, add `M0 0h.01M24 24h-.01` to the path so the icon keeps its built-in padding (the demo does this), or use an icon package such as Material.Icons.Avalonia. Icon sizes inside buttons follow the button size (20, 24, 32 or 40 px). For an icon with a label, put a horizontal `StackPanel` with the `PathIcon` and a `TextBlock` into the button; the label is centered on the icon.
 
 ## Project layout
 
@@ -303,6 +303,7 @@ tests/Material3Expressive.Avalonia.Tests/    Color, motion and shape tests, head
 - Shapes are normalized to their exact outline, while androidx uses control-point bounds. They fill their box about 1–2% more than in Compose.
 - `Vibrant` and `Expressive` color variants use the hue-rotation tables from material-color-utilities with the standard tone mapping. They are close to MCU output but not identical, and the 2025 dynamic-color spec is not implemented.
 - Not implemented yet: the search app bar and search view, carousel, bottom and side sheets, the modal expanded navigation rail, range and centered sliders, inset slider icons, icons inside switch handles, and text-field prefix, suffix and character counter.
+- The date range picker pages through months in a dialog; the spec's full-screen picker with vertically scrolling months is not implemented.
 - In an outlined text field with a leading icon, the floating label stays aligned with the text instead of moving over the icon.
 - Roboto is bundled; the Expressive brand typeface (Google Sans Flex) is not.
 - `MotionScheme` changes apply to animations created after the change.
