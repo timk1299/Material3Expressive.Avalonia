@@ -10,7 +10,7 @@
     <NoWarn>$(NoWarn);CS1591</NoWarn>
 
     <PackageId>Material3Expressive.Avalonia</PackageId>
-    <Version>0.2.0</Version>
+    <Version>0.3.0</Version>
     <Description>Material 3 Expressive theme for Avalonia UI: spring motion, shape morphing, the Material shape library, expressive components (button groups, split buttons, FAB menu, loading indicator, toolbars) and dynamic color (HCT).</Description>
     <PackageTags>avalonia;material;material3;material-you;material-expressive;theme;design</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.0 – 2026-10-29
 
 - Scrollable tabs (`Classes="Scrollable"`) scroll: the tab strip lies in a `ScrollViewer` (scrolling off
   without the class, so other tabs keep their layout). Tabs that do not fit scroll sideways without a scroll
