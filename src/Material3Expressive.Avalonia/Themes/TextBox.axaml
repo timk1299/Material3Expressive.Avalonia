@@ -16,6 +16,17 @@
     The label is laid out at 12px (its floating size) and scaled up to 16px while resting.
     Avalonia applies the translation before the scale, so resting offsets are divided by 1.3333.
   -->
+  <!--
+    Context menu of a text field, one per field (Avalonia's DefaultTextBoxContextFlyout is one menu for all
+    fields). A field keeps its selection when it loses the focus while its context menu is open; with a
+    shared menu that is open for another field, a field touched before kept its selection highlighted.
+  -->
+  <MenuFlyout x:Key="M3TextBoxContextFlyout" x:Shared="False" ShowMode="{OnFormFactor Desktop=Standard, Mobile=Transient}">
+    <MenuItem Header="{DynamicResource StringTextFlyoutCutText}" Command="{Binding $parent[TextBox].Cut}" IsEnabled="{Binding $parent[TextBox].CanCut}" InputGesture="{x:Static TextBox.CutGesture}" />
+    <MenuItem Header="{DynamicResource StringTextFlyoutCopyText}" Command="{Binding $parent[TextBox].Copy}" IsEnabled="{Binding $parent[TextBox].CanCopy}" InputGesture="{x:Static TextBox.CopyGesture}" />
+    <MenuItem Header="{DynamicResource StringTextFlyoutPasteText}" Command="{Binding $parent[TextBox].Paste}" IsEnabled="{Binding $parent[TextBox].CanPaste}" InputGesture="{x:Static TextBox.PasteGesture}" />
+  </MenuFlyout>
+
   <ControlTheme x:Key="M3TextBox" TargetType="TextBox">
     <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
     <Setter Property="Background" Value="{DynamicResource M3SurfaceContainerHighestBrush}" />
@@ -32,7 +43,7 @@
     <Setter Property="VerticalContentAlignment" Value="Center" />
     <Setter Property="FocusAdorner" Value="{x:Null}" />
     <Setter Property="ScrollViewer.IsScrollChainingEnabled" Value="True" />
-    <Setter Property="ContextFlyout" Value="{DynamicResource DefaultTextBoxContextFlyout}" />
+    <Setter Property="ContextFlyout" Value="{DynamicResource M3TextBoxContextFlyout}" />
     <Setter Property="Template">
       <ControlTemplate>
         <DataValidationErrors>

@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Each text field has its own context menu (`M3TextBoxContextFlyout`, Cut · Copy · Paste) instead of
+  Avalonia's `DefaultTextBoxContextFlyout`, one menu for all fields. A field keeps its selection while it loses
+  the focus with its context menu open; with the shared menu open for another field, a field selected before
+  (e.g. by a long press on a touch screen) kept its selection highlighted.
+
 ## 0.3.0 – 2026-10-29
 
 - Scrollable tabs (`Classes="Scrollable"`) scroll: the tab strip lies in a `ScrollViewer` (scrolling off

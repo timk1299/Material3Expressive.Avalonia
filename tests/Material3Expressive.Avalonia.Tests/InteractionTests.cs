@@ -329,6 +329,31 @@ public class InteractionTests
     }
 
     [AvaloniaFact]
+    public void A_field_clears_its_selection_when_another_field_opens_its_context_menu()
+    {
+        Application.Current!.RequestedThemeVariant = ThemeVariant.Light;
+        var first = new TextBox { Text = "Anlage in Wartungsposition" };
+        var second = new TextBox { Text = "Reserve" };
+        var window = CreateWindow(new StackPanel { Margin = new Thickness(24), Spacing = 16, Children = { first, second } });
+        window.Show();
+        RenderingTests.Render(window);
+        Assert.NotSame(first.ContextFlyout, second.ContextFlyout);
+
+        first.Focus();
+        first.SelectAll();
+        // A long press on the second field selects a word there and opens its context menu before it takes the focus.
+        second.SelectAll();
+        second.ContextFlyout!.ShowAt(second);
+        second.Focus();
+        RenderingTests.Render(window);
+
+        Assert.Equal("", first.SelectedText);
+        Assert.Equal("Reserve", second.SelectedText);
+        second.ContextFlyout.Hide();
+        window.Close();
+    }
+
+    [AvaloniaFact]
     public void Search_bar_widens_while_active_and_its_back_button_leaves_it()
     {
         Application.Current!.RequestedThemeVariant = ThemeVariant.Light;
