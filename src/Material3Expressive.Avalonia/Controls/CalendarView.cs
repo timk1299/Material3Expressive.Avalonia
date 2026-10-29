@@ -284,6 +284,8 @@ public class CalendarView : TemplatedControl
         if (_dayGrid == null)
             return;
         _dayGrid.Children.Clear();
+        // One Tab stop for the month; the arrow keys move between the days.
+        KeyboardNavigation.SetTabNavigation(_dayGrid, KeyboardNavigationMode.Once);
         var theme = FindTheme("M3CalendarDayButton");
         for (var i = 0; i < Cells; i++)
         {
@@ -378,6 +380,21 @@ public class CalendarView : TemplatedControl
             button.Classes.Set("RangeStart", inMonth && hasBand && rangeStart);
             button.Classes.Set("RangeEnd", inMonth && hasBand && rangeEnd);
         }
+
+        // Tab enters the month at the selected day, else today, else the first selectable day.
+        Button? selectedDay = null, todayDay = null, firstDay = null;
+        foreach (var button in _days)
+        {
+            if (button is not { IsEnabled: true })
+                continue;
+            firstDay ??= button;
+            if (button.Classes.Contains("Selected"))
+                selectedDay ??= button;
+            if (button.Classes.Contains("Today"))
+                todayDay = button;
+        }
+
+        KeyboardNavigation.SetTabOnceActiveElement(_dayGrid, selectedDay ?? todayDay ?? firstDay);
     }
 
     private (DateTime? Start, DateTime? End) RangeBounds()

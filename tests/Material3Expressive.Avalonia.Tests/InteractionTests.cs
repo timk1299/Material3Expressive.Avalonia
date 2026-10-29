@@ -129,6 +129,47 @@ public class InteractionTests
     }
 
     [AvaloniaFact]
+    public void Menu_highlights_the_item_under_the_pointer_or_keyboard_focus_and_separators_are_thin()
+    {
+        Application.Current!.RequestedThemeVariant = ThemeVariant.Light;
+        var first = new MenuItem { Header = "New" };
+        var second = new MenuItem { Header = "Open" };
+        var separator = new MenuItem { Header = "-" };
+        var fileMenu = new MenuItem { Header = "File", ItemsSource = new[] { first, second, separator, new MenuItem { Header = "Close" } } };
+        var menu = new Menu { ItemsSource = new[] { fileMenu }, VerticalAlignment = VerticalAlignment.Top };
+        var window = CreateWindow(menu, 600, 400);
+        window.Show();
+        RenderingTests.Render(window);
+
+        static double StateLayer(MenuItem item) =>
+            item.GetVisualDescendants().OfType<Border>().Single(b => b.Name == "PART_StateLayer").Opacity;
+        window.MouseDown(Center(fileMenu, window), MouseButton.Left);
+        window.MouseUp(Center(fileMenu, window), MouseButton.Left);
+        RenderingTests.Render(window);
+        Assert.True(fileMenu.IsSubMenuOpen);
+        Assert.Equal(0, StateLayer(first));
+        // A menu in its own popup window focuses (and selects) an item as it opens: no highlight either.
+        first.Focus();
+        RenderingTests.Render(window);
+        Assert.Equal(0, StateLayer(first));
+        Assert.True(separator.Bounds.Height < 20, $"separator is {separator.Bounds.Height} high");
+
+        window.MouseMove(Center(second, window));
+        RenderingTests.Render(window);
+        Assert.True(StateLayer(second) > 0);
+        Assert.Equal(0, StateLayer(first));
+
+        window.KeyPress(Key.Up, RawInputModifiers.None, PhysicalKey.ArrowUp, null);
+        // Moving the mouse afterwards (without pointing at an item) keeps the keyboard highlight.
+        window.MouseMove(new Point(590, 390));
+        RenderingTests.Render(window);
+        Assert.True(first.IsFocused);
+        Assert.True(StateLayer(first) > 0);
+        Assert.Equal(0, StateLayer(second));
+        window.Close();
+    }
+
+    [AvaloniaFact]
     public void Navigation_bar_renders()
     {
         Application.Current!.RequestedThemeVariant = ThemeVariant.Light;
@@ -328,6 +369,13 @@ public class InteractionTests
         Assert.Equal(string.Empty, search.Text ?? string.Empty);
         Assert.False(search.IsFocused);
         Assert.Equal(new Thickness(12, 0), field.Margin);
+
+        // Escape leaves the search like the back button.
+        search.Focus();
+        search.Text = "valve";
+        window.KeyPress(Key.Escape, RawInputModifiers.None, PhysicalKey.Escape, null);
+        Assert.Equal(string.Empty, search.Text ?? string.Empty);
+        Assert.False(search.IsFocused);
         window.Close();
     }
 

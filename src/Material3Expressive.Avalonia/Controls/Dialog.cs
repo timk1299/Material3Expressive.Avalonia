@@ -138,7 +138,9 @@ public class Dialog : ContentControl
         {
             PseudoClasses.Set(":open", true);
             scrim.Classes.Add("Open");
-            Focus(NavigationMethod.Tab);
+            // Content that already took the focus (a picker's input field) keeps it.
+            if (!IsKeyboardFocusWithin)
+                Focus(NavigationMethod.Tab);
         }, DispatcherPriority.Background);
 
         return _completion.Task;

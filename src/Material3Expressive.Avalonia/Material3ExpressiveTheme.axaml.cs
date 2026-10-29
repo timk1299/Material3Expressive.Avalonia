@@ -112,6 +112,7 @@ public class Material3ExpressiveTheme : Styles
 
         SettledTransitions.Install();
         TextFieldAssist.Install();
+        MenuKeyboardFocus.Install();
         UpdateColors();
     }
 

@@ -291,15 +291,15 @@
                 CornerRadius="{TemplateBinding CornerRadius}"
                 Padding="{TemplateBinding Padding}"
                 BoxShadow="{DynamicResource M3Elevation3}">
-          <DockPanel>
+          <!-- Content before the buttons, so Tab reaches the content first -->
+          <Grid RowDefinitions="Auto,Auto,*,Auto">
             <ContentPresenter Name="PART_Icon"
-                              DockPanel.Dock="Top"
                               Margin="0,0,0,16"
                               HorizontalAlignment="Center"
                               Foreground="{DynamicResource M3SecondaryBrush}"
                               Content="{TemplateBinding Icon}" />
             <ContentPresenter Name="PART_Headline"
-                              DockPanel.Dock="Top"
+                              Grid.Row="1"
                               Margin="0,0,0,16"
                               Foreground="{DynamicResource M3OnSurfaceBrush}"
                               FontSize="24"
@@ -307,16 +307,17 @@
                               LetterSpacing="0"
                               TextWrapping="Wrap"
                               Content="{TemplateBinding Headline}" />
-            <ContentPresenter Name="PART_Buttons"
-                              DockPanel.Dock="Bottom"
-                              Margin="0,24,0,0"
-                              HorizontalAlignment="Right"
-                              Content="{TemplateBinding Buttons}" />
             <ContentPresenter Name="PART_ContentPresenter"
+                              Grid.Row="2"
                               LineHeight="20"
                               Content="{TemplateBinding Content}"
                               ContentTemplate="{TemplateBinding ContentTemplate}" />
-          </DockPanel>
+            <ContentPresenter Name="PART_Buttons"
+                              Grid.Row="3"
+                              Margin="0,24,0,0"
+                              HorizontalAlignment="Right"
+                              Content="{TemplateBinding Buttons}" />
+          </Grid>
         </Border>
       </ControlTemplate>
     </Setter>

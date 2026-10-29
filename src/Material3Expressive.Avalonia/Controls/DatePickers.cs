@@ -312,6 +312,9 @@ public class DatePickerPanel : TemplatedControl
         }
     }
 
+    /// <summary>Moves keyboard focus to the selected day (or today) in the calendar.</summary>
+    internal void FocusSelectedDay() => _calendar?.FocusDate(SelectedDate ?? SelectedStartDate ?? DateTime.Today);
+
     // Do not rewrite what the user is typing if it already means the same date.
     private bool IsFocusedValid(TextBox box, DateTime? value) =>
         box.IsFocused && DateInputFormat.TryParse(box.Text, EffectiveFormat, out var typed) && typed.Date == value?.Date;
@@ -450,7 +453,12 @@ public static class DatePickerDialog
             HorizontalAlignment = HorizontalAlignment.Right,
             Children = { dismiss, confirm },
         };
-        return dialog.ShowAsync(owner);
+        var shown = dialog.ShowAsync(owner);
+        // The arrow keys move through the days right away (the input mode focuses its field itself).
+        if (panel.DisplayMode == PickerDisplayMode.Picker)
+            global::Avalonia.Threading.Dispatcher.UIThread.Post(panel.FocusSelectedDay,
+                global::Avalonia.Threading.DispatcherPriority.Loaded);
+        return shown;
     }
 }
 
@@ -489,6 +497,7 @@ public class DateField : TemplatedControl
     private TextBox? _textBox;
     private Button? _button, _cancel, _ok;
     private CalendarView? _calendar;
+    private Popup? _popup;
     private bool _syncing;
 
     public DateTime? SelectedDate
@@ -552,6 +561,8 @@ public class DateField : TemplatedControl
             _cancel.Click -= OnCancel;
         if (_ok != null)
             _ok.Click -= OnOk;
+        if (_popup?.Child != null)
+            _popup.Child.KeyDown -= OnDropDownKeyDown;
         base.OnApplyTemplate(e);
 
         _textBox = e.NameScope.Find<TextBox>("PART_TextBox");
@@ -559,6 +570,7 @@ public class DateField : TemplatedControl
         _calendar = e.NameScope.Find<CalendarView>("PART_Calendar");
         _cancel = e.NameScope.Find<Button>("PART_Cancel");
         _ok = e.NameScope.Find<Button>("PART_Ok");
+        _popup = e.NameScope.Find<Popup>("PART_Popup");
         if (_textBox != null)
         {
             _textBox.LostFocus += OnTextBoxLostFocus;
@@ -574,6 +586,9 @@ public class DateField : TemplatedControl
             _ok.Click += OnOk;
         if (_calendar != null)
             _calendar.DateFilter = DateFilter;
+        // Escape closes the calendar like Cancel, from the days and from the buttons.
+        if (_popup?.Child != null)
+            _popup.Child.KeyDown += OnDropDownKeyDown;
 
         SyncText();
     }
@@ -665,7 +680,22 @@ public class DateField : TemplatedControl
         SetCurrentValue(IsDropDownOpenProperty, !IsDropDownOpen);
     }
 
-    private void OnCancel(object? sender, RoutedEventArgs e) => SetCurrentValue(IsDropDownOpenProperty, false);
+    private void OnCancel(object? sender, RoutedEventArgs e) => CloseDropDown();
+
+    private void OnDropDownKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Escape && IsDropDownOpen)
+        {
+            CloseDropDown();
+            e.Handled = true;
+        }
+    }
+
+    private void CloseDropDown()
+    {
+        SetCurrentValue(IsDropDownOpenProperty, false);
+        _textBox?.Focus();
+    }
 
     private void OnOk(object? sender, RoutedEventArgs e)
     {

@@ -120,7 +120,8 @@
     <Style Selector="^:icon /template/ ContentControl#PART_IconPresenter">
       <Setter Property="IsVisible" Value="True" />
     </Style>
-    <Style Selector="^:selected /template/ Border#PART_StateLayer">
+    <!-- Not :selected: opening a menu with the mouse selects its first item without the user pointing at it -->
+    <Style Selector="^:pointerover /template/ Border#PART_StateLayer, ^:focus-visible /template/ Border#PART_StateLayer">
       <Setter Property="Opacity" Value="{DynamicResource M3StateHoverOpacity}" />
     </Style>
     <Style Selector="^:pressed /template/ Border#PART_StateLayer">
@@ -138,9 +139,10 @@
       </Style>
     </Style>
     <Style Selector="^:separator">
+      <Setter Property="MinHeight" Value="0" />
       <Setter Property="Template">
         <ControlTemplate>
-          <Separator Margin="0,8" />
+          <Separator Height="1" Margin="0,8" />
         </ControlTemplate>
       </Setter>
     </Style>

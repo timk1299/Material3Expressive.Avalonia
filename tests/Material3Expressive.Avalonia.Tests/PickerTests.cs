@@ -166,6 +166,28 @@ public class PickerTests
     }
 
     [AvaloniaFact]
+    public void Tab_enters_the_month_once_at_the_selected_day()
+    {
+        var before = new Button { Content = "Before" };
+        var after = new Button { Content = "After" };
+        var calendar = new CalendarView { DisplayDate = new DateTime(2025, 8, 1), SelectedDate = new DateTime(2025, 8, 12) };
+        var window = Show(new StackPanel { Children = { before, calendar, after } });
+        before.Focus(NavigationMethod.Tab);
+
+        var visitedDays = new List<DateTime>();
+        for (var i = 0; i < 10 && !after.IsFocused; i++)
+        {
+            window.KeyPress(Key.Tab, RawInputModifiers.None, PhysicalKey.Tab, null);
+            if (window.FocusManager!.GetFocusedElement() is Button { Tag: DateTime day })
+                visitedDays.Add(day);
+        }
+
+        Assert.True(after.IsFocused);
+        Assert.Equal(new[] { new DateTime(2025, 8, 12) }, visitedDays);
+        window.Close();
+    }
+
+    [AvaloniaFact]
     public void Year_selection_jumps_to_another_year()
     {
         var calendar = new CalendarView { DisplayDate = new DateTime(2025, 8, 1), MinDate = new DateTime(2000, 1, 1), MaxDate = new DateTime(2040, 12, 31) };
@@ -234,6 +256,41 @@ public class PickerTests
     }
 
     [AvaloniaFact]
+    public void Date_picker_dialog_opens_with_the_focus_on_the_selected_day()
+    {
+        var host = new Panel();
+        var window = Show(host);
+        var task = DatePickerDialog.ShowAsync(host, new DateTime(2025, 8, 4));
+        Wait(300);
+        DateTime? Focused() => (window.FocusManager!.GetFocusedElement() as Button)?.Tag as DateTime?;
+        Assert.Equal(new DateTime(2025, 8, 4), Focused());
+        window.KeyPress(Key.Right, RawInputModifiers.None, PhysicalKey.ArrowRight, null);
+        Assert.Equal(new DateTime(2025, 8, 5), Focused());
+        window.KeyPress(Key.Escape, RawInputModifiers.None, PhysicalKey.Escape, null);
+        Assert.Null(Await(task));
+        window.Close();
+    }
+
+    [AvaloniaFact]
+    public void Picker_dialogs_in_input_mode_keep_the_focus_in_their_field()
+    {
+        var host = new Panel();
+        var window = Show(host);
+        var date = DatePickerDialog.ShowAsync(host, new DateTime(2025, 8, 4), displayMode: PickerDisplayMode.Input);
+        Wait(300);
+        Assert.Equal("PART_StartInput", (window.FocusManager!.GetFocusedElement() as TextBox)?.Name);
+        window.KeyPress(Key.Escape, RawInputModifiers.None, PhysicalKey.Escape, null);
+        Await(date);
+
+        var time = TimePickerDialog.ShowAsync(host, new TimeSpan(7, 15, 0), displayMode: PickerDisplayMode.Input);
+        Wait(300);
+        Assert.Equal("PART_HourInput", (window.FocusManager!.GetFocusedElement() as TextBox)?.Name);
+        window.KeyPress(Key.Escape, RawInputModifiers.None, PhysicalKey.Escape, null);
+        Await(time);
+        window.Close();
+    }
+
+    [AvaloniaFact]
     public void Date_range_dialog_returns_start_and_end()
     {
         var host = new Panel();
@@ -279,6 +336,32 @@ public class PickerTests
         Wait(100);
         Assert.False(field.IsDropDownOpen);
         Assert.Equal(new DateTime(2026, 3, 20), field.SelectedDate);
+        window.Close();
+    }
+
+    [AvaloniaFact]
+    public void Escape_and_cancel_close_the_docked_calendar_and_return_to_the_field()
+    {
+        var field = new DateField { Width = 300, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top };
+        var window = Show(new Panel { Margin = new Thickness(24), Children = { field } });
+        var text = field.GetVisualDescendants().OfType<TextBox>().Single(t => t.Name == "PART_TextBox");
+        var calendarButton = field.GetVisualDescendants().OfType<Button>().Single(b => b.Name == "PART_Button");
+
+        Click(window, calendarButton);
+        Wait(200);
+        Assert.True(field.IsDropDownOpen);
+        Assert.IsType<DateTime>((window.FocusManager!.GetFocusedElement() as Button)?.Tag);
+        window.KeyPress(Key.Escape, RawInputModifiers.None, PhysicalKey.Escape, null);
+        Wait(100);
+        Assert.False(field.IsDropDownOpen);
+        Assert.True(text.IsFocused);
+
+        Click(window, calendarButton);
+        Wait(200);
+        Click(window, ButtonWithText(window, "Cancel"));
+        Wait(100);
+        Assert.False(field.IsDropDownOpen);
+        Assert.True(text.IsFocused);
         window.Close();
     }
 

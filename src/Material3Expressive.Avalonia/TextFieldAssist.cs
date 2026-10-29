@@ -2,6 +2,7 @@ using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Input;
 
 namespace Material3Expressive.Avalonia;
 
@@ -25,6 +26,7 @@ public static class TextFieldAssist
 
     private static IDisposable? _templateApplied;
     private static IDisposable? _clearClicked;
+    private static IDisposable? _searchEscape;
 
     internal static TextFieldVariant DefaultVariant { get; set; }
 
@@ -67,10 +69,24 @@ public static class TextFieldAssist
             }
             else if (button.Name == "PART_BackButton")
             {
-                textBox.Clear();
-                TopLevel.GetTopLevel(textBox)?.FocusManager?.Focus(null);
+                LeaveSearch(textBox);
             }
         });
+        // Escape in a search bar leaves the search like the back button.
+        _searchEscape ??= InputElement.KeyDownEvent.AddClassHandler<TextBox>((textBox, e) =>
+        {
+            if (e.Key == Key.Escape && e.KeyModifiers == KeyModifiers.None && textBox.Classes.Contains("Search"))
+            {
+                LeaveSearch(textBox);
+                e.Handled = true;
+            }
+        });
+    }
+
+    private static void LeaveSearch(TextBox textBox)
+    {
+        textBox.Clear();
+        TopLevel.GetTopLevel(textBox)?.FocusManager?.Focus(null);
     }
 
     private static void ApplyDefaultVariant(TemplatedControl control)

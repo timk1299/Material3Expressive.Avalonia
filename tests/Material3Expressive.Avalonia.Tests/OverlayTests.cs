@@ -52,6 +52,32 @@ public class OverlayTests
     }
 
     [AvaloniaFact]
+    public void Tab_reaches_the_dialog_content_before_its_buttons()
+    {
+        var window = CreateWindow(out var anchor);
+        var field = new TextBox();
+        var cancel = new Button { Content = "Cancel", Classes = { "Text" } };
+        var dialog = new Dialog
+        {
+            Headline = "Rename",
+            Content = field,
+            Buttons = new StackPanel { Orientation = Orientation.Horizontal, Children = { cancel, new Button { Content = "OK", Classes = { "Text" } } } },
+        };
+        dialog.ShowAsync(anchor);
+        RenderingTests.Render(window);
+        Thread.Sleep(250);
+        RenderingTests.Render(window);
+        Assert.True(dialog.IsFocused);
+
+        window.KeyPress(Key.Tab, RawInputModifiers.None, PhysicalKey.Tab, null);
+        Assert.True(field.IsFocused);
+        window.KeyPress(Key.Tab, RawInputModifiers.None, PhysicalKey.Tab, null);
+        Assert.True(cancel.IsFocused);
+        dialog.Close();
+        window.Close();
+    }
+
+    [AvaloniaFact]
     public async Task Clicking_the_scrim_dismisses_the_dialog()
     {
         var window = CreateWindow(out var anchor);
