@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using Material3Expressive.Avalonia.Motion;

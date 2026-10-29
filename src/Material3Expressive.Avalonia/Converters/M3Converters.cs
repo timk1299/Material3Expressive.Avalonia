@@ -7,10 +7,6 @@ namespace Material3Expressive.Avalonia.Converters;
 
 public static class M3Converters
 {
-    /// <summary>ProgressBar percentage (0–100) to an arc sweep angle in degrees.</summary>
-    public static readonly IValueConverter PercentToSweepAngle =
-        new FuncValueConverter<double, double>(p => Math.Clamp(p, 0, 100) * 3.6);
-
     /// <summary>
     /// Width of a floating label (laid out at 12px) to the width of the outline notch around it.
     /// </summary>
@@ -24,10 +20,6 @@ public static class M3Converters
     /// <summary>True when a string is not null or empty.</summary>
     public static readonly IValueConverter IsNotNullOrEmpty =
         new FuncValueConverter<string?, bool>(s => !string.IsNullOrEmpty(s));
-
-    /// <summary>Uniform corner radius taken from the top-left corner.</summary>
-    public static readonly IValueConverter CornerRadiusToDouble =
-        new FuncValueConverter<CornerRadius, double>(c => c.TopLeft);
 
     /// <summary>Corner radius grown by the converter parameter (focus ring outset).</summary>
     public static readonly IValueConverter InflateCornerRadius = new InflateCornerRadiusConverter();

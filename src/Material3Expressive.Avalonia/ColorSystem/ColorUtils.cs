@@ -69,8 +69,6 @@ internal static class ColorUtils
 
     public static double YFromLstar(double lstar) => 100.0 * LabInvf((lstar + 16.0) / 116.0);
 
-    public static double LstarFromY(double y) => LabF(y / 100.0) * 116.0 - 16.0;
-
     /// <summary>Linearizes an 8-bit sRGB component to 0..100.</summary>
     public static double Linearized(int rgbComponent)
     {
