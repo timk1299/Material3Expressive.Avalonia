@@ -193,7 +193,7 @@
                              IsVisible="{TemplateBinding IsEditable}" />
                   </Panel>
                 </DockPanel>
-                <TextBlock Name="PART_Label"
+                <controls:FieldLabel Name="PART_Label"
                            Margin="16,8,0,0"
                            VerticalAlignment="Top"
                            Text="{TemplateBinding (m3:TextFieldAssist.Label)}"
@@ -208,13 +208,13 @@
                            IsVisible="False"
                            RenderTransformOrigin="0%,0%"
                            RenderTransform="translate(0px,0px) scale(1)">
-                  <TextBlock.Transitions>
+                  <controls:FieldLabel.Transitions>
                     <Transitions>
                       <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.15" Easing="CubicEaseOut" />
                       <BrushTransition Property="Foreground" Duration="0:0:0.15" />
                     </Transitions>
-                  </TextBlock.Transitions>
-                </TextBlock>
+                  </controls:FieldLabel.Transitions>
+                </controls:FieldLabel>
                 <PathIcon Name="DropDownGlyph"
                           Grid.Column="1"
                           Width="10"
@@ -295,6 +295,7 @@
     <!-- Resting label: nothing selected and closed -->
     <Style Selector="^[SelectedIndex=-1]:not(:dropdownopen):not(:focus-visible) /template/ TextBlock#PART_Label">
       <Setter Property="RenderTransform" Value="translate(0px,7px) scale(1.3333)" />
+      <Setter Property="controls:FieldLabel.RestingScale" Value="1.3333" />
     </Style>
 
     <Style Selector="^:dropdownopen /template/ PathIcon#DropDownGlyph">
@@ -335,6 +336,7 @@
       </Style>
       <Style Selector="^[SelectedIndex=-1]:not(:dropdownopen):not(:focus-visible) /template/ TextBlock#PART_Label">
         <Setter Property="RenderTransform" Value="translate(0px,7px) scale(1.3333)" />
+        <Setter Property="controls:FieldLabel.RestingScale" Value="1.3333" />
       </Style>
       <Style Selector="^.HasLabel /template/ controls|OutlineBorder#PART_Outline">
         <Setter Property="GapProgress" Value="1" />

@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- The label of a text field or combo box resting in an empty field is trimmed with "…" at its resting size
+  inside the field. It was laid out at its 12px floating size and only drawn at 16px, so a label that fit
+  floating reached past the field while resting. The label is a `FieldLabel` (a `TextBlock`, styled as one)
+  whose `RestingScale` goes with the resting scale of its render transform.
+
 ## 0.3.1 – 2026-10-29
 
 - Each text field has its own context menu (`M3TextBoxContextFlyout`, Cut · Copy · Paste) instead of

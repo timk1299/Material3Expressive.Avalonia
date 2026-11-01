@@ -15,6 +15,7 @@
 
     The label is laid out at 12px (its floating size) and scaled up to 16px while resting.
     Avalonia applies the translation before the scale, so resting offsets are divided by 1.3333.
+    FieldLabel.RestingScale goes with the resting scale: the label is trimmed at its resting size.
   -->
   <!--
     Context menu of a text field, one per field (Avalonia's DefaultTextBoxContextFlyout is one menu for all
@@ -187,7 +188,7 @@
                     </ScrollViewer.Styles>
                   </ScrollViewer>
                 </DockPanel>
-                <TextBlock Name="PART_Label"
+                <controls:FieldLabel Name="PART_Label"
                            Grid.Column="1"
                            Margin="16,8,16,0"
                            VerticalAlignment="Top"
@@ -202,14 +203,15 @@
                            IsHitTestVisible="False"
                            IsVisible="False"
                            RenderTransformOrigin="0%,0%"
-                           RenderTransform="translate(0px,7px) scale(1.3333)">
-                  <TextBlock.Transitions>
+                           RenderTransform="translate(0px,7px) scale(1.3333)"
+                           RestingScale="1.3333">
+                  <controls:FieldLabel.Transitions>
                     <Transitions>
                       <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.15" Easing="CubicEaseOut" />
                       <BrushTransition Property="Foreground" Duration="0:0:0.15" />
                     </Transitions>
-                  </TextBlock.Transitions>
-                </TextBlock>
+                  </controls:FieldLabel.Transitions>
+                </controls:FieldLabel>
                 <!-- Search bar: clears the text (TextFieldAssist); shown while active or while there is text -->
                 <Button Name="PART_ClearButton"
                         Grid.Column="2"
@@ -289,6 +291,7 @@
     <!-- Floating -->
     <Style Selector="^:focus /template/ TextBlock#PART_Label, ^:not(:empty) /template/ TextBlock#PART_Label">
       <Setter Property="RenderTransform" Value="translate(0px,0px) scale(1)" />
+      <Setter Property="controls:FieldLabel.RestingScale" Value="1" />
     </Style>
 
     <!-- ===== Filled states ===== -->
