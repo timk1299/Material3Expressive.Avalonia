@@ -63,7 +63,7 @@ public partial class ShapesPage : UserControl
 
     private void ChangeProgress(double delta)
     {
-        foreach (var bar in new[] { LinearFlat, LinearWavy, CircularFlat, CircularWavy })
+        foreach (var bar in new[] { LinearFlat, LinearWavy, CircularFlat, CircularWavy, VerticalFlat, VerticalWavy })
             bar.Value = Math.Clamp(bar.Value + delta, 0, 100);
     }
 

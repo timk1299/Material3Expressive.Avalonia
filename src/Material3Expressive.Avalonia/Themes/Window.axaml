@@ -26,4 +26,228 @@
       </ControlTemplate>
     </Setter>
   </ControlTheme>
+
+  <!--
+    Title bar, frame and shadow of a window that draws its own decorations: with
+    ExtendClientAreaToDecorationsHint, and where the platform has no decorations of its own.
+    Surface-container bar (40dp) with the title and caption buttons with a state layer; the close
+    button turns to the error color under the pointer.
+  -->
+  <StreamGeometry x:Key="M3CaptionMinimizeGeometry">M0.5,5.5 H9.5</StreamGeometry>
+  <StreamGeometry x:Key="M3CaptionMaximizeGeometry">M0.5,0.5 H9.5 V9.5 H0.5 Z</StreamGeometry>
+  <StreamGeometry x:Key="M3CaptionRestoreGeometry">M0.5,2.5 H7.5 V9.5 H0.5 Z M2.5,2.5 V0.5 H9.5 V7.5 H7.5</StreamGeometry>
+  <StreamGeometry x:Key="M3CaptionCloseGeometry">M0,0 L10,10 M10,0 L0,10</StreamGeometry>
+  <StreamGeometry x:Key="M3CaptionFullScreenGeometry">M0.5,3.5 V0.5 H3.5 M6.5,0.5 H9.5 V3.5 M9.5,6.5 V9.5 H6.5 M3.5,9.5 H0.5 V6.5</StreamGeometry>
+  <StreamGeometry x:Key="M3CaptionExitFullScreenGeometry">M3.5,0.5 V3.5 H0.5 M6.5,0.5 V3.5 H9.5 M9.5,6.5 H6.5 V9.5 M0.5,6.5 H3.5 V9.5</StreamGeometry>
+
+  <ControlTheme x:Key="M3CaptionButton" TargetType="Button">
+    <Setter Property="Background" Value="{DynamicResource M3OnSurfaceBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+    <Setter Property="Width" Value="46" />
+    <Setter Property="VerticalAlignment" Value="Stretch" />
+    <Setter Property="Focusable" Value="False" />
+    <Setter Property="(WindowDecorationProperties.ElementRole)" Value="DecorationsElement" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Panel Background="Transparent">
+          <Border Name="PART_StateLayer"
+                  Background="{TemplateBinding Background}"
+                  Opacity="0"
+                  IsHitTestVisible="False">
+            <Border.Transitions>
+              <Transitions>
+                <DoubleTransition Property="Opacity" Duration="0:0:0.1" />
+              </Transitions>
+            </Border.Transitions>
+          </Border>
+          <Path Name="PART_Icon"
+                Width="10"
+                Height="10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Data="{TemplateBinding Tag}"
+                Stroke="{TemplateBinding Foreground}"
+                StrokeThickness="1.2"
+                StrokeLineCap="Round"
+                StrokeJoin="Round" />
+        </Panel>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:pointerover /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StateHoverOpacity}" />
+    </Style>
+    <Style Selector="^:pressed /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="{DynamicResource M3StatePressedOpacity}" />
+    </Style>
+    <Style Selector="^:disabled /template/ Path#PART_Icon">
+      <Setter Property="Opacity" Value="{DynamicResource M3DisabledContentOpacity}" />
+    </Style>
+    <!-- Close: error container under the pointer -->
+    <Style Selector="^.Close:pointerover">
+      <Setter Property="Background" Value="{DynamicResource M3ErrorBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource M3OnErrorBrush}" />
+      <Style Selector="^ /template/ Border#PART_StateLayer">
+        <Setter Property="Opacity" Value="1" />
+      </Style>
+    </Style>
+    <Style Selector="^.Close:pressed /template/ Border#PART_StateLayer">
+      <Setter Property="Opacity" Value="0.88" />
+    </Style>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type WindowDrawnDecorations}" TargetType="WindowDrawnDecorations">
+    <Setter Property="DefaultTitleBarHeight" Value="40" />
+    <Setter Property="DefaultFrameThickness" Value="1" />
+    <Setter Property="DefaultShadowThickness" Value="8" />
+    <Setter Property="Template">
+      <WindowDrawnDecorationsTemplate>
+        <WindowDrawnDecorationsContent>
+
+          <WindowDrawnDecorationsContent.Underlay>
+            <Panel Name="PART_UnderlayWrapper">
+              <Border Name="PART_WindowBorder"
+                      Background="Transparent"
+                      BorderThickness="{TemplateBinding FrameThickness}"
+                      BorderBrush="{DynamicResource M3OutlineVariantBrush}"
+                      IsHitTestVisible="False" />
+              <!-- Background and drag area of the title bar -->
+              <Panel Name="PART_TitleBar"
+                     VerticalAlignment="Top"
+                     Height="{TemplateBinding TitleBarHeight}"
+                     Background="{DynamicResource M3SurfaceContainerBrush}"
+                     IsVisible="{TemplateBinding HasTitleBar}"
+                     WindowDecorationProperties.ElementRole="TitleBar" />
+            </Panel>
+          </WindowDrawnDecorationsContent.Underlay>
+
+          <WindowDrawnDecorationsContent.Overlay>
+            <Panel Name="PART_OverlayWrapper">
+              <!-- The title is in the overlay so that it is drawn above the content of the window -->
+              <Panel Name="PART_TitleTextPanel"
+                     VerticalAlignment="Top"
+                     Height="{TemplateBinding TitleBarHeight}"
+                     IsHitTestVisible="False"
+                     IsVisible="{TemplateBinding HasTitleBar}">
+                <TextBlock Name="PART_Title"
+                           Margin="16,0,152,0"
+                           VerticalAlignment="Center"
+                           FontFamily="{DynamicResource M3FontFamily}"
+                           FontSize="14"
+                           FontWeight="Medium"
+                           LetterSpacing="0.1"
+                           Foreground="{DynamicResource M3OnSurfaceBrush}"
+                           TextTrimming="CharacterEllipsis"
+                           Text="{TemplateBinding Title}" />
+              </Panel>
+              <StackPanel Name="PART_OverlayPanel"
+                          VerticalAlignment="Top"
+                          HorizontalAlignment="Right"
+                          Height="{TemplateBinding TitleBarHeight}"
+                          IsVisible="{TemplateBinding HasTitleBar}"
+                          Orientation="Horizontal">
+                <Button Name="PART_FullScreenButton"
+                        Theme="{StaticResource M3CaptionButton}"
+                        Tag="{StaticResource M3CaptionFullScreenGeometry}"
+                        WindowDecorationProperties.ElementRole="FullScreenButton" />
+                <Button Name="PART_MinimizeButton"
+                        Theme="{StaticResource M3CaptionButton}"
+                        Tag="{StaticResource M3CaptionMinimizeGeometry}"
+                        WindowDecorationProperties.ElementRole="MinimizeButton" />
+                <Button Name="PART_MaximizeButton"
+                        Theme="{StaticResource M3CaptionButton}"
+                        Tag="{StaticResource M3CaptionMaximizeGeometry}"
+                        WindowDecorationProperties.ElementRole="MaximizeButton" />
+                <Button Name="PART_CloseButton"
+                        Classes="Close"
+                        Theme="{StaticResource M3CaptionButton}"
+                        Tag="{StaticResource M3CaptionCloseGeometry}"
+                        WindowDecorationProperties.ElementRole="CloseButton" />
+              </StackPanel>
+            </Panel>
+          </WindowDrawnDecorationsContent.Overlay>
+
+          <!-- Shown at the top edge of a full-screen window -->
+          <WindowDrawnDecorationsContent.FullscreenPopover>
+            <Panel Height="{TemplateBinding DefaultTitleBarHeight}"
+                   VerticalAlignment="Top"
+                   Background="{DynamicResource M3SurfaceContainerHighBrush}"
+                   WindowDecorationProperties.ElementRole="DecorationsElement">
+              <TextBlock Margin="16,0,108,0"
+                         VerticalAlignment="Center"
+                         FontFamily="{DynamicResource M3FontFamily}"
+                         FontSize="14"
+                         FontWeight="Medium"
+                         LetterSpacing="0.1"
+                         Foreground="{DynamicResource M3OnSurfaceBrush}"
+                         TextTrimming="CharacterEllipsis"
+                         Text="{TemplateBinding Title}" />
+              <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                <Button Name="PART_PopoverFullScreenButton"
+                        Theme="{StaticResource M3CaptionButton}"
+                        Tag="{StaticResource M3CaptionExitFullScreenGeometry}"
+                        WindowDecorationProperties.ElementRole="FullScreenButton" />
+                <Button Name="PART_PopoverCloseButton"
+                        Classes="Close"
+                        Theme="{StaticResource M3CaptionButton}"
+                        Tag="{StaticResource M3CaptionCloseGeometry}"
+                        WindowDecorationProperties.ElementRole="CloseButton" />
+              </StackPanel>
+            </Panel>
+          </WindowDrawnDecorationsContent.FullscreenPopover>
+
+        </WindowDrawnDecorationsContent>
+      </WindowDrawnDecorationsTemplate>
+    </Setter>
+
+    <!-- Shadow: the frame and the title bar leave room for it -->
+    <Style Selector="^:has-shadow /template/ Panel#PART_UnderlayWrapper">
+      <Setter Property="Margin" Value="{TemplateBinding ShadowThickness}" />
+    </Style>
+    <Style Selector="^:has-shadow /template/ Border#PART_WindowBorder">
+      <Setter Property="BoxShadow" Value="0 2 10 2 #66000000" />
+    </Style>
+    <Style Selector="^:has-shadow /template/ Panel#PART_OverlayWrapper">
+      <Setter Property="Margin" Value="{TemplateBinding ShadowThickness}" />
+    </Style>
+
+    <!-- Frame: title bar and buttons lie inside it -->
+    <Style Selector="^:has-border /template/ Panel#PART_TitleTextPanel">
+      <Setter Property="Margin" Value="1,1,1,0" />
+    </Style>
+    <Style Selector="^:has-border /template/ Panel#PART_TitleBar">
+      <Setter Property="Margin" Value="1,1,1,0" />
+    </Style>
+    <Style Selector="^:has-border /template/ StackPanel#PART_OverlayPanel">
+      <Setter Property="Margin" Value="0,1,1,0" />
+    </Style>
+
+    <Style Selector="^:maximized /template/ Button#PART_MaximizeButton">
+      <Setter Property="Tag" Value="{StaticResource M3CaptionRestoreGeometry}" />
+    </Style>
+
+    <!-- Actions the platform does not offer have no button -->
+    <Style Selector="^:not(:has-minimize) /template/ Button#PART_MinimizeButton">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^:not(:has-maximize) /template/ Button#PART_MaximizeButton">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^:not(:has-fullscreen) /template/ Button#PART_FullScreenButton">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^:not(:has-fullscreen) /template/ Button#PART_PopoverFullScreenButton">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <!-- Full screen: the popover takes over -->
+    <Style Selector="^:fullscreen /template/ Panel#PART_TitleTextPanel">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^:fullscreen /template/ StackPanel#PART_OverlayPanel">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="^:fullscreen /template/ Panel#PART_TitleBar">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+  </ControlTheme>
 </ResourceDictionary>

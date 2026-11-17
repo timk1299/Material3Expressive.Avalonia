@@ -1,0 +1,42 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!--
+    The texts of the theme. To localize them, define resources with these keys in the resources of
+    the application (or of a window): they take precedence over the ones here.
+  -->
+  <x:String x:Key="M3StringOk">OK</x:String>
+  <x:String x:Key="M3StringCancel">Cancel</x:String>
+  <x:String x:Key="M3StringSave">Save</x:String>
+
+  <!-- Search bar (names for assistive technology) -->
+  <x:String x:Key="M3StringBack">Back</x:String>
+  <x:String x:Key="M3StringClear">Clear</x:String>
+
+  <!-- Date pickers -->
+  <x:String x:Key="M3StringDate">Date</x:String>
+  <x:String x:Key="M3StringStartDate">Start date</x:String>
+  <x:String x:Key="M3StringEndDate">End date</x:String>
+  <x:String x:Key="M3StringSelectedDate">Selected date</x:String>
+  <x:String x:Key="M3StringSelectDate">Select date</x:String>
+  <x:String x:Key="M3StringSelectDates">Select dates</x:String>
+  <x:String x:Key="M3StringPreviousMonth">Previous month</x:String>
+  <x:String x:Key="M3StringNextMonth">Next month</x:String>
+  <x:String x:Key="M3StringOpenCalendar">Open calendar</x:String>
+  <x:String x:Key="M3StringSwitchDateInput">Switch between calendar and keyboard input</x:String>
+  <!-- {0}: the expected pattern, e.g. mm/dd/yyyy -->
+  <x:String x:Key="M3StringDateFormatError">Date does not match expected pattern: {0}</x:String>
+  <x:String x:Key="M3StringDateRangeError">Date out of expected range</x:String>
+  <x:String x:Key="M3StringEndBeforeStartError">End date is before the start date</x:String>
+
+  <!-- Time pickers -->
+  <x:String x:Key="M3StringTime">Time</x:String>
+  <x:String x:Key="M3StringSelectTime">Select time</x:String>
+  <x:String x:Key="M3StringEnterTime">Enter time</x:String>
+  <x:String x:Key="M3StringHour">Hour</x:String>
+  <x:String x:Key="M3StringMinute">Minute</x:String>
+  <x:String x:Key="M3StringOpenTimePicker">Open time picker</x:String>
+  <x:String x:Key="M3StringSwitchTimeInput">Switch between clock and keyboard input</x:String>
+  <x:String x:Key="M3StringTimeFormatError24">Use hh:mm</x:String>
+  <x:String x:Key="M3StringTimeFormatError12">Use h:mm AM/PM</x:String>
+</ResourceDictionary>

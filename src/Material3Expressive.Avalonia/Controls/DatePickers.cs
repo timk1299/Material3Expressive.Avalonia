@@ -10,6 +10,7 @@ using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
+using Avalonia.LogicalTree;
 
 namespace Material3Expressive.Avalonia.Controls;
 
@@ -119,6 +120,14 @@ public class DatePickerPanel : TemplatedControl
         UpdateHeadline();
     }
 
+    protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToLogicalTree(e);
+        // Texts that the window replaces in its resources are found from here on.
+        RaisePropertyChanged(EffectiveTitleProperty, "", EffectiveTitle);
+        UpdateHeadline();
+    }
+
     public DateTime? SelectedDate
     {
         get => GetValue(SelectedDateProperty);
@@ -169,7 +178,7 @@ public class DatePickerPanel : TemplatedControl
         set => SetValue(DisplayModeProperty, value);
     }
 
-    /// <summary>Title above the headline. Default "Select date" / "Select dates".</summary>
+    /// <summary>Title above the headline. Default: the texts <c>M3StringSelectDate</c> / <c>M3StringSelectDates</c>.</summary>
     public string? Title
     {
         get => GetValue(TitleProperty);
@@ -197,7 +206,9 @@ public class DatePickerPanel : TemplatedControl
         private set => SetAndRaise(HeadlineProperty, ref _headline, value);
     }
 
-    public string EffectiveTitle => Title ?? (SelectionMode == DateSelectionMode.Range ? "Select dates" : "Select date");
+    public string EffectiveTitle => Title ?? (SelectionMode == DateSelectionMode.Range
+        ? M3Strings.Get(this, "M3StringSelectDates", "Select dates")
+        : M3Strings.Get(this, "M3StringSelectDate", "Select date"));
 
     /// <summary>Optional rule for which dates can be selected.</summary>
     public Func<DateTime, bool>? DateFilter
@@ -290,12 +301,12 @@ public class DatePickerPanel : TemplatedControl
         static string Short(DateTime d) => d.ToString("MMM d", CultureInfo.CurrentCulture);
         if (SelectionMode == DateSelectionMode.Single)
         {
-            Headline = SelectedDate is { } d ? Day(d) : "Selected date";
+            Headline = SelectedDate is { } d ? Day(d) : M3Strings.Get(this, "M3StringSelectedDate", "Selected date");
         }
         else
         {
-            var start = SelectedStartDate is { } s ? Short(s) : "Start date";
-            var end = SelectedEndDate is { } e ? Short(e) : "End date";
+            var start = SelectedStartDate is { } s ? Short(s) : M3Strings.Get(this, "M3StringStartDate", "Start date");
+            var end = SelectedEndDate is { } e ? Short(e) : M3Strings.Get(this, "M3StringEndDate", "End date");
             Headline = $"{start} – {end}";
         }
     }
@@ -341,7 +352,7 @@ public class DatePickerPanel : TemplatedControl
             end = parsedEnd;
         if (startOk && endOk && start != null && end != null && end < start)
         {
-            DataValidationErrors.SetErrors(_endInput!, new object[] { "End date is before the start date" });
+            DataValidationErrors.SetErrors(_endInput!, new object[] { M3Strings.Get(this, "M3StringEndBeforeStartError", "End date is before the start date") });
             endOk = false;
         }
 
@@ -378,11 +389,12 @@ public class DatePickerPanel : TemplatedControl
         }
         else if (!DateInputFormat.TryParse(box.Text, EffectiveFormat, out var parsed))
         {
-            error = $"Date does not match expected pattern: {DateInputFormat.Placeholder(EffectiveFormat)}";
+            error = M3Strings.Format(this, "M3StringDateFormatError", "Date does not match expected pattern: {0}",
+                DateInputFormat.Placeholder(EffectiveFormat));
         }
         else if (parsed.Date < MinDate.Date || parsed.Date > MaxDate.Date || DateFilter?.Invoke(parsed.Date) == false)
         {
-            error = "Date out of expected range";
+            error = M3Strings.Get(this, "M3StringDateRangeError", "Date out of expected range");
         }
         else
         {
@@ -402,11 +414,12 @@ public static class DatePickerDialog
     /// </summary>
     public static async Task<DateTime?> ShowAsync(Visual owner, DateTime? initialDate = null, DateTime? minDate = null,
         DateTime? maxDate = null, Func<DateTime, bool>? dateFilter = null, PickerDisplayMode displayMode = PickerDisplayMode.Picker,
-        string? title = null, string confirmText = "OK", string dismissText = "Cancel")
+        string? title = null, string? confirmText = null, string? dismissText = null)
     {
         var panel = CreatePanel(DateSelectionMode.Single, initialDate, minDate, maxDate, dateFilter, displayMode, title);
         panel.SelectedDate = initialDate?.Date;
-        var result = await Show(owner, panel, confirmText, dismissText, () => panel.SelectedDate);
+        var result = await Show(owner, panel, confirmText ?? M3Strings.Get(owner as StyledElement, "M3StringOk", "OK"),
+            dismissText, () => panel.SelectedDate);
         return result as DateTime?;
     }
 
@@ -415,13 +428,14 @@ public static class DatePickerDialog
     /// </summary>
     public static async Task<(DateTime Start, DateTime End)?> ShowRangeAsync(Visual owner, DateTime? initialStart = null,
         DateTime? initialEnd = null, DateTime? minDate = null, DateTime? maxDate = null, Func<DateTime, bool>? dateFilter = null,
-        PickerDisplayMode displayMode = PickerDisplayMode.Picker, string? title = null, string confirmText = "Save",
-        string dismissText = "Cancel")
+        PickerDisplayMode displayMode = PickerDisplayMode.Picker, string? title = null, string? confirmText = null,
+        string? dismissText = null)
     {
         var panel = CreatePanel(DateSelectionMode.Range, initialStart, minDate, maxDate, dateFilter, displayMode, title);
         panel.SelectedStartDate = initialStart?.Date;
         panel.SelectedEndDate = initialEnd?.Date;
-        var result = await Show(owner, panel, confirmText, dismissText, () =>
+        var result = await Show(owner, panel, confirmText ?? M3Strings.Get(owner as StyledElement, "M3StringSave", "Save"),
+            dismissText, () =>
             panel.SelectedStartDate is { } s ? (s, panel.SelectedEndDate ?? s) : null);
         return result as (DateTime, DateTime)?;
     }
@@ -444,9 +458,10 @@ public static class DatePickerDialog
         return panel;
     }
 
-    private static Task<object?> Show(Visual owner, DatePickerPanel panel, string confirmText, string dismissText,
+    private static Task<object?> Show(Visual owner, DatePickerPanel panel, string confirmText, string? dismissText,
         Func<object?> result)
     {
+        dismissText ??= M3Strings.Get(owner as StyledElement, "M3StringCancel", "Cancel");
         var dialog = new Dialog { Classes = { "Picker" }, Content = panel };
         var confirm = new Button { Classes = { "Text" }, Content = confirmText };
         var dismiss = new Button { Classes = { "Text" }, Content = dismissText };
@@ -493,7 +508,7 @@ public class DateField : TemplatedControl
         CalendarView.MaxDateProperty.AddOwner<DateField>();
 
     public static readonly StyledProperty<string?> LabelProperty =
-        AvaloniaProperty.Register<DateField, string?>(nameof(Label), "Date");
+        AvaloniaProperty.Register<DateField, string?>(nameof(Label));
 
     public static readonly StyledProperty<string?> DateFormatProperty =
         DatePickerPanel.DateFormatProperty.AddOwner<DateField>();
@@ -529,7 +544,7 @@ public class DateField : TemplatedControl
         set => SetValue(MaxDateProperty, value);
     }
 
-    /// <summary>Floating label of the field. Default "Date".</summary>
+    /// <summary>Floating label of the field. The theme sets the text <c>M3StringDate</c> ("Date").</summary>
     public string? Label
     {
         get => GetValue(LabelProperty);
@@ -661,13 +676,16 @@ public class DateField : TemplatedControl
 
         if (!DateInputFormat.TryParse(text, EffectiveFormat, out var date))
         {
-            DataValidationErrors.SetErrors(_textBox, new object[] { $"Date does not match expected pattern: {Placeholder}" });
+            DataValidationErrors.SetErrors(_textBox, new object[]
+            {
+                M3Strings.Format(this, "M3StringDateFormatError", "Date does not match expected pattern: {0}", Placeholder),
+            });
             return;
         }
 
         if (date.Date < MinDate.Date || date.Date > MaxDate.Date || DateFilter?.Invoke(date.Date) == false)
         {
-            DataValidationErrors.SetErrors(_textBox, new object[] { "Date out of expected range" });
+            DataValidationErrors.SetErrors(_textBox, new object[] { M3Strings.Get(this, "M3StringDateRangeError", "Date out of expected range") });
             return;
         }
 

@@ -17,12 +17,12 @@
           <TextBlock Classes="TitleMediumEmphasized" Text="Date and time fields" />
           <TextBlock Classes="BodyMedium OnSurfaceVariant" TextWrapping="Wrap"
                      Text="Type a date or time, or use the button: dates open the docked calendar, times open the time picker dialog." />
-          <StackPanel Orientation="Horizontal" Spacing="24">
+          <WrapPanel ItemSpacing="24" LineSpacing="12">
             <m3:DateField Name="BirthdayField" Width="260" Label="Date of birth" VerticalAlignment="Top" />
             <m3:DateField Classes="Outlined" Width="260" Label="Check-in" VerticalAlignment="Top" />
             <m3:TimeField Name="AlarmField" Width="220" Label="Alarm" VerticalAlignment="Top" />
             <m3:TimeField Classes="Outlined" Width="220" Label="Meeting" VerticalAlignment="Top" />
-          </StackPanel>
+          </WrapPanel>
         </StackPanel>
       </m3:Card>
 

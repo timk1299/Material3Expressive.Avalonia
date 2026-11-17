@@ -126,7 +126,7 @@
                             Opacity="0"
                             IsHitTestVisible="False"
                             Foreground="{DynamicResource M3OnSurfaceBrush}"
-                            AutomationProperties.Name="Back">
+                            AutomationProperties.Name="{DynamicResource M3StringBack}">
                       <PathIcon Width="24" Height="24" Data="{StaticResource M3ChevronLeftGeometry}" />
                       <Button.Transitions>
                         <Transitions>
@@ -228,7 +228,7 @@
                         IsHitTestVisible="False"
                         Opacity="0"
                         RenderTransform="scale(0.6)"
-                        AutomationProperties.Name="Clear">
+                        AutomationProperties.Name="{DynamicResource M3StringClear}">
                   <PathIcon Width="24" Height="24" Data="{StaticResource M3CloseIconGeometry}" />
                   <Button.Transitions>
                     <Transitions>

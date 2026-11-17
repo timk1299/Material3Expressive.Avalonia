@@ -36,17 +36,17 @@
             <TextBlock Classes="TitleMediumEmphasized" Text="Loading indicators" />
             <TextBlock Classes="BodyMedium OnSurfaceVariant" TextWrapping="Wrap"
                        Text="A shape morphing through the Material shape library while it rotates." />
-            <StackPanel Orientation="Horizontal" Spacing="24">
+            <WrapPanel ItemSpacing="24" LineSpacing="12">
               <m3:LoadingIndicator VerticalAlignment="Center" />
               <m3:LoadingIndicator Classes="Contained" VerticalAlignment="Center" />
               <m3:LoadingIndicator Classes="Contained" Width="96" Height="96" VerticalAlignment="Center" />
               <m3:LoadingIndicator Name="CustomLoading" Foreground="{DynamicResource M3TertiaryBrush}" Width="72" Height="72" VerticalAlignment="Center" />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Spacing="16">
+            </WrapPanel>
+            <WrapPanel ItemSpacing="16" LineSpacing="12">
               <m3:LoadingIndicator Name="DeterminateLoading" Progress="0.4" VerticalAlignment="Center" />
               <TextBlock Classes="BodyMedium OnSurfaceVariant" VerticalAlignment="Center" Text="Determinate:" />
-              <Slider Name="LoadingProgress" Width="200" Minimum="0" Maximum="1" Value="0.4" VerticalAlignment="Center" />
-            </StackPanel>
+              <Slider Name="LoadingProgress" Width="160" Minimum="0" Maximum="1" Value="0.4" VerticalAlignment="Center" />
+            </WrapPanel>
           </StackPanel>
         </m3:Card>
 
@@ -58,17 +58,19 @@
             <ProgressBar Classes="Thick" Value="40" />
             <ProgressBar IsIndeterminate="True" />
             <ProgressBar Classes="Wavy" IsIndeterminate="True" />
-            <StackPanel Orientation="Horizontal" Spacing="24">
+            <WrapPanel ItemSpacing="24" LineSpacing="12">
               <ProgressBar Name="CircularFlat" Classes="Circular" Value="65" />
               <ProgressBar Name="CircularWavy" Classes="Circular Wavy" Value="65" />
               <ProgressBar Classes="Circular" IsIndeterminate="True" />
               <ProgressBar Classes="Circular Wavy" IsIndeterminate="True" />
               <ProgressBar Classes="Circular Thick" Value="30" Width="48" Height="48" />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Spacing="8">
+              <ProgressBar Name="VerticalFlat" Orientation="Vertical" Value="65" MinHeight="0" Height="48" />
+              <ProgressBar Name="VerticalWavy" Orientation="Vertical" Classes="Wavy" Value="65" MinHeight="0" Height="48" />
+            </WrapPanel>
+            <WrapPanel ItemSpacing="8" LineSpacing="12">
               <Button Classes="Tonal XSmall" Content="−20%" Name="LessProgress" />
               <Button Classes="Tonal XSmall" Content="+20%" Name="MoreProgress" />
-            </StackPanel>
+            </WrapPanel>
             <TextBlock Classes="BodySmall OnSurfaceVariant" TextWrapping="Wrap"
                        Text="Progress changes animate with a spring; the wave flattens near 0% and 100%." />
           </StackPanel>
@@ -112,7 +114,7 @@
           <TextBlock Classes="TitleMediumEmphasized" Text="Motion: spring tokens" />
           <TextBlock Classes="BodyMedium OnSurfaceVariant" TextWrapping="Wrap"
                      Text="Expressive motion is driven by springs instead of fixed durations. Spatial springs move and resize things and may overshoot; effects springs fade colors and opacity without overshoot. Switch the theme's motion scheme to compare." />
-          <StackPanel Orientation="Horizontal" Spacing="16">
+          <WrapPanel ItemSpacing="16" LineSpacing="12">
             <m3:ButtonGroup Name="SchemeGroup" IsConnected="True" SelectionMode="SingleRequired" SelectedIndex="0">
               <ToggleButton Content="Expressive" />
               <ToggleButton Content="Standard" />
@@ -123,15 +125,15 @@
                 <TextBlock Text="Play" />
               </StackPanel>
             </Button>
-          </StackPanel>
+          </WrapPanel>
           <ItemsControl Name="SpringLanes" />
-          <StackPanel Orientation="Horizontal" Spacing="16">
+          <WrapPanel ItemSpacing="16" LineSpacing="12">
             <Border Classes="SpringDemo" Width="96" Height="96">
               <TextBlock Classes="LabelLarge" Text="Hover me" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Border>
             <TextBlock Classes="BodyMedium OnSurfaceVariant" VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="560"
                        Text="Your own transitions can use the same springs: Duration=&quot;{m3:SpringDuration DefaultSpatial}&quot; Easing=&quot;{m3:Spring DefaultSpatial}&quot;." />
-          </StackPanel>
+          </WrapPanel>
         </StackPanel>
       </m3:Card>
     </StackPanel>

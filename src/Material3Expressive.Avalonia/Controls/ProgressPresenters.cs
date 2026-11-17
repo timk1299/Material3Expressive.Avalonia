@@ -1,6 +1,7 @@
 using System;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Material3Expressive.Avalonia.Motion;
 
@@ -224,10 +225,26 @@ public abstract class ProgressPresenterBase : Control
 
 /// <summary>
 /// Linear Expressive progress indicator: active indicator (flat or wavy), a gap, the track, and a
-/// stop dot at the end of the track for determinate progress.
+/// stop dot at the end of the track for determinate progress. <see cref="Orientation"/>
+/// <c>Vertical</c> runs it from the bottom up.
 /// </summary>
 public class LinearProgressPresenter : ProgressPresenterBase
 {
+    public static readonly StyledProperty<Orientation> OrientationProperty =
+        AvaloniaProperty.Register<LinearProgressPresenter, Orientation>(nameof(Orientation));
+
+    static LinearProgressPresenter()
+    {
+        AffectsRender<LinearProgressPresenter>(OrientationProperty);
+    }
+
+    /// <summary>Direction of the indicator: left to right (default) or bottom to top.</summary>
+    public Orientation Orientation
+    {
+        get => GetValue(OrientationProperty);
+        set => SetValue(OrientationProperty, value);
+    }
+
     public override void Render(DrawingContext context)
     {
         base.Render(context);
@@ -235,6 +252,19 @@ public class LinearProgressPresenter : ProgressPresenterBase
         var height = Bounds.Height;
         if (width <= 0 || height <= 0)
             return;
+        if (Orientation == Orientation.Vertical)
+        {
+            // Drawn as the horizontal indicator, turned so that its start is at the bottom.
+            using (context.PushTransform(new Matrix(0, -1, 1, 0, 0, height)))
+                RenderHorizontal(context, height, width);
+            return;
+        }
+
+        RenderHorizontal(context, width, height);
+    }
+
+    private void RenderHorizontal(DrawingContext context, double width, double height)
+    {
         var t = Thickness;
         var cy = height / 2;
         var radius = t / 2;

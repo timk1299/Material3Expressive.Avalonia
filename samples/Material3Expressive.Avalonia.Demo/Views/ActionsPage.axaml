@@ -16,7 +16,7 @@
           <TextBlock Classes="TitleMediumEmphasized" Text="Button groups" />
           <TextBlock Classes="BodyMedium OnSurfaceVariant" TextWrapping="Wrap"
                      Text="Pressing a button in a group widens it while its neighbors make room. Standard groups keep the buttons apart; connected groups share one shape and replace segmented buttons." />
-          <StackPanel Orientation="Horizontal" Spacing="32">
+          <WrapPanel ItemSpacing="32" LineSpacing="12">
             <m3:ButtonGroup VerticalAlignment="Center">
               <Button Classes="TonalIcon"><PathIcon Data="{StaticResource IconSkipPrevious}" /></Button>
               <ToggleButton Classes="FilledIcon Wide" IsChecked="True"><PathIcon Data="{StaticResource IconPlay}" /></ToggleButton>
@@ -32,7 +32,7 @@
               <ToggleButton Classes="Icon Square" IsChecked="True"><PathIcon Data="{StaticResource IconItalic}" /></ToggleButton>
               <ToggleButton Classes="Icon Square"><PathIcon Data="{StaticResource IconUnderline}" /></ToggleButton>
             </m3:ButtonGroup>
-          </StackPanel>
+          </WrapPanel>
 
           <TextBlock Classes="LabelLargeEmphasized OnSurfaceVariant" Text="Connected (single selection)" />
           <m3:ButtonGroup Name="ConnectedSingle" IsConnected="True" SelectionMode="SingleRequired" SelectedIndex="0" HorizontalAlignment="Left">
@@ -69,7 +69,7 @@
       <m3:Card Classes="Outlined">
         <StackPanel Spacing="16">
           <TextBlock Classes="TitleMediumEmphasized" Text="Split buttons" />
-          <StackPanel Orientation="Horizontal" Spacing="16">
+          <WrapPanel ItemSpacing="16" LineSpacing="12">
             <SplitButton Name="SaveSplit" VerticalAlignment="Center">
               <StackPanel Orientation="Horizontal" Spacing="8">
                 <PathIcon Data="{StaticResource IconSave}" />
@@ -121,7 +121,7 @@
                 <MenuFlyout><MenuItem Header="Option" /></MenuFlyout>
               </SplitButton.Flyout>
             </SplitButton>
-          </StackPanel>
+          </WrapPanel>
         </StackPanel>
       </m3:Card>
 

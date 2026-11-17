@@ -10,6 +10,7 @@ using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
+using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Material3Expressive.Avalonia.Motion;
 
@@ -625,14 +626,23 @@ public class TimePickerPanel : TemplatedControl
         set => SetValue(OrientationProperty, value);
     }
 
-    /// <summary>Title. Default "Select time" (dial) / "Enter time" (input).</summary>
+    /// <summary>Title. Default: the texts <c>M3StringSelectTime</c> (dial) / <c>M3StringEnterTime</c> (input).</summary>
     public string? Title
     {
         get => GetValue(TitleProperty);
         set => SetValue(TitleProperty, value);
     }
 
-    public string EffectiveTitle => Title ?? (DisplayMode == PickerDisplayMode.Input ? "Enter time" : "Select time");
+    public string EffectiveTitle => Title ?? (DisplayMode == PickerDisplayMode.Input
+        ? M3Strings.Get(this, "M3StringEnterTime", "Enter time")
+        : M3Strings.Get(this, "M3StringSelectTime", "Select time"));
+
+    protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToLogicalTree(e);
+        // A text that the window replaces in its resources is found from here on.
+        RaisePropertyChanged(EffectiveTitleProperty, "", EffectiveTitle);
+    }
 
     public string HourText => Is24Hour ? SelectedTime.Hours.ToString("00", CultureInfo.CurrentCulture)
         : TimeFormat.To12Hour(SelectedTime.Hours).ToString("00", CultureInfo.CurrentCulture);
@@ -847,7 +857,7 @@ public static class TimePickerDialog
     /// </summary>
     public static async Task<TimeSpan?> ShowAsync(Visual owner, TimeSpan? initialTime = null, bool? is24Hour = null,
         PickerDisplayMode displayMode = PickerDisplayMode.Picker, Orientation orientation = Orientation.Vertical,
-        string? title = null, string confirmText = "OK", string dismissText = "Cancel")
+        string? title = null, string? confirmText = null, string? dismissText = null)
     {
         var panel = new TimePickerPanel
         {
@@ -859,6 +869,7 @@ public static class TimePickerDialog
         if (is24Hour != null)
             panel.Is24Hour = is24Hour.Value;
 
+        var scope = owner as StyledElement;
         var dialog = new Dialog { Classes = { "Picker" }, Content = panel };
         var toggleIcon = new PathIcon();
         void UpdateToggleIcon()
@@ -869,7 +880,7 @@ public static class TimePickerDialog
         }
 
         var toggle = new Button { Classes = { "Icon" }, Content = toggleIcon, HorizontalAlignment = HorizontalAlignment.Left };
-        ToolTip.SetTip(toggle, "Switch between clock and keyboard input");
+        ToolTip.SetTip(toggle, M3Strings.Get(scope, "M3StringSwitchTimeInput", "Switch between clock and keyboard input"));
         toggle.Click += (_, _) =>
         {
             panel.DisplayMode = panel.DisplayMode == PickerDisplayMode.Picker ? PickerDisplayMode.Input : PickerDisplayMode.Picker;
@@ -877,8 +888,8 @@ public static class TimePickerDialog
         };
         dialog.AttachedToVisualTree += (_, _) => UpdateToggleIcon();
 
-        var confirm = new Button { Classes = { "Text" }, Content = confirmText };
-        var dismiss = new Button { Classes = { "Text" }, Content = dismissText };
+        var confirm = new Button { Classes = { "Text" }, Content = confirmText ?? M3Strings.Get(scope, "M3StringOk", "OK") };
+        var dismiss = new Button { Classes = { "Text" }, Content = dismissText ?? M3Strings.Get(scope, "M3StringCancel", "Cancel") };
         dismiss.Click += (_, _) => dialog.Close();
         confirm.Click += (_, _) =>
         {
@@ -911,7 +922,7 @@ public class TimeField : TemplatedControl
         TimePickerPanel.Is24HourProperty.AddOwner<TimeField>();
 
     public static readonly StyledProperty<string?> LabelProperty =
-        AvaloniaProperty.Register<TimeField, string?>(nameof(Label), "Time");
+        AvaloniaProperty.Register<TimeField, string?>(nameof(Label));
 
     private TextBox? _textBox;
     private Button? _button;
@@ -929,7 +940,7 @@ public class TimeField : TemplatedControl
         set => SetValue(Is24HourProperty, value);
     }
 
-    /// <summary>Floating label of the field. Default "Time".</summary>
+    /// <summary>Floating label of the field. The theme sets the text <c>M3StringTime</c> ("Time").</summary>
     public string? Label
     {
         get => GetValue(LabelProperty);
@@ -999,7 +1010,12 @@ public class TimeField : TemplatedControl
         }
         else
         {
-            DataValidationErrors.SetErrors(_textBox, new object[] { Is24Hour ? "Use hh:mm" : "Use h:mm AM/PM" });
+            DataValidationErrors.SetErrors(_textBox, new object[]
+            {
+                Is24Hour
+                    ? M3Strings.Get(this, "M3StringTimeFormatError24", "Use hh:mm")
+                    : M3Strings.Get(this, "M3StringTimeFormatError12", "Use h:mm AM/PM"),
+            });
         }
     }
 

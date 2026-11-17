@@ -113,7 +113,7 @@
             <m3:Card>
               <StackPanel Spacing="16">
                 <TextBlock Classes="TitleMedium CardTitle" Text="Drop-down menus" />
-                <StackPanel Orientation="Horizontal" Spacing="24">
+                <WrapPanel ItemSpacing="24" LineSpacing="12">
                   <ComboBox Width="240" m3:TextFieldAssist.Label="Flavor" SelectedIndex="1">
                     <ComboBoxItem Content="Vanilla" />
                     <ComboBoxItem Content="Chocolate" />
@@ -129,7 +129,7 @@
                     <ComboBoxItem Content="Sprinkles" />
                     <ComboBoxItem Content="Nuts" />
                   </ComboBox>
-                </StackPanel>
+                </WrapPanel>
               </StackPanel>
             </m3:Card>
 
@@ -178,37 +178,37 @@
             <m3:Card>
               <StackPanel Spacing="8">
                 <TextBlock Classes="TitleMedium CardTitle" Text="Checkboxes" />
-                <StackPanel Orientation="Horizontal" Spacing="16">
+                <WrapPanel ItemSpacing="16" LineSpacing="12">
                   <CheckBox Content="Unchecked" />
                   <CheckBox Content="Checked" IsChecked="True" />
                   <CheckBox Content="Indeterminate" IsThreeState="True" IsChecked="{x:Null}" />
                   <CheckBox Content="Disabled" IsEnabled="False" />
                   <CheckBox Content="Disabled checked" IsChecked="True" IsEnabled="False" />
-                </StackPanel>
+                </WrapPanel>
               </StackPanel>
             </m3:Card>
             <m3:Card>
               <StackPanel Spacing="8">
                 <TextBlock Classes="TitleMedium CardTitle" Text="Radio buttons" />
-                <StackPanel Orientation="Horizontal" Spacing="16">
+                <WrapPanel ItemSpacing="16" LineSpacing="12">
                   <RadioButton GroupName="g" Content="Option A" IsChecked="True" />
                   <RadioButton GroupName="g" Content="Option B" />
                   <RadioButton GroupName="g" Content="Option C" />
                   <RadioButton Content="Disabled" IsEnabled="False" />
                   <RadioButton Content="Disabled selected" IsChecked="True" IsEnabled="False" />
-                </StackPanel>
+                </WrapPanel>
               </StackPanel>
             </m3:Card>
             <m3:Card>
               <StackPanel Spacing="8">
                 <TextBlock Classes="TitleMedium CardTitle" Text="Switches" />
-                <StackPanel Orientation="Horizontal" Spacing="32">
+                <WrapPanel ItemSpacing="32" LineSpacing="12">
                   <ToggleSwitch IsChecked="True" />
                   <ToggleSwitch />
                   <ToggleSwitch IsChecked="True" IsEnabled="False" />
                   <ToggleSwitch IsEnabled="False" />
                   <ToggleSwitch Content="With header" OnContent="Wi-Fi on" OffContent="Wi-Fi off" IsChecked="True" />
-                </StackPanel>
+                </WrapPanel>
               </StackPanel>
             </m3:Card>
           </StackPanel>
@@ -341,7 +341,7 @@
               </StackPanel>
               <StackPanel Grid.Column="2" Spacing="8">
                 <TextBlock Classes="TitleMediumEmphasized" Text="Menus" />
-                <StackPanel Orientation="Horizontal" Spacing="8">
+                <WrapPanel ItemSpacing="8" LineSpacing="12">
                   <Button Classes="Tonal" Content="Standard menu">
                     <Button.Flyout>
                       <MenuFlyout Placement="BottomEdgeAlignedLeft">
@@ -363,7 +363,7 @@
                       </MenuFlyout>
                     </Button.Flyout>
                   </Button>
-                </StackPanel>
+                </WrapPanel>
                 <!-- Static preview of an open menu -->
                 <ContextMenu Name="MenuPreview" HorizontalAlignment="Left" Width="260" Margin="-8,0,0,0" IsHitTestVisible="False">
                   <MenuItem Header="Inbox">
@@ -484,7 +484,7 @@
             <m3:Card Classes="Outlined">
               <StackPanel Spacing="16">
                 <TextBlock Classes="TitleMedium CardTitle" Text="Dialogs, snackbars and tooltips" />
-                <StackPanel Orientation="Horizontal" Spacing="8">
+                <WrapPanel ItemSpacing="8" LineSpacing="12">
                   <Button Name="ShowDialogButton" Content="Show dialog" />
                   <Button Name="ShowIconDialogButton" Classes="Tonal" Content="Dialog with icon" />
                   <Button Name="ShowSnackbarButton" Classes="Outlined" Content="Show snackbar" />
@@ -500,9 +500,9 @@
                       </ToolTip>
                     </ToolTip.Tip>
                   </Button>
-                </StackPanel>
+                </WrapPanel>
                 <!-- Static previews of the overlay surfaces -->
-                <StackPanel Orientation="Horizontal" Spacing="24">
+                <WrapPanel ItemSpacing="24" LineSpacing="12">
                   <m3:Dialog Headline="Discard draft?" Opacity="1" RenderTransform="none" Margin="0" Width="320">
                     <TextBlock TextWrapping="Wrap" Text="Your message has not been sent. This action cannot be undone." />
                     <m3:Dialog.Buttons>
@@ -514,14 +514,14 @@
                   </m3:Dialog>
                   <m3:Snackbar Content="Message archived" ActionContent="Undo" ShowCloseButton="True"
                                Opacity="1" RenderTransform="none" VerticalAlignment="Center" />
-                </StackPanel>
+                </WrapPanel>
               </StackPanel>
             </m3:Card>
 
             <m3:Card Classes="Outlined">
               <StackPanel Spacing="16">
                 <TextBlock Classes="TitleMedium CardTitle" Text="Badges" />
-                <StackPanel Orientation="Horizontal" Spacing="32">
+                <WrapPanel ItemSpacing="32" LineSpacing="12">
                   <m3:Badge>
                     <PathIcon Width="24" Height="24" Data="{StaticResource IconMail}" />
                   </m3:Badge>
@@ -531,7 +531,7 @@
                   <m3:Badge BadgeContent="999+">
                     <PathIcon Width="24" Height="24" Data="{StaticResource IconInbox}" />
                   </m3:Badge>
-                </StackPanel>
+                </WrapPanel>
               </StackPanel>
             </m3:Card>
 

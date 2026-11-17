@@ -146,7 +146,7 @@ Variants, sizes and shapes are set with `Classes`.
 |---|---|
 | `Button` | Color: Filled (default), `Tonal`, `Elevated`, `Outlined`, `Text`. Size: `XSmall` (32), `Small` (40, default), `Medium` (56), `Large` (96), `XLarge` (136). Shape: round (default) or `Square`. |
 | `ToggleButton` | The same colors, sizes and shapes as `Button`. Checking it changes the color and morphs round to square (a `Square` one becomes round). |
-| Icon buttons | `Icon`, `FilledIcon`, `TonalIcon`, `OutlinedIcon` on `Button` or `ToggleButton`, combined with a size, `Narrow` or `Wide`, and `Square`. |
+| Icon buttons | `Icon`, `FilledIcon`, `TonalIcon`, `OutlinedIcon` on `Button` or `ToggleButton`, combined with a size, `Narrow` or `Wide`, and `Square`. Icon buttons have no elevation, also under the pointer. |
 | FABs | `Fab` (56), `MediumFab` (80), `LargeFab` (96), `SmallFab` (40, deprecated), `ExtendedFab` (+ `Medium`, `Large`). Color: primary container (default), `Secondary`, `Tertiary`, `Surface`, and `Filled` for the strong color. Add `Lowered` for less elevation. |
 | Chips | `AssistChip`, `SuggestionChip`, `InputChip` (Button) and `FilterChip` (ToggleButton). Add `Elevated` for the elevated versions. |
 | `SplitButton` | Avalonia's split button: a leading action and a trailing menu button. Colors `Tonal`, `Elevated`, `Outlined`; sizes `XSmall` to `XLarge`. The inner corners grow on hover, and while the flyout is open the menu button becomes a pill and its chevron turns. |
@@ -176,7 +176,9 @@ Pressing a button morphs its corners to a tighter radius on the fast spatial spr
 
 - **Standard** (default): buttons sit 18, 12 or 8 px apart depending on their size, and each keeps its own shape.
 - **Connected** (`IsConnected="True"`): buttons sit 2 px apart and share one shape. Outer corners are fully round and inner corners are 8 px. Inner corners tighten to 4 px while pressed, and a checked button rounds out fully. This replaces the segmented button; the old `Segmented` toggle-button classes still work.
-- `SelectionMode`: `None` (independent toggles), `Single` or `SingleRequired`, with a two-way `SelectedIndex`. `FillWidth="True"` shares the available width equally.
+- `SelectionMode`: `None` (independent toggles), `Single` or `SingleRequired`, with a two-way `SelectedIndex`. `FillWidth="True"` shares the available width equally; with less room than the buttons want, each gives up the same amount.
+- Keyboard: Left and Right (Home and End) move the focus between the buttons, and Tab stops at each of them.
+- A button that is narrower than it wants to be (a neighbor of the pressed button, or a `FillWidth` group with too little room) gives up padding first, so its label stays whole as long as the padding lasts.
 
 ```xml
 <m3:ButtonGroup IsConnected="True" SelectionMode="SingleRequired" SelectedIndex="{Binding Range}">
@@ -204,7 +206,7 @@ Pressing a button morphs its corners to a tighter radius on the fast spatial spr
 | Control | Notes |
 |---|---|
 | `m3:LoadingIndicator` | Morphs through the shape library while rotating, with Compose's shape sequence and timing. `Contained` class for the primary-container version. `Progress` (0–1) for the determinate version. `Shapes` sets a custom shape sequence. |
-| `ProgressBar` | The secondary-container track sits 4 px away from the active indicator, with a stop dot at its end. Add `Wavy` for the wave, `Thick` for an 8 px stroke, and `Circular` for the circular indicator. Determinate changes are smoothed with a spring, and the wave flattens near 0% and 100%. |
+| `ProgressBar` | The secondary-container track sits 4 px away from the active indicator, with a stop dot at its end. Add `Wavy` for the wave, `Thick` for an 8 px stroke, and `Circular` for the circular indicator. `Orientation="Vertical"` runs the linear indicator from the bottom up; it takes the height it is given (at least 120 px). Determinate changes are smoothed with a spring, and the wave flattens near 0% and 100%. |
 | `m3:Dialog`, `m3:Snackbar`, `m3:Badge`, `ToolTip` (`Rich`) | Same as Material 3. Dialogs and snackbars now enter with a spring. |
 
 ### Inputs and selection
@@ -240,7 +242,7 @@ TimeSpan? alarm = await TimePickerDialog.ShowAsync(this, new TimeSpan(7, 30, 0))
 <m3:TimeField Classes="Outlined" Label="Alarm" SelectedTime="{Binding Alarm}" />
 ```
 
-Dates are typed in the culture's short date pattern with two-digit day and month and a four-digit year (`DateInputFormat.Default`, e.g. `mm/dd/yyyy`), and weekday letters, month names and AM/PM come from the current culture. The built-in texts ("Select date", "Cancel", …) are English; pass `title`, `confirmText` and `dismissText` to localize the dialogs.
+Dates are typed in the culture's short date pattern with two-digit day and month and a four-digit year (`DateInputFormat.Default`, e.g. `mm/dd/yyyy`), and weekday letters, month names and AM/PM come from the current culture. The built-in texts are English and can be replaced, see [Texts](#texts).
 
 ### Navigation and containers
 
@@ -255,6 +257,7 @@ Dates are typed in the culture's short date pattern with two-digit day and month
 | `Menu`, `ContextMenu`, `MenuFlyout` | Expressive menus: 16 px container corners, 44 px items, and checked items shown as selected (tertiary container). `FlyoutPresenterClasses="Vibrant"` on a `MenuFlyout`, or `Classes="Vibrant"` on a `ContextMenu`, gives the vibrant (tertiary) menu. |
 | `GridSplitter` | A transparent grab area with a 2 px divider line (outline variant); `Handle` shows the Material 3 drag handle (4 × 48 pill) instead. Hover and dragging color it primary. Set `ResizeDirection="Rows"` for horizontal splitters. |
 | `m3:Card`, `m3:BottomAppBar`, `Separator`, `SplitView`, `Window` | Same as Material 3. |
+| Window title bar | Where Avalonia draws the window decorations itself (`ExtendClientAreaToDecorationsHint="True"`, or a platform without decorations of its own), the title bar is a 40 px surface-container bar with the title and caption buttons that have a state layer; the close button turns to the error color under the pointer. On X11 Avalonia draws decorations only with `X11PlatformOptions.EnableDrawnDecorations` (experimental). |
 
 Text fields use `TextFieldAssist`:
 
@@ -278,6 +281,21 @@ Scroll bars that should stay visible: set `AllowAutoHide="False"` on the `Scroll
 
 Icons: `PathIcon` stretches its geometry's bounds. For 24 px Material icon paths, add `M0 0h.01M24 24h-.01` to the path so the icon keeps its built-in padding (the demo does this), or use an icon package such as Material.Icons.Avalonia. Icon sizes inside buttons follow the button size (20, 24, 32 or 40 px). For an icon with a label, put a horizontal `StackPanel` with the `PathIcon` and a `TextBlock` into the button; the label is centered on the icon.
 
+## Texts
+
+The texts of the theme (the pickers' titles, labels, tooltips and errors, "OK" and "Cancel") are string resources named `M3String…`, English by default. To localize them, define resources with the same keys in the resources of the application (or of a window); `Resources/Strings.axaml` lists all keys.
+
+```xml
+<Application.Resources>
+  <x:String x:Key="M3StringCancel">Abbrechen</x:String>
+  <x:String x:Key="M3StringSelectDate">Datum wählen</x:String>
+  <!-- {0} is the expected pattern -->
+  <x:String x:Key="M3StringDateFormatError">Erwartet wird {0}</x:String>
+</Application.Resources>
+```
+
+A `title`, `confirmText` or `dismissText` passed to a picker dialog, and a `Label` set on a `DateField` or `TimeField`, go before the resources.
+
 ## Project layout
 
 ```
@@ -288,7 +306,7 @@ src/Material3Expressive.Avalonia/
   Controls/         ButtonGroup, FabMenu, LoadingIndicator, progress presenters, ShapeBox, toolbars,
                     NavigationRail, CalendarView, date and time pickers, Ripple, Card, TopAppBar,
                     Dialog, Snackbar, Badge, …
-  Resources/        Design tokens and global styles (type scale, icon sizing)
+  Resources/        Design tokens, texts (Strings.axaml) and global styles (type scale, icon sizing)
   Themes/           ControlThemes per component (Expressive.axaml: new Expressive controls, Pickers.axaml: date/time pickers)
   Material3ExpressiveTheme.*   The theme entry point
 samples/Material3Expressive.Avalonia.Demo/   Showcase app
@@ -304,9 +322,6 @@ tests/Material3Expressive.Avalonia.Tests/    Color, motion and shape tests, head
 - `Vibrant` and `Expressive` color variants use the hue-rotation tables from material-color-utilities with the standard tone mapping. They are close to MCU output but not identical, and the 2025 dynamic-color spec is not implemented.
 - Not implemented yet: the search app bar and search view, carousel, bottom and side sheets, the modal expanded navigation rail, range and centered sliders, inset slider icons, icons inside switch handles, and text-field prefix, suffix and character counter.
 - The date range picker pages through months in a dialog; the spec's full-screen picker with vertically scrolling months is not implemented.
-- A vertical `ProgressBar` is a flat bar; the gap, the stop dot, `Wavy` and `Thick` are for horizontal and `Circular` bars.
-- Button groups have no arrow-key navigation: every button is a Tab stop. While a button is pressed, long labels of its neighbors are cut off, because the neighbors keep their padding.
-- Tooltips, field labels and error texts inside the pickers ("Previous month", "Hour", "Date out of expected range" …) are English and cannot be set.
 - In an outlined text field with a leading icon, the floating label stays aligned with the text instead of moving over the icon.
 - Roboto is bundled; the Expressive brand typeface (Google Sans Flex) is not.
 - `MotionScheme` changes apply to animations created after the change.

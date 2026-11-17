@@ -68,8 +68,9 @@ public class ExpressiveControlTests
         // Released immediately: the pressed shape is kept briefly so the morph is visible.
         window.MouseUp(Center(button, window), MouseButton.Left);
         Dispatcher.UIThread.RunJobs();
-        // Only checkable while the hold lasts; a busy test machine can take longer than that to get here.
-        if (pressedFor.Elapsed < Ripple.MinimumPressDuration)
+        // Only checkable while the hold lasts; a busy test machine can take longer than that to get here
+        // (with a margin: the timer that ends the hold and this clock do not tick alike).
+        if (pressedFor.Elapsed < Ripple.MinimumPressDuration - TimeSpan.FromMilliseconds(30))
             Assert.Equal(new CornerRadius(8), button.CornerRadius);
         Wait(200);
         Assert.Equal(new CornerRadius(20), button.CornerRadius);

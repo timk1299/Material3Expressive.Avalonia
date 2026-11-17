@@ -148,10 +148,10 @@
         <Grid Margin="{TemplateBinding Padding}" RowDefinitions="56,Auto">
           <DockPanel>
             <StackPanel Name="PART_Nav" DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
-              <Button Name="PART_PreviousButton" Classes="Icon" ToolTip.Tip="Previous month">
+              <Button Name="PART_PreviousButton" Classes="Icon" ToolTip.Tip="{DynamicResource M3StringPreviousMonth}">
                 <PathIcon Data="{StaticResource M3ChevronLeftGeometry}" />
               </Button>
-              <Button Name="PART_NextButton" Classes="Icon" ToolTip.Tip="Next month">
+              <Button Name="PART_NextButton" Classes="Icon" ToolTip.Tip="{DynamicResource M3StringNextMonth}">
                 <PathIcon Data="{StaticResource M3ChevronRightIconGeometry}" />
               </Button>
             </StackPanel>
@@ -229,7 +229,7 @@
                     Margin="0,0,12,12"
                     VerticalAlignment="Bottom"
                     Classes="Icon"
-                    ToolTip.Tip="Switch between calendar and keyboard input"
+                    ToolTip.Tip="{DynamicResource M3StringSwitchDateInput}"
                     IsVisible="{TemplateBinding ShowModeToggle}">
               <Panel>
                 <PathIcon Name="PART_EditIcon" Data="{StaticResource M3EditGeometry}" />
@@ -248,8 +248,8 @@
                                  MinDate="{TemplateBinding MinDate}"
                                  MaxDate="{TemplateBinding MaxDate}" />
           <StackPanel Name="PART_InputArea" Margin="24,16,24,12" Spacing="16" IsVisible="False">
-            <TextBox Name="PART_StartInput" Classes="Outlined" local:TextFieldAssist.Label="Date" />
-            <TextBox Name="PART_EndInput" Classes="Outlined" local:TextFieldAssist.Label="End date" IsVisible="False" />
+            <TextBox Name="PART_StartInput" Classes="Outlined" local:TextFieldAssist.Label="{DynamicResource M3StringDate}" />
+            <TextBox Name="PART_EndInput" Classes="Outlined" local:TextFieldAssist.Label="{DynamicResource M3StringEndDate}" IsVisible="False" />
           </StackPanel>
         </StackPanel>
       </ControlTemplate>
@@ -263,7 +263,7 @@
         <Setter Property="LineHeight" Value="28" />
       </Style>
       <Style Selector="^ /template/ TextBox#PART_StartInput">
-        <Setter Property="(local:TextFieldAssist.Label)" Value="Start date" />
+        <Setter Property="(local:TextFieldAssist.Label)" Value="{DynamicResource M3StringStartDate}" />
       </Style>
       <Style Selector="^ /template/ TextBox#PART_EndInput">
         <Setter Property="IsVisible" Value="True" />
@@ -287,6 +287,7 @@
 
   <!-- Docked date picker: text field + calendar below it -->
   <ControlTheme x:Key="{x:Type controls:DateField}" TargetType="controls:DateField">
+    <Setter Property="Label" Value="{DynamicResource M3StringDate}" />
     <!-- The outlined field's floating label sits on the outline, half above the field's bounds -->
     <Setter Property="ClipToBounds" Value="False" />
     <Setter Property="Template">
@@ -297,7 +298,7 @@
                    local:TextFieldAssist.SupportingText="{TemplateBinding Placeholder}"
                    PlaceholderText="{TemplateBinding Placeholder}">
             <TextBox.InnerRightContent>
-              <Button Name="PART_Button" Classes="Icon" Margin="0,0,4,0" ToolTip.Tip="Open calendar">
+              <Button Name="PART_Button" Classes="Icon" Margin="0,0,4,0" ToolTip.Tip="{DynamicResource M3StringOpenCalendar}">
                 <PathIcon Data="{StaticResource M3CalendarGeometry}" />
               </Button>
             </TextBox.InnerRightContent>
@@ -318,8 +319,8 @@
                                        MinDate="{TemplateBinding MinDate}"
                                        MaxDate="{TemplateBinding MaxDate}" />
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8" Margin="12,0,12,12">
-                  <Button Name="PART_Cancel" Classes="Text" Content="Cancel" />
-                  <Button Name="PART_Ok" Classes="Text" Content="OK" />
+                  <Button Name="PART_Cancel" Classes="Text" Content="{DynamicResource M3StringCancel}" />
+                  <Button Name="PART_Ok" Classes="Text" Content="{DynamicResource M3StringOk}" />
                 </StackPanel>
               </StackPanel>
             </Border>
@@ -535,14 +536,14 @@
           <StackPanel Name="PART_Inputs" Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Top" IsVisible="False">
             <StackPanel Spacing="7">
               <TextBox Name="PART_HourInput" Theme="{StaticResource M3TimeInputField}" />
-              <TextBlock Classes="BodySmall OnSurfaceVariant" Text="Hour" />
+              <TextBlock Classes="BodySmall OnSurfaceVariant" Text="{DynamicResource M3StringHour}" />
             </StackPanel>
             <Panel Height="72" VerticalAlignment="Top">
               <TextBlock Classes="M3TimeSeparator" Text=":" />
             </Panel>
             <StackPanel Spacing="7">
               <TextBox Name="PART_MinuteInput" Theme="{StaticResource M3TimeInputField}" />
-              <TextBlock Classes="BodySmall OnSurfaceVariant" Text="Minute" />
+              <TextBlock Classes="BodySmall OnSurfaceVariant" Text="{DynamicResource M3StringMinute}" />
             </StackPanel>
           </StackPanel>
           <controls:PeriodSelector Name="PART_Period" Grid.Row="1" Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Top" />
@@ -598,13 +599,14 @@
 
   <!-- Time field: text field with a clock button -->
   <ControlTheme x:Key="{x:Type controls:TimeField}" TargetType="controls:TimeField">
+    <Setter Property="Label" Value="{DynamicResource M3StringTime}" />
     <!-- The outlined field's floating label sits on the outline, half above the field's bounds -->
     <Setter Property="ClipToBounds" Value="False" />
     <Setter Property="Template">
       <ControlTemplate>
         <TextBox Name="PART_TextBox" local:TextFieldAssist.Label="{TemplateBinding Label}">
           <TextBox.InnerRightContent>
-            <Button Name="PART_Button" Classes="Icon" Margin="0,0,4,0" ToolTip.Tip="Open time picker">
+            <Button Name="PART_Button" Classes="Icon" Margin="0,0,4,0" ToolTip.Tip="{DynamicResource M3StringOpenTimePicker}">
               <PathIcon Data="{StaticResource M3ScheduleGeometry}" />
             </Button>
           </TextBox.InnerRightContent>

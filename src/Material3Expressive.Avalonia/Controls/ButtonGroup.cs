@@ -5,6 +5,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
+using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Threading;
 using Material3Expressive.Avalonia.Motion;
@@ -32,6 +33,10 @@ public enum ButtonGroupSelectionMode
 /// (<see cref="IsConnected"/>) sit 2px apart with fully rounded outer corners and small inner
 /// corners that tighten when pressed and round out fully when a toggle button is checked. Connected
 /// groups replace the segmented button.
+/// </para>
+/// <para>
+/// Left/Right (and Home/End) move the keyboard focus between the buttons; Tab still stops at each.
+/// A compressed neighbor gives up padding first, so its label stays whole.
 /// </para>
 /// </summary>
 public class ButtonGroup : Panel
@@ -72,6 +77,48 @@ public class ButtonGroup : Panel
         _ticker = new FrameTicker(this, Tick);
     }
 
+    /// <summary>Left/Right and Home/End move the focus between the buttons of the group.</summary>
+    protected override void OnKeyDown(KeyEventArgs e)
+    {
+        base.OnKeyDown(e);
+        // Only from a button itself: a text field or slider in the group keeps its arrow keys.
+        if (e.Handled || e.KeyModifiers != KeyModifiers.None || e.Source is not Button { IsFocused: true } current ||
+            !Children.Contains(current))
+        {
+            return;
+        }
+
+        var forward = FlowDirection == global::Avalonia.Media.FlowDirection.RightToLeft ? Key.Left : Key.Right;
+        var backward = forward == Key.Right ? Key.Left : Key.Right;
+        var index = Children.IndexOf(current);
+        Control? target = null;
+        if (e.Key == forward)
+            target = NextStop(index + 1, 1);
+        else if (e.Key == backward)
+            target = NextStop(index - 1, -1);
+        else if (e.Key == Key.Home)
+            target = NextStop(0, 1);
+        else if (e.Key == Key.End)
+            target = NextStop(Children.Count - 1, -1);
+        else
+            return;
+
+        e.Handled = true;
+        if (target != null && target != current)
+            target.Focus(NavigationMethod.Directional);
+    }
+
+    private Control? NextStop(int start, int step)
+    {
+        for (var i = start; i >= 0 && i < Children.Count; i += step)
+        {
+            if (Children[i] is Button { IsEffectivelyVisible: true, IsEffectivelyEnabled: true, Focusable: true } button)
+                return button;
+        }
+
+        return null;
+    }
+
     /// <summary>Connected group (2px gaps, shared shape). Default false (standard group).</summary>
     public bool IsConnected
     {
@@ -96,7 +143,10 @@ public class ButtonGroup : Panel
         set => SetValue(ExpandedRatioProperty, value);
     }
 
-    /// <summary>Stretch the buttons to share the available width equally (when the group is stretched).</summary>
+    /// <summary>
+    /// Stretch the buttons to share the available width equally (when the group is stretched). With
+    /// less room than the buttons want, they give up the same amount each.
+    /// </summary>
     public bool FillWidth
     {
         get => GetValue(FillWidthProperty);
@@ -199,6 +249,8 @@ public class ButtonGroup : Panel
         child.PropertyChanged -= OnChildPropertyChanged;
         state.Width.Clear();
         state.Shape.Clear();
+        state.Padding?.Clear();
+        state.PaddingGiven = 0;
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -364,10 +416,10 @@ public class ButtonGroup : Panel
     }
 
     /// <summary>
-    /// Width of a child without the group's own width override: its base (style or local) Width if
-    /// it has one, otherwise its desired width.
+    /// Width of a child without the group's own overrides: its base (style or local) Width if it
+    /// has one, otherwise its desired width (the one from before it gave up padding, while it does).
     /// </summary>
-    private static double NaturalWidth(Control child)
+    private double NaturalWidth(Control child)
     {
         var baseWidth = child.GetBaseValue(WidthProperty);
         if (baseWidth.HasValue && !double.IsNaN(baseWidth.Value))
@@ -376,7 +428,42 @@ public class ButtonGroup : Panel
             return w + child.Margin.Left + child.Margin.Right;
         }
 
-        return child.DesiredSize.Width;
+        var desired = child.DesiredSize.Width;
+        if (!_states.TryGetValue(child, out var state) || state.MeasuredPaddingGiven <= 0)
+            return desired;
+        // Measured with less padding: that much is missing, unless MinWidth held the width up.
+        var floor = child.MinWidth + child.Margin.Left + child.Margin.Right;
+        return desired > floor + 0.5
+            ? desired + state.MeasuredPaddingGiven
+            : Math.Clamp(state.NaturalWidth, desired, desired + state.MeasuredPaddingGiven);
+    }
+
+    /// <summary>
+    /// A child arranged narrower than it wants would cut its label; it gives up that much of its
+    /// horizontal padding instead (both sides alike, so the label stays centered).
+    /// </summary>
+    private static void UpdatePadding(Control child, ChildState state, double width)
+    {
+        if (state.Padding == null)
+            return;
+        var missing = HasExplicitWidth(child) ? 0 : state.NaturalWidth - width;
+        if (missing <= 0.5)
+        {
+            state.Padding.Clear();
+            state.PaddingGiven = 0;
+            return;
+        }
+
+        if (state.PaddingGiven == 0)
+            state.RestingPadding = ((TemplatedControl)child).Padding;
+        var resting = state.RestingPadding;
+        var left = Math.Min(missing / 2, Math.Max(0, resting.Left));
+        var right = Math.Min(missing / 2, Math.Max(0, resting.Right));
+        state.PaddingGiven = left + right;
+        if (state.PaddingGiven > 0)
+            state.Padding.Set(new Thickness(resting.Left - left, resting.Top, resting.Right - right, resting.Bottom));
+        else
+            state.Padding.Clear();
     }
 
     private static bool HasExplicitWidth(Control child)
@@ -392,6 +479,13 @@ public class ButtonGroup : Panel
         foreach (var child in Children)
         {
             child.Measure(new Size(double.PositiveInfinity, availableSize.Height));
+            if (_states.TryGetValue(child, out var state))
+            {
+                // While the child gives up padding, its desired width is not its width at rest.
+                state.MeasuredPaddingGiven = state.PaddingGiven;
+                state.NaturalWidth = NaturalWidth(child);
+            }
+
             if (!child.IsVisible)
                 continue;
             width += NaturalWidth(child);
@@ -419,7 +513,8 @@ public class ButtonGroup : Panel
         if (count == 0)
             return finalSize;
 
-        // 1. Resting slots: natural widths, plus an equal share of the leftover width when filling.
+        // 1. Resting slots: natural widths; when filling, plus an equal share of the leftover width
+        //    (or less an equal share of what is missing).
         var slots = new double[count];
         var total = Math.Max(0, count - 1) * spacing;
         for (var i = 0; i < count; i++)
@@ -428,9 +523,9 @@ public class ButtonGroup : Panel
             total += slots[i];
         }
 
-        var extra = FillWidth ? Math.Max(0, finalSize.Width - total) / count : 0;
+        var extra = FillWidth ? (finalSize.Width - total) / count : 0;
         for (var i = 0; i < count; i++)
-            slots[i] += extra;
+            slots[i] = Math.Max(0, slots[i] + extra);
 
         // 2. Pressed expansion: the pressed button takes width from its direct neighbors only,
         //    so the row's total width (and every other button) stays put.
@@ -487,6 +582,7 @@ public class ButtonGroup : Panel
                     state.Width.Set(width - child.Margin.Left - child.Margin.Right);
                 else
                     state.Width.Clear();
+                UpdatePadding(child, state, width);
             }
 
             child.Arrange(new Rect(left, y, width, rowHeight));
@@ -519,6 +615,20 @@ public class ButtonGroup : Panel
         public double LastHeight { get; set; }
         public ValueOverride<double> Width { get; } = new(child, WidthProperty);
         public ValueOverride<CornerRadius> Shape { get; } = new(child, TemplatedControl.CornerRadiusProperty);
+        public ValueOverride<Thickness>? Padding { get; } =
+            child is TemplatedControl ? new(child, TemplatedControl.PaddingProperty) : null;
+
+        /// <summary>Padding of the child before the group took some of it.</summary>
+        public Thickness RestingPadding { get; set; }
+
+        /// <summary>Horizontal padding the child gives up at present.</summary>
+        public double PaddingGiven { get; set; }
+
+        /// <summary>What it had given up when it was last measured.</summary>
+        public double MeasuredPaddingGiven { get; set; }
+
+        /// <summary>Width of the child at rest, as of the last measure.</summary>
+        public double NaturalWidth { get; set; }
     }
 
     /// <summary>

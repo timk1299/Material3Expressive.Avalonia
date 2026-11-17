@@ -5,6 +5,7 @@
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source="avares://Material3Expressive.Avalonia/Resources/Tokens.axaml" />
+        <ResourceInclude Source="avares://Material3Expressive.Avalonia/Resources/Strings.axaml" />
         <ResourceInclude Source="avares://Material3Expressive.Avalonia/Themes/Window.axaml" />
         <ResourceInclude Source="avares://Material3Expressive.Avalonia/Themes/Button.axaml" />
         <ResourceInclude Source="avares://Material3Expressive.Avalonia/Themes/SplitButton.axaml" />

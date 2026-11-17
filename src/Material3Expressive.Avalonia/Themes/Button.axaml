@@ -396,11 +396,11 @@
       <Setter Property="IsVisible" Value="True" />
     </Style>
 
-    <!-- Hover elevation: filled/tonal +1, elevated 2, FAB 4 -->
+    <!-- Hover elevation: filled/tonal +1, elevated 2, FAB 4; icon buttons have none -->
     <Style Selector="^:pointerover /template/ Border#PART_Container">
       <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation1}" />
     </Style>
-    <Style Selector="^.Outlined:pointerover, ^.Text:pointerover, ^.Icon:pointerover, ^.OutlinedIcon:pointerover, ^.AssistChip:pointerover, ^.SuggestionChip:pointerover, ^.InputChip:pointerover">
+    <Style Selector="^.Outlined:pointerover, ^.Text:pointerover, ^.Icon:pointerover, ^.FilledIcon:pointerover, ^.TonalIcon:pointerover, ^.OutlinedIcon:pointerover, ^.AssistChip:pointerover, ^.SuggestionChip:pointerover, ^.InputChip:pointerover">
       <Style Selector="^ /template/ Border#PART_Container">
         <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation0}" />
       </Style>

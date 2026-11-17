@@ -30,6 +30,27 @@
   focus to the FAB.
 - The `Baseline` variant keeps its tertiary hue within 0–360° (`TonalPalette.Hue`).
 - Demo: the variant menu marks the active variant.
+- `FilledIcon` and `TonalIcon` buttons no longer get elevation level 1 under the pointer: icon buttons have
+  no elevation.
+- `ButtonGroup`: Left and Right (Home and End) move the keyboard focus between the buttons; Tab still stops
+  at each. A button that is arranged narrower than it wants to be gives up padding first, so the labels of
+  the neighbors of a pressed button are no longer cut off. A `FillWidth` group with less room than its
+  buttons want shares it (each button gives up the same amount) instead of running over its container.
+- A vertical `ProgressBar` is the linear Expressive indicator from the bottom up, with the gap, the stop
+  dot, `Wavy` and `Thick` (it was a flat bar). It takes the height it is given, at least 120px, and is
+  centered horizontally; before it was 120px high and centered vertically unless it had a `Height`.
+  `LinearProgressPresenter` has an `Orientation`.
+- The texts of the theme are string resources (`M3String…` in `Resources/Strings.axaml`) that an app
+  replaces in its own resources to localize them: titles, headline placeholders, labels, tooltips and error
+  texts of the pickers, "OK", "Cancel" and "Save", and the names of the search bar's buttons for assistive
+  technology. `confirmText` and `dismissText` of the picker dialogs default to null (the resource); the
+  default `Label` of `DateField` and `TimeField` comes from the theme, the property itself defaults to null.
+- Windows that draw their own decorations (`ExtendClientAreaToDecorationsHint`) have a Material title bar
+  instead of the Fluent one, also with `UseFluentFallback="False"` (which had none): 40dp, title in Title
+  Small, caption buttons with a state layer, an error-colored close button under the pointer
+  (`M3CaptionButton`, theme for `WindowDrawnDecorations`).
+- Demo: the rows of the cards wrap, so a narrow window no longer pushes them out of their cards; the progress
+  card shows vertical bars.
 
 ## 0.3.1 – 2026-10-29
 
