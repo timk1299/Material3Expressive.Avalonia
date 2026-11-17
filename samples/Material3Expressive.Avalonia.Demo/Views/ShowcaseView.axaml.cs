@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
@@ -63,11 +64,19 @@ public partial class ShowcaseView : UserControl
         VariantButton.Flyout = variantMenu;
         foreach (var variant in Enum.GetValues<SchemeVariant>())
         {
-            var item = new MenuItem { Header = variant.ToString() };
+            var item = new MenuItem
+            {
+                Header = variant.ToString(),
+                ToggleType = MenuItemToggleType.Radio,
+                IsChecked = Material3ExpressiveTheme.Find()?.Variant == variant,
+            };
             item.Click += (_, _) =>
             {
                 if (Material3ExpressiveTheme.Find() is { } theme)
                     theme.Variant = variant;
+                // The active variant stays marked, also when it is clicked again.
+                foreach (var other in variantMenu.Items.OfType<MenuItem>())
+                    other.IsChecked = other == item;
             };
             variantMenu.Items.Add(item);
         }

@@ -297,6 +297,11 @@
       <Setter Property="RenderTransform" Value="translate(0px,7px) scale(1.3333)" />
       <Setter Property="controls:FieldLabel.RestingScale" Value="1.3333" />
     </Style>
+    <!-- Editable: typed text has no selection, and the caret is in the field while it has the focus -->
+    <Style Selector="^[IsEditable=True]:focus-within /template/ TextBlock#PART_Label, ^[IsEditable=True]:text /template/ TextBlock#PART_Label">
+      <Setter Property="RenderTransform" Value="translate(0px,0px) scale(1)" />
+      <Setter Property="controls:FieldLabel.RestingScale" Value="1" />
+    </Style>
 
     <Style Selector="^:dropdownopen /template/ PathIcon#DropDownGlyph">
       <Setter Property="RenderTransform" Value="rotate(180deg)" />
@@ -343,6 +348,13 @@
       </Style>
       <Style Selector="^.HasLabel[SelectedIndex=-1]:not(:dropdownopen):not(:focus-visible) /template/ controls|OutlineBorder#PART_Outline">
         <Setter Property="GapProgress" Value="0" />
+      </Style>
+      <Style Selector="^[IsEditable=True]:focus-within /template/ TextBlock#PART_Label, ^[IsEditable=True]:text /template/ TextBlock#PART_Label">
+        <Setter Property="RenderTransform" Value="translate(0px,-16px) scale(1)" />
+        <Setter Property="controls:FieldLabel.RestingScale" Value="1" />
+      </Style>
+      <Style Selector="^.HasLabel[IsEditable=True]:focus-within /template/ controls|OutlineBorder#PART_Outline, ^.HasLabel[IsEditable=True]:text /template/ controls|OutlineBorder#PART_Outline">
+        <Setter Property="GapProgress" Value="1" />
       </Style>
       <Style Selector="^:pointerover">
         <Setter Property="BorderBrush" Value="{DynamicResource M3OnSurfaceBrush}" />

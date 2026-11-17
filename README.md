@@ -265,7 +265,7 @@ Text fields use `TextFieldAssist`:
          PlaceholderText="name@example.com" />
 ```
 
-Dialogs and snackbars need no host control. They appear in the window's overlay layer:
+Dialogs and snackbars need no host control. They appear in the window's overlay layer. A dialog is modal: its scrim takes the pointer, and Tab goes round inside it. Snackbars queue per window; `Dismiss()` hides the one on screen or skips one that still waits:
 
 ```csharp
 bool discard = await Dialog.ShowMessageAsync(this, "Discard draft?", "This cannot be undone.", "Discard", "Cancel");
@@ -304,6 +304,9 @@ tests/Material3Expressive.Avalonia.Tests/    Color, motion and shape tests, head
 - `Vibrant` and `Expressive` color variants use the hue-rotation tables from material-color-utilities with the standard tone mapping. They are close to MCU output but not identical, and the 2025 dynamic-color spec is not implemented.
 - Not implemented yet: the search app bar and search view, carousel, bottom and side sheets, the modal expanded navigation rail, range and centered sliders, inset slider icons, icons inside switch handles, and text-field prefix, suffix and character counter.
 - The date range picker pages through months in a dialog; the spec's full-screen picker with vertically scrolling months is not implemented.
+- A vertical `ProgressBar` is a flat bar; the gap, the stop dot, `Wavy` and `Thick` are for horizontal and `Circular` bars.
+- Button groups have no arrow-key navigation: every button is a Tab stop. While a button is pressed, long labels of its neighbors are cut off, because the neighbors keep their padding.
+- Tooltips, field labels and error texts inside the pickers ("Previous month", "Hour", "Date out of expected range" …) are English and cannot be set.
 - In an outlined text field with a leading icon, the floating label stays aligned with the text instead of moving over the icon.
 - Roboto is bundled; the Expressive brand typeface (Google Sans Flex) is not.
 - `MotionScheme` changes apply to animations created after the change.

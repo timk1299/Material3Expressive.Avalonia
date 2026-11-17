@@ -472,7 +472,18 @@ public class CalendarView : TemplatedControl
         if (target is not { } t)
             return;
         e.Handled = true;
-        if (t.Date < MinDate.Date || t.Date > MaxDate.Date)
+        // The arrow keys pass over days that cannot be selected (a date filter) to the next one that can.
+        var step = e.Key switch
+        {
+            Key.Left => -1,
+            Key.Right => 1,
+            Key.Up => -7,
+            Key.Down => 7,
+            _ => 0,
+        };
+        for (var i = 0; step != 0 && i < 53 && !IsSelectable(t) && t.Date >= MinDate.Date && t.Date <= MaxDate.Date; i++)
+            t = t.AddDays(step);
+        if (t.Date < MinDate.Date || t.Date > MaxDate.Date || (step != 0 && !IsSelectable(t)))
             return;
         if (t.Year != DisplayDate.Year || t.Month != DisplayDate.Month)
         {

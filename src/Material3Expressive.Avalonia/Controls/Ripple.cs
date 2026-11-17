@@ -109,11 +109,12 @@ public class Ripple : Control
             _host.RemoveHandler(PointerReleasedEvent, OnHostPointerReleased);
             _host.RemoveHandler(PointerCaptureLostEvent, OnHostPointerReleased);
             _host.RemoveHandler(PointerExitedEvent, OnHostPointerReleased);
+            // A click that removes its button (a page change) never reaches the release handler here.
+            SetPressing(false);
             _host = null;
         }
 
         _waves.Clear();
-        _releaseTimer?.Stop();
         base.OnDetachedFromVisualTree(e);
     }
 

@@ -58,6 +58,8 @@ public class LoadingIndicator : TemplatedControl
     public LoadingIndicator()
     {
         _ticker = new FrameTicker(this, Tick);
+        // An ancestor that is shown again changes no property of this control.
+        _ = new VisibilityWatcher(this, StartIfNeeded);
         UpdateShapeScale();
     }
 
@@ -100,8 +102,7 @@ public class LoadingIndicator : TemplatedControl
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (change.Property == IsActiveProperty || change.Property == ProgressProperty ||
-            change.Property == IsVisibleProperty)
+        if (change.Property == IsActiveProperty || change.Property == ProgressProperty)
         {
             StartIfNeeded();
         }

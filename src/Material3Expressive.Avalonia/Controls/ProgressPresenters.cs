@@ -58,6 +58,8 @@ public abstract class ProgressPresenterBase : Control
     protected ProgressPresenterBase()
     {
         _ticker = new FrameTicker(this, Tick);
+        // An ancestor that is shown again changes no property of this control.
+        _ = new VisibilityWatcher(this, Restart);
     }
 
     public double Percentage
@@ -155,8 +157,7 @@ public abstract class ProgressPresenterBase : Control
             _amplitude.AnimateTo(TargetAmplitude());
             Restart();
         }
-        else if (change.Property == IsIndeterminateProperty || change.Property == IsWavyProperty ||
-                 change.Property == IsVisibleProperty)
+        else if (change.Property == IsIndeterminateProperty || change.Property == IsWavyProperty)
         {
             _amplitude.AnimateTo(TargetAmplitude());
             Restart();

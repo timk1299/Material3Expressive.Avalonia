@@ -39,6 +39,9 @@ public class Snackbar : ContentControl
     private Button? _closeButton;
     private Action? _dismissed;
     private DispatcherTimer? _timer;
+    private bool _waiting;
+    private bool _skipped;
+    private bool _open;
     private bool _dismissing;
 
     /// <summary>Label of the optional action button (e.g. "Undo").</summary>
@@ -93,15 +96,27 @@ public class Snackbar : ContentControl
         Queues.GetValue(layer, l => new Queue(l)).Enqueue(snackbar);
     }
 
-    /// <summary>Hides the snackbar and shows the next queued one.</summary>
+    /// <summary>
+    /// Hides the snackbar and shows the next queued one. A snackbar that still waits in the queue is
+    /// skipped when its turn comes.
+    /// </summary>
     public void Dismiss()
     {
-        if (_dismissing)
+        if (_waiting)
+            _skipped = true;
+        if (!_open || _dismissing)
             return;
         _dismissing = true;
         _timer?.Stop();
         PseudoClasses.Set(":open", false);
-        DispatcherTimer.RunOnce(() => _dismissed?.Invoke(), ExitDuration);
+        DispatcherTimer.RunOnce(() =>
+        {
+            _open = false;
+            _dismissing = false;
+            var dismissed = _dismissed;
+            _dismissed = null;
+            dismissed?.Invoke();
+        }, ExitDuration);
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -130,23 +145,40 @@ public class Snackbar : ContentControl
 
     private void OnActionButtonClick(object? sender, RoutedEventArgs e)
     {
+        // A second click while the snackbar leaves must not run the action again.
+        if (_dismissing)
+            return;
         RaiseEvent(new RoutedEventArgs(ActionClickEvent, this));
         Dismiss();
     }
 
     private void OnCloseButtonClick(object? sender, RoutedEventArgs e) => Dismiss();
 
-    private void Open(Action dismissed)
+    /// <summary>False for a snackbar that was dismissed while it waited: the queue skips it.</summary>
+    private bool Open(Action dismissed)
     {
+        _waiting = false;
+        if (_skipped)
+            return false;
+
+        _open = true;
         _dismissed = dismissed;
         // Let the closed state render once so the enter transition runs.
-        Dispatcher.UIThread.Post(() => PseudoClasses.Set(":open", true), DispatcherPriority.Background);
+        Dispatcher.UIThread.Post(() =>
+        {
+            if (_open && !_dismissing)
+                PseudoClasses.Set(":open", true);
+        }, DispatcherPriority.Background);
+        _timer?.Stop();
+        _timer = null;
         if (Duration > TimeSpan.Zero)
         {
             _timer = new DispatcherTimer { Interval = Duration };
             _timer.Tick += (_, _) => Dismiss();
             _timer.Start();
         }
+
+        return true;
     }
 
     private sealed class Queue(OverlayLayer layer)
@@ -157,6 +189,11 @@ public class Snackbar : ContentControl
 
         public void Enqueue(Snackbar snackbar)
         {
+            // Already on screen or waiting: it is shown once.
+            if (snackbar._open || snackbar._waiting)
+                return;
+            snackbar._waiting = true;
+            snackbar._skipped = false;
             _pending.Enqueue(snackbar);
             if (!_showing)
                 ShowNext();
@@ -164,35 +201,36 @@ public class Snackbar : ContentControl
 
         private void ShowNext()
         {
-            if (_pending.Count == 0)
+            while (_pending.Count > 0)
             {
-                _showing = false;
-                if (_root != null)
+                var snackbar = _pending.Dequeue();
+                if (_root == null)
                 {
-                    layer.Children.Remove(_root);
-                    _root = null;
+                    _root = new OverlayRoot();
+                    layer.Children.Add(_root);
                 }
 
+                snackbar.HorizontalAlignment = HorizontalAlignment.Center;
+                snackbar.VerticalAlignment = VerticalAlignment.Bottom;
+                snackbar.Margin = new Thickness(16);
+                var opened = snackbar.Open(() =>
+                {
+                    _root?.Children.Remove(snackbar);
+                    ShowNext();
+                });
+                if (!opened)
+                    continue;
+                _showing = true;
+                _root.Children.Add(snackbar);
                 return;
             }
 
-            _showing = true;
-            if (_root == null)
+            _showing = false;
+            if (_root != null)
             {
-                _root = new OverlayRoot();
-                layer.Children.Add(_root);
+                layer.Children.Remove(_root);
+                _root = null;
             }
-
-            var snackbar = _pending.Dequeue();
-            snackbar.HorizontalAlignment = HorizontalAlignment.Center;
-            snackbar.VerticalAlignment = VerticalAlignment.Bottom;
-            snackbar.Margin = new Thickness(16);
-            _root.Children.Add(snackbar);
-            snackbar.Open(() =>
-            {
-                _root?.Children.Remove(snackbar);
-                ShowNext();
-            });
         }
     }
 }

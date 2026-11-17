@@ -40,6 +40,9 @@ public static class TextFieldAssist
             else if (!hasLabel)
                 control.Classes.Remove(HasLabelClass);
         });
+        // An editable combo box holds text without a selection: its label floats while it has text (:text).
+        ComboBox.TextProperty.Changed.AddClassHandler<ComboBox>((combo, e) =>
+            ((IPseudoClasses)combo.Classes).Set(":text", !string.IsNullOrEmpty(e.GetNewValue<string?>())));
     }
 
     /// <summary>Floating label. Rests inside the field and moves up on focus or when there is content.</summary>

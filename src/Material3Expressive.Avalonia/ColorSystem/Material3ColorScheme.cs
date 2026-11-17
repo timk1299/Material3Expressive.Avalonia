@@ -109,7 +109,7 @@ public sealed class Material3ColorScheme
             case SchemeVariant.Baseline:
                 primary = TonalPalette.FromHueAndChroma(hue, Math.Max(48, chroma));
                 secondary = TonalPalette.FromHueAndChroma(hue, 16);
-                tertiary = TonalPalette.FromHueAndChroma(hue + 60, 24);
+                tertiary = TonalPalette.FromHueAndChroma(ColorUtils.SanitizeDegrees(hue + 60), 24);
                 neutral = TonalPalette.FromHueAndChroma(hue, 6);
                 neutralVariant = TonalPalette.FromHueAndChroma(hue, 8);
                 break;

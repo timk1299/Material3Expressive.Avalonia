@@ -271,6 +271,22 @@
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
 
+  <!--
+    List leading/trailing icons: 24dp, on-surface-variant (on-secondary-container when selected). Before the
+    rules for buttons, which so keep the size of their icons inside a list item; the color is given back below.
+  -->
+  <Style Selector="ListBoxItem PathIcon">
+    <Setter Property="Width" Value="24" />
+    <Setter Property="Height" Value="24" />
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
+  </Style>
+  <Style Selector="ListBoxItem:selected PathIcon">
+    <Setter Property="Foreground" Value="{DynamicResource M3OnSecondaryContainerBrush}" />
+  </Style>
+  <Style Selector="ListBoxItem :is(Button) PathIcon, ListBoxItem SplitButton PathIcon">
+    <Setter Property="Foreground" Value="{Binding $parent[TemplatedControl].Foreground}" />
+  </Style>
+
   <!-- Icon sizes inside components (content is not reachable from ControlTheme styles). -->
   <Style Selector=":is(Button) PathIcon">
     <Setter Property="Width" Value="20" />
@@ -358,20 +374,13 @@
     <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceBrush}" />
   </Style>
   <!-- Tabs: only the tab's own icon; PathIcons in the tab content keep the size of their component. -->
-  <Style Selector="TabItem /template/ ContentPresenter#PART_IconPresenter PathIcon, ListBoxItem PathIcon">
+  <Style Selector="TabItem /template/ ContentPresenter#PART_IconPresenter PathIcon">
     <Setter Property="Width" Value="24" />
     <Setter Property="Height" Value="24" />
   </Style>
   <Style Selector="MenuItem PathIcon">
     <Setter Property="Width" Value="20" />
     <Setter Property="Height" Value="20" />
-  </Style>
-  <!-- List leading/trailing icons use on-surface-variant (on-secondary-container when selected). -->
-  <Style Selector="ListBoxItem PathIcon">
-    <Setter Property="Foreground" Value="{DynamicResource M3OnSurfaceVariantBrush}" />
-  </Style>
-  <Style Selector="ListBoxItem:selected PathIcon">
-    <Setter Property="Foreground" Value="{DynamicResource M3OnSecondaryContainerBrush}" />
   </Style>
   <!-- Vibrant menus: tertiary container, selected = tertiary -->
   <Style Selector="MenuFlyoutPresenter.Vibrant MenuItem, ContextMenu.Vibrant MenuItem">

@@ -42,6 +42,7 @@ public class FabMenu : ItemsControl
     private readonly List<SpringAnimator> _itemProgress = new();
     private readonly FrameTicker _ticker;
     private double _elapsed;
+    private ToggleButton? _toggle;
 
     public FabMenu()
     {
@@ -77,6 +78,24 @@ public class FabMenu : ItemsControl
         set => SetValue(CloseOnItemClickProperty, value);
     }
 
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        base.OnApplyTemplate(e);
+        _toggle = e.NameScope.Find<ToggleButton>("PART_ToggleButton");
+    }
+
+    /// <summary>The item that has the keyboard focus (or contains it).</summary>
+    private Control? FocusedItem()
+    {
+        for (var i = 0; i < ItemCount; i++)
+        {
+            if (ContainerFromIndex(i) is { IsKeyboardFocusWithin: true } container)
+                return container;
+        }
+
+        return null;
+    }
+
     protected override bool NeedsContainerOverride(object? item, int index, out object? recycleKey) =>
         NeedsContainer<FabMenuItem>(item, out recycleKey);
 
@@ -95,6 +114,9 @@ public class FabMenu : ItemsControl
         if (change.Property == IsOpenProperty)
         {
             var open = change.GetNewValue<bool>();
+            // The items are hidden when the menu closes; the focus on one of them would be lost.
+            if (!open && _toggle != null && FocusedItem() is { } focused)
+                _toggle.Focus(focused.Classes.Contains(":focus-visible") ? NavigationMethod.Tab : NavigationMethod.Pointer);
             PseudoClasses.Set(":open", open);
             _elapsed = 0;
             EnsureAnimators();

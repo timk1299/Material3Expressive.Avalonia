@@ -6,6 +6,30 @@
   inside the field. It was laid out at its 12px floating size and only drawn at 16px, so a label that fit
   floating reached past the field while resting. The label is a `FieldLabel` (a `TextBlock`, styled as one)
   whose `RestingScale` goes with the resting scale of its render transform.
+- A button that leaves the window in its own click (a page change, a closing dialog) no longer comes back in
+  its pressed shape: the `Ripple` takes `:pressing` off its host when it leaves the visual tree.
+- Progress indicators and the loading indicator go on after a container around them was hidden and shown
+  again. They stopped for good, because showing an ancestor changes no property of the indicator; a
+  determinate bar kept the value it had when it was hidden.
+- `Dialog` is modal for the keyboard too: Tab goes round inside the dialog and no longer reaches the controls
+  behind the scrim. A dialog closed before its opening step ran stays closed.
+- `Snackbar`: `Dismiss()` on a snackbar that still waits in the queue skips it (it used to appear and stay,
+  blocking the queue); a dismissed snackbar can be shown again; a double click on the action runs it once.
+- Elevated split buttons have their shadow (level 1, none while disabled). The rule that set it crossed two
+  templates and never applied.
+- A slider with `IsDirectionReversed` keeps its round outer ends and the stop dot at the ends of the track.
+- Icons of buttons and chips inside a list item keep the size and color of their button: the 24dp
+  on-surface-variant list icon applied to them too.
+- The label of an editable `ComboBox` floats while the field has text or the focus (it rested over typed
+  text, which is no selection). The combo box has the pseudo-class `:text` while it holds text.
+- `CalendarView`: the arrow keys pass over days that cannot be selected (a `DateFilter`) to the next one that
+  can; `DateFilter` of `DatePickerPanel` and `DateField` also applies when set after the control is shown.
+- `DateField`: OK in the docked calendar writes the date into the field also when it is the date selected
+  before (an invalid text typed in between stayed). `TimeField`: clearing the field clears its error.
+- `FabMenu`: closing the menu with the focus on one of its items (Escape, or the item's click) returns the
+  focus to the FAB.
+- The `Baseline` variant keeps its tertiary hue within 0–360° (`TonalPalette.Hue`).
+- Demo: the variant menu marks the active variant.
 
 ## 0.3.1 – 2026-10-29
 

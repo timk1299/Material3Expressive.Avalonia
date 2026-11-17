@@ -112,6 +112,7 @@ public class DatePickerPanel : TemplatedControl
     private TextBox? _startInput, _endInput;
     private string _headline = "";
     private bool _syncingInput;
+    private Func<DateTime, bool>? _dateFilter;
 
     public DatePickerPanel()
     {
@@ -199,7 +200,16 @@ public class DatePickerPanel : TemplatedControl
     public string EffectiveTitle => Title ?? (SelectionMode == DateSelectionMode.Range ? "Select dates" : "Select date");
 
     /// <summary>Optional rule for which dates can be selected.</summary>
-    public Func<DateTime, bool>? DateFilter { get; set; }
+    public Func<DateTime, bool>? DateFilter
+    {
+        get => _dateFilter;
+        set
+        {
+            _dateFilter = value;
+            if (_calendar != null)
+                _calendar.DateFilter = value;
+        }
+    }
 
     internal string EffectiveFormat => string.IsNullOrEmpty(DateFormat) ? DateInputFormat.Default : DateFormat!;
 
@@ -499,6 +509,7 @@ public class DateField : TemplatedControl
     private CalendarView? _calendar;
     private Popup? _popup;
     private bool _syncing;
+    private Func<DateTime, bool>? _dateFilter;
 
     public DateTime? SelectedDate
     {
@@ -543,7 +554,16 @@ public class DateField : TemplatedControl
     public string Placeholder => DateInputFormat.Placeholder(EffectiveFormat);
 
     /// <summary>Optional rule for which dates can be selected.</summary>
-    public Func<DateTime, bool>? DateFilter { get; set; }
+    public Func<DateTime, bool>? DateFilter
+    {
+        get => _dateFilter;
+        set
+        {
+            _dateFilter = value;
+            if (_calendar != null)
+                _calendar.DateFilter = value;
+        }
+    }
 
     private string EffectiveFormat => string.IsNullOrEmpty(DateFormat) ? DateInputFormat.Default : DateFormat!;
 
@@ -701,6 +721,8 @@ public class DateField : TemplatedControl
     {
         if (_calendar != null)
             SetCurrentValue(SelectedDateProperty, _calendar.SelectedDate);
+        // The same date changes no property: the text typed before (and its error) would stay.
+        SyncText();
         SetCurrentValue(IsDropDownOpenProperty, false);
         _textBox?.Focus();
     }

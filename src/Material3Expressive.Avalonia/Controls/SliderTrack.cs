@@ -2,6 +2,7 @@ using System;
 using Avalonia;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
+using Avalonia.Media;
 
 namespace Material3Expressive.Avalonia.Controls;
 
@@ -13,6 +14,9 @@ namespace Material3Expressive.Avalonia.Controls;
 /// </summary>
 public class SliderTrack : Track
 {
+    private static readonly ScaleTransform MirrorHorizontal = new(-1, 1);
+    private static readonly ScaleTransform MirrorVertical = new(1, -1);
+
     protected override Type StyleKeyOverride => typeof(Track);
 
     protected override Size ArrangeOverride(Size finalSize)
@@ -23,6 +27,15 @@ public class SliderTrack : Track
 
         var scale = LayoutHelper.GetLayoutScale(this);
         var horizontal = Orientation == Orientation.Horizontal;
+        // Reversed, the segments swap sides: mirrored, their round outer corners and the stop dot stay at
+        // the ends of the track.
+        var mirror = !IsDirectionReversed ? null : horizontal ? MirrorHorizontal : MirrorVertical;
+        foreach (var segment in new[] { DecreaseButton, IncreaseButton })
+        {
+            if (segment != null && !ReferenceEquals(segment.RenderTransform, mirror))
+                segment.RenderTransform = mirror;
+        }
+
         var extent = horizontal ? size.Width : size.Height;
         var thumbStart = horizontal ? thumb.Bounds.Left : thumb.Bounds.Top;
         var thumbEnd = horizontal ? thumb.Bounds.Right : thumb.Bounds.Bottom;

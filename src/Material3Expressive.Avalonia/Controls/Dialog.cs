@@ -9,6 +9,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 
 namespace Material3Expressive.Avalonia.Controls;
 
@@ -130,12 +131,16 @@ public class Dialog : ContentControl
 
         HorizontalAlignment = HorizontalAlignment.Center;
         VerticalAlignment = VerticalAlignment.Center;
-        _root = new OverlayRoot { Children = { scrim, this } };
-        _root.KeyDown += OnRootKeyDown;
-        layer.Children.Add(_root);
+        var root = new OverlayRoot { Children = { scrim, this } };
+        _root = root;
+        root.KeyDown += OnRootKeyDown;
+        layer.Children.Add(root);
 
         Dispatcher.UIThread.Post(() =>
         {
+            // Closed in the meantime: it must not open (or take the focus) after it was closed.
+            if (_root != root)
+                return;
             PseudoClasses.Set(":open", true);
             scrim.Classes.Add("Open");
             // Content that already took the focus (a picker's input field) keeps it.
@@ -193,6 +198,22 @@ public class Dialog : ContentControl
         {
             Close();
             e.Handled = true;
+        }
+        else if (e.Key == Key.Tab && e.Source == this)
+        {
+            // The focus is on the dialog itself (as right after it opened). Inside, Tab goes round
+            // (Themes/Components.axaml); from here it would reach the controls behind the scrim when the
+            // dialog has nothing to focus, or with Shift+Tab.
+            var first = FocusManager.FindFirstFocusableElement(this);
+            if (first is not Visual visual || !this.IsVisualAncestorOf(visual))
+            {
+                e.Handled = true;
+            }
+            else if (e.KeyModifiers.HasFlag(KeyModifiers.Shift))
+            {
+                (FocusManager.FindLastFocusableElement(this) ?? first).Focus(NavigationMethod.Tab);
+                e.Handled = true;
+            }
         }
     }
 }

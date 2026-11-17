@@ -985,6 +985,7 @@ public class TimeField : TemplatedControl
         if (string.IsNullOrWhiteSpace(_textBox.Text))
         {
             SetCurrentValue(SelectedTimeProperty, null);
+            DataValidationErrors.SetErrors(_textBox, null);
             return;
         }
 

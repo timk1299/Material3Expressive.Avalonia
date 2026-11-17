@@ -291,8 +291,9 @@
                 CornerRadius="{TemplateBinding CornerRadius}"
                 Padding="{TemplateBinding Padding}"
                 BoxShadow="{DynamicResource M3Elevation3}">
-          <!-- Content before the buttons, so Tab reaches the content first -->
-          <Grid RowDefinitions="Auto,Auto,*,Auto">
+          <!-- Content before the buttons, so Tab reaches the content first. The dialog is modal: Tab goes
+               round inside it and does not reach the controls behind the scrim (see Dialog.OnRootKeyDown). -->
+          <Grid RowDefinitions="Auto,Auto,*,Auto" KeyboardNavigation.TabNavigation="Cycle">
             <ContentPresenter Name="PART_Icon"
                               Margin="0,0,0,16"
                               HorizontalAlignment="Center"

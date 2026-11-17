@@ -68,6 +68,10 @@
         <Setter Property="IsVisible" Value="True" />
       </Style>
     </Style>
+    <!-- Elevated split button (Tag set by the SplitButton theme): level 1, none while disabled -->
+    <Style Selector="^[Tag=Elevated]:not(:disabled) /template/ Border#PART_Container">
+      <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation1}" />
+    </Style>
   </ControlTheme>
 
   <!--
@@ -145,8 +149,9 @@
     <Style Selector="^.Elevated">
       <Setter Property="Background" Value="{DynamicResource M3SurfaceContainerLowBrush}" />
       <Setter Property="Foreground" Value="{DynamicResource M3PrimaryBrush}" />
-      <Style Selector="^ /template/ Button /template/ Border#PART_Container">
-        <Setter Property="BoxShadow" Value="{DynamicResource M3Elevation1}" />
+      <!-- A style reaches one template only: the halves take the elevation from their Tag (M3SplitButtonPart) -->
+      <Style Selector="^ /template/ Button#PART_PrimaryButton, ^ /template/ Button#PART_SecondaryButton">
+        <Setter Property="Tag" Value="Elevated" />
       </Style>
     </Style>
     <Style Selector="^.Outlined">
